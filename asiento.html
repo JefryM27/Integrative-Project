@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asiento Contable</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1 class="text-center py-3">Ejemplo de Asiento Contable</h1>
+    </header>
+
+    <!-- Content -->
+    <div class="container">
+        <div class="asiento-contable">
+            <div class="asiento-header">
+                <h3>Compra de Mercancías</h3>
+                <p>Fecha: 01/01/2024</p>
+            </div>
+            <div class="asiento-body">
+                <table class="asiento-table">
+                    <thead>
+                        <tr>
+                            <th>Cuenta</th>
+                            <th>Debe</th>
+                            <th>Haber</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inventarios</td>
+                            <td>$1,000</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Caja</td>
+                            <td></td>
+                            <td>$1,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Descripción: Compra de mercancías por $1,000 pagada en efectivo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
