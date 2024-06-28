@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Tipo de Cambio</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header,
+        footer {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .standard-button {
+            width: 150px;
+            height: 50px;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            background-color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="text-center p-3">
+        <h1>Registro de Tipo de Cambio</h1>
+    </header>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form>
+                    <div class="form-group">
+                        <label for="fechaCambio">Fecha</label>
+                        <input type="date" class="form-control" id="fechaCambio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="monedaOrigen">Moneda Origen</label>
+                        <input type="text" class="form-control" id="monedaOrigen" placeholder="Ingrese la moneda de origen" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="monedaDestino">Moneda Destino</label>
+                        <input type="text" class="form-control" id="monedaDestino" placeholder="Ingrese la moneda de destino" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoCambioCompra">Compra</label>
+                        <input type="number" step="0.01" class="form-control" id="tipoCambioCompra" placeholder="Ingrese el tipo de cambio para compra" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoCambioVenta">Venta</label>
+                        <input type="number" step="0.01" class="form-control" id="tipoCambioVenta" placeholder="Ingrese el tipo de cambio para venta" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tasaCambio">Tasa de Cambio (%)</label>
+                        <input type="number" step="0.01" class="form-control" id="tasaCambio" placeholder="Ingrese la tasa de cambio" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary standard-button">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Cooperativa de Ahorro y Crédito. Todos los derechos reservados.</p>
+    </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

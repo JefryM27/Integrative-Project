@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Tipo de Cambio</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header,
+        footer {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .standard-button {
+            width: 150px;
+            height: 50px;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            background-color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <header class="text-center p-3">
+        <h1>Tipos de Cambio Registrados</h1>
+    </header>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="table-container">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Moneda Origen</th>
+                                <th>Moneda Destino</th>
+                                <th>Compra</th>
+                                <th>Venta</th>
+                                <th>Tasa de Cambio (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2024-06-01</td>
+                                <td>USD</td>
+                                <td>CRC</td>
+                                <td>610.00</td>
+                                <td>615.00</td>
+                                <td>1.50</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2024-06-02</td>
+                                <td>EUR</td>
+                                <td>USD</td>
+                                <td>1.10</td>
+                                <td>1.12</td>
+                                <td>1.25</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>2024-06-03</td>
+                                <td>GBP</td>
+                                <td>USD</td>
+                                <td>1.25</td>
+                                <td>1.27</td>
+                                <td>1.75</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn btn-primary standard-button" data-toggle="modal" data-target="#editarModal">Editar</button>
+                    <button type="button" class="btn btn-primary standard-button" data-toggle="modal" data-target="#eliminarModal">Eliminar</button>
+                    <button type="button" class="btn btn-primary standard-button" data-toggle="modal" data-target="#consultarModal">Consultar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Cooperativa de Ahorro y Crédito. Todos los derechos reservados.</p>
+    </footer>
+    
+    <!-- Modals -->
+    <!-- Editar Modal -->
+    <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar Tipo de Cambio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para editar tipo de cambio -->
+                    <form>
+                        <div class="form-group">
+                            <label for="editarID">ID</label>
+                            <input type="text" class="form-control" id="editarID" placeholder="Ingrese el ID del tipo de cambio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarFecha">Fecha</label>
+                            <input type="date" class="form-control" id="editarFecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarMonedaOrigen">Moneda Origen</label>
+                            <input type="text" class="form-control" id="editarMonedaOrigen" placeholder="Ingrese la moneda de origen" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarMonedaDestino">Moneda Destino</label>
+                            <input type="text" class="form-control" id="editarMonedaDestino" placeholder="Ingrese la moneda de destino" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarCompra">Compra</label>
+                            <input type="number" step="0.01" class="form-control" id="editarCompra" placeholder="Ingrese el tipo de cambio para compra" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarVenta">Venta</label>
+                            <input type="number" step="0.01" class="form-control" id="editarVenta" placeholder="Ingrese el tipo de cambio para venta" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editarTasaCambio">Tasa de Cambio (%)</label>
+                            <input type="number" step="0.01" class="form-control" id="editarTasaCambio" placeholder="Ingrese la tasa de cambio" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Eliminar Modal -->
+    <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarModalLabel">Eliminar Tipo de Cambio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para eliminar tipo de cambio -->
+                    <form>
+                        <div class="form-group">
+                            <label for="eliminarID">ID</label>
+                            <input type="text" class="form-control" id="eliminarID" placeholder="Ingrese el ID del tipo de cambio" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Consultar Modal -->
+    <div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="consultarModalLabel">Consultar Tipo de Cambio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para consultar tipo de cambio -->
+                    <form>
+                        <div class="form-group">
+                            <label for="consultarID">ID</label>
+                            <input type="text" class="form-control" id="consultarID" placeholder="Ingrese el ID del tipo de cambio" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Consultar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
