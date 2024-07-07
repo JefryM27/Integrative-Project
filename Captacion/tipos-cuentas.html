@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de cuentas</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header,
+        footer {
+            background-color: #3b5998;
+            color: white;
+            padding: 10px;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .container {
+            flex-grow: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-button {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #000;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 200px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .custom-button img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .custom-button:hover {
+            background-color: #d0d0d0;
+        }
+
+        .savings-description {
+            background-color: #3b5998;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .image {
+            position: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="text-center">
+        <h1>Tipos de cuentas</h1>
+    </header>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="custom-button" id="navideno-button">
+                    <img src="Images/navidad.png" alt="Navideño">
+                    <strong>Navideño</strong>
+                </a>
+            </div>
+            <div class="col-md-9">
+                <div class="savings-description">
+                    <p><strong>Ahorro navideño:</strong> Es un plan de ahorro en el que los usuarios depositan dinero de
+                        manera regular a lo largo del año con el objetivo de disponer de una suma de dinero específica
+                        para los gastos de la temporada navideña. Este tipo de ahorro suele comenzar a principios del
+                        año y culmina en diciembre, permitiendo a las personas disfrutar de las festividades sin
+                        preocupaciones financieras.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="custom-button">
+                    <img src="Images/plazos.png" alt="Plazos">
+                    <strong>Plazos</strong>
+                </a>
+            </div>
+            <div class="col-md-9">
+                <div class="savings-description">
+                    <p><strong>Ahorro a plazos:</strong> También conocido como depósito a plazo, este tipo de ahorro
+                        implica depositar una cantidad de dinero en una cuenta que tiene un periodo de tiempo fijo y
+                        específico antes de que el dinero pueda ser retirado sin penalización. Los depósitos a plazo
+                        suelen ofrecer tasas de interés más altas en comparación con las cuentas de ahorro
+                        tradicionales, recompensando a los ahorradores por no tocar su dinero durante el periodo
+                        acordado.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="custom-button">
+                    <img src="Images/Tradicional.png" alt="Tradicional">
+                    <strong>Tradicional</strong>
+                </a>
+            </div>
+            <div class="col-md-9">
+                <div class="savings-description">
+                    <p><strong>Ahorro tradicional:</strong> Este es el tipo de ahorro más común y sencillo, donde los
+                        individuos depositan dinero en una cuenta de ahorro en un banco o cooperativa de crédito. Estas
+                        cuentas suelen ofrecer intereses modestos sobre el saldo y proporcionan liquidez, permitiendo a
+                        los ahorradores acceder a sus fondos cuando lo necesiten.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="custom-button">
+                    <img src="Images/carro.png" alt="Marchamo">
+                    <strong>Marchamo</strong>
+                </a>
+            </div>
+            <div class="col-md-9">
+                <div class="savings-description">
+                    <p><strong>Ahorro para marchamo:</strong> En algunos países, el marchamo es el impuesto o derecho de
+                        circulación que deben pagar los propietarios de vehículos. El ahorro para marchamo es un plan
+                        específico en el que los individuos guardan dinero regularmente con el fin de cubrir este pago
+                        anual, evitando así la carga financiera que puede representar al final del año.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="custom-button">
+                    <img src="Images/infantil.png" alt="Infantil">
+                    <strong>Infantil</strong>
+                </a>
+            </div>
+            <div class="col-md-9">
+                <div class="savings-description">
+                    <p><strong>Ahorro infantil:</strong> Es un tipo de cuenta de ahorro diseñada específicamente para
+                        niños. Estas cuentas están pensadas para enseñar a los niños la importancia del ahorro y la
+                        gestión financiera desde una edad temprana. Los padres o tutores gestionan estas cuentas hasta
+                        que los niños alcanzan una cierta edad o grado de madurez financiera.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Modal -->
+    <div id="navideno-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <header class="text-center">
+                <h1>Ahorro Navideño</h1>
+            </header>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <br>
+                        <p><strong>¿Qué es el Ahorro Navideño?</strong>
+                            El Ahorro Navideño es un producto financiero que le permite ahorrar dinero durante todo el
+                            año para tener un fondo disponible en diciembre y así poder afrontar los gastos de las
+                            fiestas navideñas sin tener que recurrir a créditos o préstamos..</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cómo funciona el Ahorro Navideño?</strong>
+                            El Ahorro Navideño funciona de la siguiente manera:
+                            Usted abre una cuenta de Ahorro Navideño en una entidad financiera.
+                            Cada mes, realiza un depósito en su cuenta de Ahorro Navideño. El monto del depósito puede
+                            ser fijo o variable, según lo prefiera.
+                            La entidad financiera le paga intereses sobre el saldo de su cuenta de Ahorro Navideño.
+                            En diciembre, la entidad financiera le devuelve el saldo de su cuenta de Ahorro Navideño,
+                            junto con los intereses ganados.</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="image">
+                        <img src="Images/navidad.png" alt="Ahorro Navideño" style="width: 100px">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cuáles son los beneficios del Ahorro Navideño?</strong>
+                            Los beneficios del Ahorro Navideño son los siguientes:
+                            Le permite ahorrar dinero de forma segura y planificada.
+                            Le ayuda a evitar los gastos excesivos en diciembre.
+                            Le permite acceder a un fondo disponible para afrontar los gastos de las fiestas navideñas.
+                            Le permite obtener intereses sobre su ahorro.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a href="#" class="custom-button">
+                        <img src="Images/navidad.png" alt="Infantil">
+                        <strong>Solicitar</strong>
+                    </a>
+                </div>
+                <hr>
+            </div>
+            <footer>
+                <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para manejar el modal
+        var modal = document.getElementById("navideno-modal");
+        var btn = document.getElementById("navideno-button");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onmouseover = function () {
+            modal.style.display = "block";
+        }
+
+        btn.onmouseout = function () {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+    <!-- Modal -->
+    <div id="plazos-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <header class="text-center">
+                <h1>Ahorro a Plazos</h1>
+            </header>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <br>
+                        <p><strong>¿Qué es el Ahorro a Plazos?</strong>
+                            El Ahorro a Plazos es una cuenta de ahorro que le permite ahorrar dinero durante un período
+                            de tiempo determinado, a cambio de una tasa de interés fija.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cómo funciona el Ahorro a Plazos?</strong>
+                            Usted establece un monto fijo que desea ahorrar mensualmente o quincenalmente durante un
+                            plazo determinado, que puede ser desde 3 meses hasta varios años. Al final del plazo, recibe
+                            su dinero ahorrado junto con los intereses acumulados.</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="image">
+                        <img src="Images/plazos.png" alt="Ahorro a Plazos" style="width: 100px">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cuáles son los beneficios del Ahorro a Plazos?</strong>
+                            Tasas de interés competitivas, Seguridad, Planificación financiera, Disciplina en el ahorro.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a href="#" class="custom-button">
+                        <img src="Images/plazos.png" alt="Plazos">
+                        <strong>Solicitar</strong>
+                    </a>
+                </div>
+                <hr>
+            </div>
+            <footer>
+                <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para manejar el modal
+        var modalPlazos = document.getElementById("plazos-modal");
+        var btnPlazos = document.getElementById("plazos-button");
+        var spanPlazos = document.getElementsByClassName("close")[0];
+
+        btnPlazos.onmouseover = function () {
+            modalPlazos.style.display = "block";
+        }
+
+        btnPlazos.onmouseout = function () {
+            modalPlazos.style.display = "block";
+        }
+
+        spanPlazos.onclick = function () {
+            modalPlazos.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modalPlazos) {
+                modalPlazos.style.display = "none";
+            }
+        }
+    </script>
+
+
+    <!-- Modal -->
+    <div id="tradicional-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <header class="text-center">
+                <h1>Ahorro Tradicional</h1>
+            </header>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <br>
+                        <p><strong>¿Qué es el Ahorro Tradicional?</strong>
+                            El Ahorro Tradicional es una cuenta de ahorro que le permite depositar y retirar dinero a su
+                            conveniencia. No tiene un plazo fijo y la tasa de interés puede variar según las condiciones
+                            del mercado.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cómo funciona el Ahorro Tradicional?</strong>
+                            Puede abrir una cuenta de Ahorro Tradicional con un depósito mínimo inicial y realizar
+                            depósitos y retiros en cualquier momento. Recibirá intereses sobre su saldo ahorrado, que se
+                            calculan y abonan mensualmente.</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="image">
+                        <img src="Images/tradicional.png" alt="Ahorro Tradicional" style="width: 100px">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cuáles son los beneficios del Ahorro Tradicional?</strong>
+                            Acceso inmediato a su dinero, Liquidez, Intereses, Simplicidad.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a href="#" class="custom-button">
+                        <img src="Images/tradicional.png" alt="Tradicional">
+                        <strong>Solicitar</strong>
+                    </a>
+                </div>
+                <hr>
+            </div>
+            <footer>
+                <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para manejar el modal
+        var modalTradicional = document.getElementById("tradicional-modal");
+        var btnTradicional = document.getElementById("tradicional-button");
+        var spanTradicional = document.getElementsByClassName("close")[0];
+
+        btnTradicional.onmouseover = function () {
+            modalTradicional.style.display = "block";
+        }
+
+        btnTradicional.onmouseout = function () {
+            modalTradicional.style.display = "block";
+        }
+
+        spanTradicional.onclick = function () {
+            modalTradicional.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modalTradicional) {
+                modalTradicional.style.display = "none";
+            }
+        }
+    </script>
+
+    <!-- Modal -->
+    <div id="marchamo-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <header class="text-center">
+                <h1>Ahorro Marchamo</h1>
+            </header>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <br>
+                        <p><strong>¿Qué es el Ahorro Marchamo?</strong>
+                            El Ahorro Marchamo es un tipo de Ahorro a Plazos diseñado específicamente para ahorrar el
+                            dinero necesario para pagar el marchamo de su vehículo.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cómo funciona el Ahorro Marchamo?</strong>
+                            Usted establece una cuota mensual que se ajusta a su presupuesto y posibilidades. Al final
+                            del año, tendrá el dinero suficiente para pagar el marchamo sin tener que desembolsar una
+                            gran cantidad de dinero de una sola vez.</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="image">
+                        <img src="Images/marchamo.png" alt="Ahorro Marchamo" style="width: 100px">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cuáles son los beneficios del Ahorro Marchamo?</strong>
+                            Planificación del pago del marchamo, Evita desembolsos grandes, Tasas de interés
+                            competitivas, Tranquilidad.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a href="#" class="custom-button">
+                        <img src="Images/marchamo.png" alt="Marchamo">
+                        <strong>Solicitar</strong>
+                    </a>
+                </div>
+                <hr>
+            </div>
+            <footer>
+                <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para manejar el modal
+        var modalMarchamo = document.getElementById("marchamo-modal");
+        var btnMarchamo = document.getElementById("marchamo-button");
+        var spanMarchamo = document.getElementsByClassName("close")[0];
+
+        btnMarchamo.onmouseover = function () {
+            modalMarchamo.style.display = "block";
+        }
+
+        btnMarchamo.onmouseout = function () {
+            modalMarchamo.style.display = "block";
+        }
+
+        spanMarchamo.onclick = function () {
+            modalMarchamo.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modalMarchamo) {
+                modalMarchamo.style.display = "none";
+            }
+        }
+    </script>
+
+    <!-- Modal -->
+    <div id="infantil-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <header class="text-center">
+                <h1>Ahorro Infantil</h1>
+            </header>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <br>
+                        <p><strong>¿Qué es el Ahorro Infantil?</strong>
+                            El Ahorro Infantil es una cuenta de ahorro diseñada para que los padres o tutores ahorren
+                            para el futuro de sus hijos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cómo funciona el Ahorro Infantil?</strong>
+                            Cualquier persona mayor de edad puede abrir una cuenta de Ahorro Infantil para un menor de
+                            edad. Los depósitos y retiros se realizan a través del titular de la cuenta. Los intereses
+                            acumulados en la cuenta se abonan a la cuenta del menor cuando este alcanza la mayoría de
+                            edad.</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="image">
+                        <img src="Images/infantil.png" alt="Ahorro Infantil" style="width: 100px">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="savings-description">
+                        <p><strong>¿Cuáles son los beneficios del Ahorro Infantil?</strong>
+                            Fomenta el ahorro desde una edad temprana, Ayuda a alcanzar metas financieras, Beneficios
+                            fiscales, Regalo significativo.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a href="#" class="custom-button">
+                        <img src="Images/infantil.png" alt="Infantil">
+                        <strong>Solicitar</strong>
+                    </a>
+                </div>
+                <hr>
+            </div>
+            <footer>
+                <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para manejar el modal
+        var modalInfantil = document.getElementById("infantil-modal");
+        var btnInfantil = document.getElementById("infantil-button");
+        var spanInfantil = document.getElementsByClassName("close")[0];
+
+        btnInfantil.onmouseover = function () {
+            modalInfantil.style.display = "block";
+        }
+
+        btnInfantil.onmouseout = function () {
+            modalInfantil.style.display = "block";
+        }
+
+        spanInfantil.onclick = function () {
+            modalInfantil.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modalInfantil) {
+                modalInfantil.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
