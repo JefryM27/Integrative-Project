@@ -1,0 +1,222 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.header {
+    background-color: #3b5998;
+    color: #fff;
+    text-align: left;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.cajaChica {
+    margin-top: 100px;
+}
+
+.Facturas {
+    margin-top: 100px;
+    margin-left: 255px;
+}
+.Trasferencia {
+    margin-top: 100px;
+}
+
+.header .btn {
+    font-size: 14px;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+.content h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.info-box {
+    background-color: #3b5998;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.info-box h3 {
+    margin-bottom: 10px;
+}
+
+.info-box p {
+    font-size: 20px;
+    margin: 0;
+}
+
+.footer {
+    background-color: #3b5998;
+    color: white;
+    text-align: center;
+    padding: 6px 0;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.header {
+    background-color: #3b5998;
+    padding: 5px;
+    color: #fff;
+    text-align: left;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header .btn {
+    font-size: 14px;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+.info-box {
+    background-color: #3b5998;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.info-box h4 {
+    margin-bottom: 10px;
+}
+
+.info-box p {
+    font-size: 20px;
+    margin: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.header {
+    background-color: #3b5998;
+    padding: 5px;
+    color: #fff;
+    text-align: left;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header .btn {
+    font-size: 14px;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+.table-responsive {
+    margin-top: 20px;
+}
+
+.table {
+    background-color: #fff;
+    color: #333;
+}
+
+.table thead {
+    background-color: #3b5998;
+    color: #fff;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.btn-lg {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #3b5998;
+    border-color: #3b5998;
+}
+
+form .form-label {
+    font-weight: bold;
+}
+
+form .form-control, form .form-select {
+    margin-bottom: 15px;
+}
+
+
+.factura {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-lg {
+    font-size: 16px;
+    padding: 8px 16px;
+    margin: 5px 0;
+    background-color: #3b5998;
+    border-color: #3b5998;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.header {
+    background-color: #3b5998;
+    padding: 5px;
+    color: #fff;
+    text-align: left;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header .btn {
+    font-size: 14px;
+}
+
+.content {
+    margin-top: 20px;
+}

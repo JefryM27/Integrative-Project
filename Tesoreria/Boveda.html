@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boveda</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        .info-box {
+            background-color: #3b5998;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .btn-custom {
+            background-color: #3b5998;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .btn-custom:hover {
+            background-color: #2d4373;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <a href="GestionBovedas.html" class="btn btn-light mx-3 my-2">Volver</a>
+            <h5 class="navbar navbar-light justify-content-end mx-4">logo</h5>
+        </div>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Total en Bóveda</h3>
+                </div>
+                <div class="col-md-3">
+                    <h3>Acciones</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 mt">
+                    <div class="info-box">
+                        <h4>CRC</h4>
+                        <p>₡20,000,000</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="info-box">
+                        <h4>USD</h4>
+                        <p>$50,000</p>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <div class="info-box">
+                        <h4>EUR</h4>
+                        <p>€40,000</p>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <button class="btn btn-custom mx-2" data-bs-toggle="modal" data-bs-target="#modalIngresarDinero">Ingresar Dinero</button>
+                    <button class="btn btn-custom mx-2" data-bs-toggle="modal" data-bs-target="#modalRetirarDinero">Retirar Dinero</button>
+                    <button class="btn btn-custom mx-2" data-bs-toggle="modal" data-bs-target="#modalMovimientos">Ver Movimientos</button>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <h3 class="mb-4">Tasa de cambio:</h3>
+                <div class="col-md-3 mt-1 mx-3">
+                    <h4>CRC a USD</h4>
+                    <canvas id="colonesToUsdChart"></canvas>
+                </div>
+                <div class="col-md-3 mt-1 mx-3">
+                    <h4>CRC a EUR</h4>
+                    <canvas id="colonesToEurChart"></canvas>
+                </div>
+                <div class="col-md-3 mt-1 mx-3 mb-4">
+                    <h4>USD a EUR</h4>
+                    <canvas id="usdToEurChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ingresar Dinero -->
+    <div class="modal fade" id="modalIngresarDinero" tabindex="-1" aria-labelledby="modalIngresarDineroLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalIngresarDineroLabel">Ingresar Dinero</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formIngresarDinero">
+                        <label for="monedaIngreso" class="form-label">Moneda</label>
+                        <select class="form-select" id="monedaIngreso">
+                            <option value="CRC">Colones</option>
+                            <option value="USD">Dólares</option>
+                            <option value="EUR">Euros</option>
+                        </select>
+                        <label for="montoIngreso" class="form-label">Monto</label>
+                        <input type="number" class="form-control" id="montoIngreso" placeholder="Ingrese el monto">
+                        <label for="descripcionIngreso" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="descripcionIngreso" placeholder="Ingrese una descripción">
+                        <button type="button" class="btn btn-success btn-lg mt-3" id="btnIngresarDinero">Ingresar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Retirar Dinero -->
+    <div class="modal fade" id="modalRetirarDinero" tabindex="-1" aria-labelledby="modalRetirarDineroLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalRetirarDineroLabel">Retirar Dinero</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formRetirarDinero">
+                        <label for="monedaRetiro" class="form-label">Moneda</label>
+                        <select class="form-select" id="monedaRetiro">
+                            <option value="CRC">Colones</option>
+                            <option value="USD">Dólares</option>
+                            <option value="EUR">Euros</option>
+                        </select>
+                        <label for="montoRetiro" class="form-label">Monto</label>
+                        <input type="number" class="form-control" id="montoRetiro" placeholder="Ingrese el monto">
+                        <label for="descripcionRetiro" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="descripcionRetiro" placeholder="Ingrese una descripción">
+                        <button type="button" class="btn btn-danger btn-lg mt-3" id="btnRetirarDinero">Retirar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Movimientos -->
+    <div class="modal fade" id="modalMovimientos" tabindex="-1" aria-labelledby="modalMovimientosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMovimientosLabel">Últimos Movimientos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="filterFecha" class="form-label">Filtrar por Fecha</label>
+                            <input type="date" class="form-control" id="filterFecha">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filterTipo" class="form-label">Filtrar por Tipo de Acción</label>
+                            <select class="form-select" id="filterTipo">
+                                <option value="">Todos</option>
+                                <option value="Ingreso">Ingreso</option>
+                                <option value="Retiro">Retiro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="filterMoneda" class="form-label">Filtrar por Moneda</label>
+                            <select class="form-select" id="filterMoneda">
+                                <option value="">Todas</option>
+                                <option value="CRC">Colones</option>
+                                <option value="USD">Dólares</option>
+                                <option value="EUR">Euros</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Descripción</th>
+                                    <th>Moneda</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Tipo de Acción</th>
+                                    <th>Nombre de la Organización</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Ahorro 402640041</td>
+                                    <td>USD</td>
+                                    <td>$50,000</td>
+                                    <td>2024-06-01</td>
+                                    <td>Ingreso</td>
+                                    <td>Org A</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Cierre Caja 5</td>
+                                    <td>CRC</td>
+                                    <td>₡75,000</td>
+                                    <td>2024-06-03</td>
+                                    <td>Ingreso</td>
+                                    <td>Org B</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Transacciones</td>
+                                    <td>EUR</td>
+                                    <td>€120,000</td>
+                                    <td>2024-06-05</td>
+                                    <td>Retiro</td>
+                                    <td>Org C</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Fondos para Caja Chica</td>
+                                    <td>CRC</td>
+                                    <td>₡30,000</td>
+                                    <td>2024-06-07</td>
+                                    <td>Retiro</td>
+                                    <td>Org D</td>
+                                </tr>
+                                <!-- Añadir más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5">
+        <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script3.js"></script>
+    <script>
+        document.getElementById('btnIngresarDinero').addEventListener('click', function () {
+            const isSuccessful = Math.random() > 0.5;
+            if (isSuccessful) {
+                alert('Ingreso exitoso');
+            } else {
+                alert('Error al ingresar dinero');
+            }
+            const modalIngresar = bootstrap.Modal.getInstance(document.getElementById('modalIngresarDinero'));
+            modalIngresar.hide();
+        });
+
+        document.getElementById('btnRetirarDinero').addEventListener('click', function () {
+            const isSuccessful = Math.random() > 0.5;
+            if (isSuccessful) {
+                alert('Retiro exitoso');
+            } else {
+                alert('Sin dinero en bóveda');
+            }
+            const modalRetirar = bootstrap.Modal.getInstance(document.getElementById('modalRetirarDinero'));
+            modalRetirar.hide();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Desembolsos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="header">
+            <a href="index.html" class="btn btn-light mx-3 my-2">Volver</a>
+            <h5 class="navbar navbar-light justify-content-end mx-4">logo</h5>
+        </div>
+        <div class="content">
+            <div class="row justify-content-center">
+                <div class="col-md-10 mb-2">
+                    <h3>Gestión de Desembolsos</h3>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <h5>Facturas Pendientes</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Proveedor</th>
+                                    <th>Moneda</th>
+                                    <th>Monto</th>
+                                    <th>Fecha de Factura</th>
+                                    <th>Descripción</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Proveedor A</td>
+                                    <td>CRC</td>
+                                    <td>₡500,000</td>
+                                    <td>2024-06-01</td>
+                                    <td>Compra de suministros</td>
+                                    <td>Pendiente</td>
+                                    <td><button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                            data-bs-target="#modalPagarFactura">Pagar</button></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Proveedor B</td>
+                                    <td>CRC</td>
+                                    <td>₡750,000</td>
+                                    <td>2024-06-02</td>
+                                    <td>Servicios de limpieza</td>
+                                    <td>Pendiente</td>
+                                    <td><button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                            data-bs-target="#modalPagarFactura">Pagar</button></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Proveedor C</td>
+                                    <td>USD</td>
+                                    <td>$1,000</td>
+                                    <td>2024-06-03</td>
+                                    <td>Consultoría</td>
+                                    <td>Pendiente</td>
+                                    <td><button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                            data-bs-target="#modalPagarFactura">Pagar</button></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Proveedor D</td>
+                                    <td>EUR</td>
+                                    <td>€2,000</td>
+                                    <td>2024-06-04</td>
+                                    <td>Servicios de TI</td>
+                                    <td>Pendiente</td>
+                                    <td><button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                            data-bs-target="#modalPagarFactura">Pagar</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <h5>Facturas Pagadas</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Proveedor</th>
+                                        <th>Moneda</th>
+                                        <th>Monto</th>
+                                        <th>Fecha de pago</th>
+                                        <th>Descripción</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Proveedor A</td>
+                                        <td>CRC</td>
+                                        <td>₡500,000</td>
+                                        <td>2024-06-01</td>
+                                        <td>Compra de suministros</td>
+                                        <td>Pagado</td>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Proveedor B</td>
+                                        <td>CRC</td>
+                                        <td>₡750,000</td>
+                                        <td>2024-06-02</td>
+                                        <td>Servicios de limpieza</td>
+                                        <td>Pagado</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Proveedor C</td>
+                                        <td>USD</td>
+                                        <td>$1,000</td>
+                                        <td>2024-06-03</td>
+                                        <td>Consultoría</td>
+                                        <td>Pagado</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Proveedor D</td>
+                                        <td>EUR</td>
+                                        <td>€2,000</td>
+                                        <td>2024-06-04</td>
+                                        <td>Servicios de TI</td>
+                                        <td>Pagado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pago de Factura -->
+    <div class="modal fade" id="modalPagarFactura" tabindex="-1" aria-labelledby="modalPagarFacturaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPagarFacturaLabel">Confirmar Pago de Factura</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPago">
+                        <div class="mb-3">
+                            <label for="cuentaDebitar" class="form-label">Cuenta a Debitar</label>
+                            <select class="form-select" id="cuentaDebitar">
+                                <option value="12345678">Cuenta 12345678</option>
+                                <option value="87654321">Cuenta 87654321</option>
+                                <option value="11223344">Cuenta 11223344</option>
+                                <option value="44332211">Cuenta 44332211</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="montoPagado" class="form-label">Monto a Pagar</label>
+                            <input type="number" class="form-control" id="montoPagado" placeholder="Ingrese el monto a pagar">
+                        </div>
+                        <div class="mb-3">
+                            <label for="divisa" class="form-label">Divisa</label>
+                            <select class="form-select" id="divisa">
+                                <option value="CRC">CRC - Colón Costarricense</option>
+                                <option value="USD">USD - Dólar Estadounidense</option>
+                                <option value="EUR">EUR - Euro</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaPago" class="form-label">Fecha de Pago</label>
+                            <input type="datetime-local" class="form-control" id="fechaPago">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cedula" class="form-label">Cédula</label>
+                            <input type="text" class="form-control" id="cedula" placeholder="Ingrese la cédula del cliente">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="confirmarPagoBtn">Confirmar Pago</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5">
+        <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('confirmarPagoBtn').addEventListener('click', function () {
+            const isConfirmed = confirm('¿Estás seguro de confirmar el pago?');
+            if (isConfirmed) {
+                const pagoExitoso = Math.random() > 0.5; // Simula el éxito o fracaso del pago
+                if (pagoExitoso) {
+                    alert('Pago exitoso');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalPagarFactura'));
+                    modal.hide();
+                } else {
+                    alert('Fondos insuficientes en la cuenta');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
