@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimientos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header d-flex justify-content-between align-items-center px-3 py-2">
+        <div>
+            <a href="index.html" class="btn btn-light mx-3 my-2">Volver</a>
+        </div>
+        <h3 class="text-center flex-grow-1">Movimientos</h3>
+        <h5 class="navbar navbar-light">logo</h5>
+    </div>
+    <div class="container-fluid">
+        <div class="content">
+            <div class="row mb-3 justify-content-center">
+                <div class="col-md-3 mt-2">
+                    <label for="filterFecha" class="form-label">Filtrar por Fecha</label>
+                    <input type="date" class="form-control" id="filterFecha">
+                </div>
+                <div class="col-md-3 mt-2">
+                    <label for="filterTipo" class="form-label">Filtrar por Tipo de Acción</label>
+                    <select class="form-select" id="filterTipo">
+                        <option value="">Todos</option>
+                        <option value="Ingreso">Ingreso</option>
+                        <option value="Retiro">Retiro</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mt-2">
+                    <label for="filterMoneda" class="form-label">Filtrar por Moneda</label>
+                    <select class="form-select" id="filterMoneda">
+                        <option value="">Todas</option>
+                        <option value="CRC">Colones</option>
+                        <option value="USD">Dólares</option>
+                        <option value="EUR">Euros</option>
+                    </select>
+                </div>
+                <div class="col-md-10 mt-2">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Descripción</th>
+                                    <th>Moneda</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Tipo de Acción</th>
+                                    <th>Nombre de la Organización</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Ahorro 402640041</td>
+                                    <td>USD</td>
+                                    <td>$50,000</td>
+                                    <td>2024-06-01</td>
+                                    <td>Ingreso</td>
+                                    <td>Org A</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Cierre Caja 5</td>
+                                    <td>CRC</td>
+                                    <td>₡75,000</td>
+                                    <td>2024-06-03</td>
+                                    <td>Ingreso</td>
+                                    <td>Org B</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Transacciones</td>
+                                    <td>EUR</td>
+                                    <td>€120,000</td>
+                                    <td>2024-06-05</td>
+                                    <td>Retiro</td>
+                                    <td>Org C</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Fondos para Caja Chica</td>
+                                    <td>CRC</td>
+                                    <td>₡30,000</td>
+                                    <td>2024-06-07</td>
+                                    <td>Retiro</td>
+                                    <td>Org D</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Fondos para Caja Chica</td>
+                                    <td>CRC</td>
+                                    <td>₡30,000</td>
+                                    <td>2024-06-07</td>
+                                    <td>Retiro</td>
+                                    <td>Org D</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Fondos para Caja Chica</td>
+                                    <td>CRC</td>
+                                    <td>₡30,000</td>
+                                    <td>2024-06-07</td>
+                                    <td>Retiro</td>
+                                    <td>Org D</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Fondos para Caja Chica</td>
+                                    <td>CRC</td>
+                                    <td>₡30,000</td>
+                                    <td>2024-06-07</td>
+                                    <td>Retiro</td>
+                                    <td>Org D</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Fondos para Caja Chica</td>
+                                    <td>CRC</td>
+                                    <td>₡30,000</td>
+                                    <td>2024-06-07</td>
+                                    <td>Retiro</td>
+                                    <td>Org D</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>Fondos para Caja Chica</td>
+                                    <td>CRC</td>
+                                    <td>₡30,000</td>
+                                    <td>2024-06-07</td>
+                                    <td>Retiro</td>
+                                    <td>Org D</td>
+                                </tr>
+                                <!-- Añadir más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer mt-5">
+        <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

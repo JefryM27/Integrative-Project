@@ -11,18 +11,15 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="header">
-            <a href="#" class="btn btn-light mx-3 my-2">Volver</a>
-            <h5 class="navbar navbar-light justify-content-end mx-4">logo</h5>
+    <div class="header d-flex justify-content-between align-items-center px-3 py-2 mb-5">
+        <div>
+            <a href="index.html" class="btn btn-light mx-3 my-2">Volver</a>
         </div>
-        <div class="content">
-            <div class="row">
-                <div class="col-md-6">
-                    <h3>Monitoreo de Efectivo</h3>
-                </div>
-            </div>
-
+        <h3 class="text-center flex-grow-1">Monitoreo de Efectivo</h3>
+        <h5 class="navbar navbar-light">logo</h5>
+    </div>
+    <div class="container-fluid mt-5">
+        <div class="content mb-4 mt-2">
             <div class="row">
                 <div class="col-md-2">
                     <div class="info-box">
@@ -97,7 +94,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-5">
+            <div class="row mt-5 mb-5">
                 <div class="col-md-3">
                     <h4>Ingresos Diarios</h4>
                     <canvas id="dailyIncomeChart"></canvas>
@@ -106,7 +103,7 @@
                     <h4>Ingresos Semanales</h4>
                     <canvas id="weeklyIncomeChart"></canvas>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-5">
                     <h4>Ingresos Mensuales</h4>
                     <canvas id="monthlyIncomeChart"></canvas>
                 </div>
@@ -121,7 +118,7 @@
         <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <script src="grafMonitoreo.js"></script>
 </body>
 
 </html>

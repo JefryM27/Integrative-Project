@@ -11,11 +11,14 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="header">
-            <a href="#" class="btn btn-light mx-3 my-2">Volver</a>
-            <h5 class="navbar navbar-light justify-content-end mx-4">logo</h5>
+    <div class="header d-flex justify-content-between align-items-center px-3 py-2">
+        <div>
+            <a href="index.html" class="btn btn-light mx-3 my-2">Volver</a>
         </div>
+        <h3 class="text-center flex-grow-1">Inversiones</h3>
+        <h5 class="navbar navbar-light">logo</h5>
+    </div>
+    <div class="container-fluid">
         <div class="content">
             <div class="row justify-content-center">
                 <div class="col-md-6">
@@ -28,96 +31,108 @@
 
             <div class="row mb-5 justify-content-center">
                 <div class="col-md-6">
-                    <form>
+                    <form id="formRegistrarInversion">
                         <div class="mb-3">
-                            <label for="divisaInversion" class="form-label">Divisa</label>
-                            <select class="form-select" id="divisaInversion">
-                                <option value="colones">CRC - Colón Costarricense</option>
-                                <option value="dolares">USD - Dólar Estadounidense</option>
-                                <option value="euros">EUR - Euro</option>
+                            <label for="monedaInversion" class="form-label">Moneda</label>
+                            <select class="form-select" id="monedaInversion">
+                                <option value="CRC">CRC - Colón Costarricense</option>
+                                <option value="USD">USD - Dólar Estadounidense</option>
+                                <option value="EUR">EUR - Euro</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="montoInversion" class="form-label">Cuenta A Debitar</label>
-                            <select class="form-select" id="divisaInversion">
-                                <option value="colones">CR150236244</option>
-                                <option value="dolares">12466314564</option>
-                                <option value="euros">5453434545</option>
+                            <label for="cuentaDebitar" class="form-label">Cuenta A Debitar</label>
+                            <select class="form-select" id="cuentaDebitar">
+                                <option value="12345678">CR150236244</option>
+                                <option value="87654321">12466314564</option>
+                                <option value="11223344">5453434545</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="montoInversion" class="form-label">Monto</label>
-                            <input type="number" class="form-control" id="montoInversion"
-                                placeholder="Ingrese el monto">
+                            <input type="number" class="form-control" id="montoInversion" placeholder="Ingrese el monto">
                         </div>
                         <div class="mb-3">
                             <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
-                            <input type="datetime" class="form-control" id="fechaInicio">
+                            <input type="date" class="form-control" id="fechaInicio">
                         </div>
                         <div class="mb-3">
                             <label for="fechaFin" class="form-label">Fecha de Fin</label>
-                            <input type="datetime" class="form-control" id="fechaFin">
+                            <input type="date" class="form-control" id="fechaFin">
                         </div>
                         <div class="mb-3">
                             <label for="clienteTesoreria" class="form-label">Cliente Tesorería</label>
                             <select class="form-select" id="clienteTesoreria">
-                                <option value="1">Banco New York</option>
-                                <option value="2">Bolsa de Valores</option>
-                                <option value="3">Banco Costa Rica</option>
+                                <option value="Banco New York">Banco New York</option>
+                                <option value="Bolsa de Valores">Bolsa de Valores</option>
+                                <option value="Banco Costa Rica">Banco Costa Rica</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg">Registrar Inversión</button>
+                        <div class="mb-3">
+                            <label for="organizacion" class="form-label">Organización</label>
+                            <select class="form-select" id="organizacion">
+                                <option value="Org A">Org A</option>
+                                <option value="Org B">Org B</option>
+                                <option value="Org C">Org C</option>
+                                <option value="Org D">Org D</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-lg" id="registrarInversionBtn">Registrar Inversión</button>
                     </form>
                 </div>
-                    <div class="col-md-6">
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th># Inversión</th>
-                                        <th>Divisa</th>
-                                        <th>Monto</th>
-                                        <th>Fecha de Inicio</th>
-                                        <th>Fecha de Fin</th>
-                                        <th>Cliente</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>CRC</td>
-                                        <td>₡1,000,000</td>
-                                        <td>2024-01-01</td>
-                                        <td>2025-01-01</td>
-                                        <td>Banco New York</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>USD</td>
-                                        <td>$2,000</td>
-                                        <td>2024-02-01</td>
-                                        <td>2025-02-01</td>
-                                        <td>Bolsa de Valores</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>EUR</td>
-                                        <td>€3,000</td>
-                                        <td>2024-03-01</td>
-                                        <td>2025-03-01</td>
-                                        <td>Banco Costa Rica</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>USD</td>
-                                        <td>$4,000</td>
-                                        <td>2024-04-01</td>
-                                        <td>2025-04-01</td>
-                                        <td>Banco New York</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th># Inversión</th>
+                                    <th>Moneda</th>
+                                    <th>Monto</th>
+                                    <th>Fecha de Inicio</th>
+                                    <th>Fecha de Fin</th>
+                                    <th>Cliente</th>
+                                    <th>Organización</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>CRC</td>
+                                    <td>₡1,000,000</td>
+                                    <td>2024-01-01</td>
+                                    <td>2025-01-01</td>
+                                    <td>Banco New York</td>
+                                    <td>Org A</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>USD</td>
+                                    <td>$2,000</td>
+                                    <td>2024-02-01</td>
+                                    <td>2025-02-01</td>
+                                    <td>Bolsa de Valores</td>
+                                    <td>Org B</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>EUR</td>
+                                    <td>€3,000</td>
+                                    <td>2024-03-01</td>
+                                    <td>2025-03-01</td>
+                                    <td>Banco Costa Rica</td>
+                                    <td>Org C</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>USD</td>
+                                    <td>$4,000</td>
+                                    <td>2024-04-01</td>
+                                    <td>2025-04-01</td>
+                                    <td>Banco New York</td>
+                                    <td>Org D</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -129,7 +144,20 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <script src="grafMonitoreo.js"></script>
+    <script>
+        document.getElementById('registrarInversionBtn').addEventListener('click', function () {
+            const isConfirmed = confirm('¿Estás seguro de registrar esta inversión?');
+            if (isConfirmed) {
+                const inversionExitosa = Math.random() > 0.5; // Simula el éxito o fracaso del registro de la inversión
+                if (inversionExitosa) {
+                    alert('Inversión registrada exitosamente');
+                } else {
+                    alert('Error al registrar la inversión');
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

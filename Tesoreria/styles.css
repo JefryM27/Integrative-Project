@@ -6,6 +6,7 @@ body {
 
 .header {
     background-color: #3b5998;
+    padding: 5px;
     color: #fff;
     text-align: left;
 }
@@ -23,6 +24,7 @@ body {
     margin-top: 100px;
     margin-left: 255px;
 }
+
 .Trasferencia {
     margin-top: 100px;
 }
@@ -69,75 +71,12 @@ body {
     bottom: 0;
 }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-}
-
-.header {
-    background-color: #3b5998;
-    padding: 5px;
-    color: #fff;
-    text-align: left;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-}
-
 .header .btn {
     font-size: 14px;
-}
-
-.content {
-    margin-top: 20px;
-}
-
-.info-box {
-    background-color: #3b5998;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font-size: 16px;
 }
 
 .info-box h4 {
     margin-bottom: 10px;
-}
-
-.info-box p {
-    font-size: 20px;
-    margin: 0;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-}
-
-.header {
-    background-color: #3b5998;
-    padding: 5px;
-    color: #fff;
-    text-align: left;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-}
-
-.header .btn {
-    font-size: 14px;
-}
-
-.content {
-    margin-top: 20px;
 }
 
 .table-responsive {
@@ -159,14 +98,6 @@ body {
     vertical-align: middle;
 }
 
-.btn-lg {
-    font-size: 18px;
-    padding: 10px 20px;
-    margin: 5px;
-    background-color: #3b5998;
-    border-color: #3b5998;
-}
-
 form .form-label {
     font-weight: bold;
 }
@@ -174,7 +105,6 @@ form .form-label {
 form .form-control, form .form-select {
     margin-bottom: 15px;
 }
-
 
 .factura {
     background-color: #fff;
@@ -195,28 +125,3 @@ form .form-control, form .form-select {
     width: 100%;
 }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-}
-
-.header {
-    background-color: #3b5998;
-    padding: 5px;
-    color: #fff;
-    text-align: left;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 24px;
-}
-
-.header .btn {
-    font-size: 14px;
-}
-
-.content {
-    margin-top: 20px;
-}
