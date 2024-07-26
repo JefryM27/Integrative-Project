@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cooperativa de Ahorro y Crédito</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    header,
+    footer {
+      background-color: #3b5998 !important;
+    }
+
+    .bg-primary {
+      background-color: #3b5998 !important;
+    }
+
+    .btn-primary {
+      background-color: #3b5998 !important;
+    }
+
+    .card-body i,
+    .card-body h5 {
+      color: #000 !important;
+    }
+
+    .card-body {
+      padding: 0.5rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+    }
+
+    .modal-content {
+      font-size: 0.9rem;
+    }
+
+    .form-control,
+    .btn {
+      font-size: 0.9rem;
+    }
+
+    .modal-header h5 {
+      font-size: 1.5rem;
+      color: #3b5998;
+      text-align: center;
+      width: 100%;
+    }
+
+    .close {
+      font-size: 1.2rem;
+    }
+
+    .list-group-item {
+      padding: 0.5rem;
+    }
+
+    .btn-sm {
+      font-size: 0.8rem;
+    }
+
+    h2,
+    h5 {
+      font-size: 1.2rem;
+    }
+
+    .modal-footer .btn-primary {
+      float: left;
+      margin-right: auto;
+    }
+
+    .modal-footer .btn-close-red {
+      float: right;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="bg-primary text-white py-3">
+    <div class="container d-flex justify-content-center align-items-center position-relative">
+      <h1 class="m-0 text-center">Cooperativa de Ahorro y Crédito</h1>
+      <div class="logo-container position-absolute" style="right: 0">
+        <img src="/icons/logo.png" alt="Logo de la Cooperativa" class="logo" />
+      </div>
+    </div>
+  </header>
+  <div class="d-flex">
+    <aside id="sidebar" class="bg-primary text-white p-3">
+      <ul class="list-unstyled">
+        <li>
+          <a href="#modalCreditosInternos" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/prestamos.png" alt="Préstamos" class="mr-2" />
+            Registro de préstamos</a>
+        </li>
+        <li>
+          <a href="#modalRegistroProveedores" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/proveedores.png" alt="Proveedores" class="mr-2" />
+            Registro de Proveedores</a>
+        </li>
+        <li>
+          <a href="#modalPagosProveedores" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/pagos.png" alt="Pagos" class="mr-2" /> Pagos a
+            Proveedores</a>
+        </li>
+        <li>
+          <a href="#modalGestionIntereses" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/intereses.png" alt="Intereses" class="mr-2" />
+            Gestión de Intereses</a>
+        </li>
+        <li>
+          <a href="#modalRegistroFacturasPorPagar" class="text-white d-flex align-items-center" data-toggle="modal">
+            <img src="/icons/facturas_por_pagar.png" alt="Facturas Por Pagar" class="mr-2" />
+            Registro de Facturas Por Pagar
+          </a>
+        </li>
+        <li>
+          <a href="#modalRegistroFacturasPorCobrar" class="text-white d-flex align-items-center" data-toggle="modal">
+            <img src="/icons/facturas_por_cobrar.png" alt="Facturas Por Cobrar" class="mr-2" />
+            Registro de Facturas Por Cobrar
+          </a>
+        </li>
+        <li>
+          <a href="#modalRegistroPagos" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/pagos.png" alt="Pagos" class="mr-2" /> Registro
+            de Pagos</a>
+        </li>
+        <li>
+          <a href="#modalRegistroCobros" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/pagos.png" alt="Cobros" class="mr-2" /> Registro
+            de Cobros</a>
+        </li>
+
+        <li>
+          <a href="#modalReportes" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/reportes.png" alt="Reportes" class="mr-2" />
+            Reportes</a>
+        </li>
+        <li>
+          <a href="#modalRegistroNotasCredito" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/credit.png" alt="Notas de Crédito" class="mr-2" />
+            Registro de Notas de Crédito</a>
+        </li>
+        <li>
+          <a href="#modalRegistroNotasDebito" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/debit.png" alt="Notas de Débito" class="mr-2" />
+            Registro de Notas de Débito</a>
+        </li>
+        <li>
+          <a href="#modalAplicacionPagos" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/payments.png" alt="Aplicación de Pagos" class="mr-2" />
+            Aplicación de Pagos</a>
+        </li>
+        <li>
+          <a href="#modalCreacionAsientos" class="text-white d-flex align-items-center" data-toggle="modal"><img
+              src="/icons/book.png" alt="Asientos" class="mr-2" />
+            Creación de Asientos</a>
+        </li>
+      </ul>
+    </aside>
+    <main class="flex-fill p-3">
+      <section id="inicio">
+        <h2>Sección de Cuentas por Cobrar | Pagar</h2>
+        <p>
+          Ofrecemos soluciones financieras para nuestros socios con
+          transparencia y confianza.
+        </p>
+      </section>
+      <section id="modulos">
+        <h2>Módulos</h2>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-hand-holding-usd fa-2x"></i>
+                <h5 class="card-title mt-2">Créditos Internos</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalCreditosInternos">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-user-check fa-2x"></i>
+                <h5 class="card-title mt-2">Registro de Proveedores</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalRegistroProveedores">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-file-invoice-dollar fa-2x"></i>
+                <h5 class="card-title mt-2">Pagos a Proveedores</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalPagosProveedores">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-percentage fa-2x"></i>
+                <h5 class="card-title mt-2">Gestión de Intereses</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalGestionIntereses">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-receipt fa-2x"></i>
+                <h5 class="card-title mt-2">Registro de Facturas Por Pagar</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalRegistroFacturasPorPagar">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-receipt fa-2x"></i>
+                <h5 class="card-title mt-2">Registro de Facturas Por Cobrar</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalRegistroFacturasPorCobrar">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-money-check-alt fa-2x"></i>
+                <h5 class="card-title mt-2">Registro de Pagos</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalRegistroPagos">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-money-check-alt fa-2x"></i>
+                <h5 class="card-title mt-2">Registro de Cobros</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalRegistroCobros">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-2x"></i>
+                <h5 class="card-title mt-2">Reportes</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalReportes">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-file-invoice fa-2x"></i>
+                <h5 class="card-title mt-2">Registro de Notas de Crédito</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalRegistroNotasCredito">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-file-invoice fa-2x"></i>
+                <h5 class="card-title mt-2">Registro de Notas de Débito</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalRegistroNotasDebito">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-hand-holding-usd fa-2x"></i>
+                <h5 class="card-title mt-2">Aplicación de Pagos</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalAplicacionPagos">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body text-center">
+                <i class="fas fa-book fa-2x"></i>
+                <h5 class="card-title mt-2">Creación de Asientos</h5>
+                <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalCreacionAsientos">
+                  Ingresar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="bg-primary text-white text-center py-3">
+    © 2024 Cooperativa de Ahorro y Crédito
+  </footer>
+
+  <!-- Modal Créditos Internos -->
+  <div class="modal fade" id="modalCreditosInternos" tabindex="-1" aria-labelledby="modalCreditosInternosLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCreditosInternosLabel">
+            Créditos Internos
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Créditos Internos -->
+          <form>
+            <div class="form-group">
+              <label for="creditoMonto">Monto</label>
+              <input type="number" class="form-control" id="creditoMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="creditoPlazo">Plazo</label>
+              <input type="number" class="form-control" id="creditoPlazo" required />
+            </div>
+            <div class="form-group">
+              <label for="creditoInteres">Interés</label>
+              <input type="number" class="form-control" id="creditoInteres" required />
+            </div>
+            <div class="form-group">
+              <label for="CreditoInternoFecha">Fecha Solicitud</label>
+              <input type="date" class="form-control" id="CreditoInternoFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="creditoMoneda">Moneda</label>
+              <select class="form-control" id="creditoMoneda" required>
+                <option>Colones</option>
+                <option>Dólares</option>
+                <option>Euros</option>
+              </select>
+            </div>
+          </form>
+          <!-- Tabla de Creditos Internos -->
+          <h5 class="mt-4">Lista de Gestion de Intereses</h5>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Credito Interno 1
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Credito Interno 2
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Crédito Interno
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Registro de Proveedores -->
+  <div class="modal fade" id="modalRegistroProveedores" tabindex="-1" aria-labelledby="modalRegistroProveedoresLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroProveedoresLabel">
+            Registro de Proveedores
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Registro de Proveedores -->
+          <form>
+            <div class="form-group">
+              <label for="proveedorNombre">Nombre del Proveedor</label>
+              <input type="text" class="form-control" id="proveedorNombre" required />
+            </div>
+            <div class="form-group">
+              <label for="proveedorRUC">Cedula Física o Juridica</label>
+              <input type="text" class="form-control" id="proveedorRUC" required />
+            </div>
+            <div class="form-group">
+              <label for="proveedorDireccion">Dirección</label>
+              <input type="text" class="form-control" id="proveedorDireccion" required />
+            </div>
+            <div class="form-group">
+              <label for="proveedorTelefono">Teléfono</label>
+              <input type="text" class="form-control" id="proveedorTelefono" required />
+            </div>
+            <div class="form-group">
+              <label for="emailProveedor">Email</label>
+              <input type="number" class="form-control" id="emailProveedor" required />
+            </div>
+          </form>
+
+          <!-- Lista de Proveedores -->
+          <h5 class="mt-4">Lista de Proveedores</h5>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Proveedor 1
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Proveedor 2
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <!-- Agrega más proveedores según sea necesario -->
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Proveedor
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pagos a Proveedores -->
+  <div class="modal fade" id="modalPagosProveedores" tabindex="-1" aria-labelledby="modalPagosProveedoresLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalPagosProveedoresLabel">Pagos a Proveedores</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Pagos a Proveedores -->
+          <form>
+            <div class="form-group">
+              <label for="pagoProveedorMonto">Monto del Pago</label>
+              <input type="number" class="form-control" id="pagoProveedorMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="pagoProveedorFecha">Fecha del Pago</label>
+              <input type="date" class="form-control" id="pagoProveedorFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="pagoProveedorMetodo">Método de Pago</label>
+              <select class="form-control" id="pagoProveedorMetodo" required>
+                <option>Transferencia Bancaria</option>
+                <option>Cheque</option>
+                <option>Tarjeta de Crédito</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pagoProveedorNombre">Nombre del Proveedor</label>
+              <select class="form-control" id="pagoProveedorNombre" required>
+                <option>Proveedor 1</option>
+                <option>Proveedor 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="creditoMoneda">Moneda</label>
+              <select class="form-control" id="creditoMoneda" required>
+                <option>Colones</option>
+                <option>Dólares</option>
+                <option>Euros</option>
+              </select>
+            </div>
+          </form>
+          <!-- Tabla de Pago a proveedores-->
+          <h5 class="mt-4">Lista de Pago a Proveedores</h5>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Pago a Proveedor 1
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Pago a proveedor 2
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">Registrar Pago</button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Gestión de Intereses -->
+  <div class="modal fade" id="modalGestionIntereses" tabindex="-1" aria-labelledby="modalGestionInteresesLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalGestionInteresesLabel">
+            Gestión de Intereses
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Gestión de Intereses -->
+          <form>
+            <div class="form-group">
+              <label for="interesTipo">Tipo de Interés</label>
+              <select class="form-control" id="interesTipo" required>
+                <option>Interés Simple</option>
+                <option>Interés Compuesto</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="interesTasa">Tasa de Interés (%)</label>
+              <input type="number" class="form-control" id="interesTasa" required />
+            </div>
+            <div class="form-group">
+              <label for="interesPeriodo">Período</label>
+              <input type="number" class="form-control" id="interesPeriodo" required />
+            </div>
+            <div class="form-group">
+              <label for="InteresesFecha">Fecha Cobro</label>
+              <input type="date" class="form-control" id="InteresesFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="InteresesMoneda">Moneda</label>
+              <select class="form-control" id="InteresesMoneda" required>
+                <option>Colones</option>
+                <option>Dólares</option>
+                <option>Euros</option>
+              </select>
+            </div>
+          </form>
+          <!-- Tabla de Gestion de Intereses -->
+          <h5 class="mt-4">Lista de Gestion de Intereses</h5>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Interes 1
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Interes 2
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Interés
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Registro de Facturas Por Pagar -->
+  <div class="modal fade" id="modalRegistroFacturasPorPagar" tabindex="-1"
+    aria-labelledby="modalRegistroFacturasPorPagarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroFacturasPorPagarLabel">Registro de Facturas Por Pagar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Registro de Facturas Por Pagar -->
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="facturaNumeroPagar">Número de Factura</label>
+                  <input type="text" class="form-control" id="facturaNumeroPagar" required />
+                </div>
+                <div class="form-group">
+                  <label for="facturaFechaPagar">Fecha de Factura</label>
+                  <input type="date" class="form-control" id="facturaFechaPagar" required />
+                </div>
+                <div class="form-group">
+                  <label for="facturaMontoPagar">Monto</label>
+                  <input type="number" class="form-control" id="facturaMontoPagar" required />
+                </div>
+                <div class="form-group">
+                  <label for="facturaEstadoPagar">Estado</label>
+                  <select class="form-control" id="facturaEstadoPagar" required>
+                    <option>Pendiente</option>
+                    <option>Pagada</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="facturaProveedorPagar">Proveedor</label>
+                  <select class="form-control" id="facturaProveedorPagar" required>
+                    <option>Proveedor 1</option>
+                    <option>Proveedor 2</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="creditoMonedaPagar">Moneda</label>
+                  <select class="form-control" id="creditoMonedaPagar" required>
+                    <option>Colones</option>
+                    <option>Dólares</option>
+                    <option>Euros</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="facturaDescripcionPagar">Descripción</label>
+                  <textarea class="form-control" id="facturaDescripcionPagar" required></textarea>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <!-- Tabla de Facturas Por Pagar-->
+                <h5 class="mt-4">Lista de Facturas por Pagar</h5>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Factura por Pagar 1
+                    <div>
+                      <button class="btn btn-sm btn-info mr-2">Editar</button>
+                      <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </div>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Factura por Pagar 2
+                    <div>
+                      <button class="btn btn-sm btn-info mr-2">Editar</button>
+                      <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">Registrar Factura</button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Registro de Facturas Por Cobrar -->
+  <div class="modal fade" id="modalRegistroFacturasPorCobrar" tabindex="-1"
+    aria-labelledby="modalRegistroFacturasPorCobrarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroFacturasPorCobrarLabel">Registro de Facturas Por Cobrar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Registro de Facturas Por Cobrar -->
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="facturaNumeroCobrar">Número de Factura</label>
+                  <input type="text" class="form-control" id="facturaNumeroCobrar" required />
+                </div>
+                <div class="form-group">
+                  <label for="facturaFechaCobrar">Fecha de Factura</label>
+                  <input type="date" class="form-control" id="facturaFechaCobrar" required />
+                </div>
+                <div class="form-group">
+                  <label for="facturaMontoCobrar">Monto</label>
+                  <input type="number" class="form-control" id="facturaMontoCobrar" required />
+                </div>
+                <div class="form-group">
+                  <label for="facturaEstadoCobrar">Estado</label>
+                  <select class="form-control" id="facturaEstadoCobrar" required>
+                    <option>Pendiente</option>
+                    <option>Cobrada</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="facturaClienteCobrar">Cliente</label>
+                  <select class="form-control" id="facturaClienteCobrar" required>
+                    <option>Cliente 1</option>
+                    <option>Cliente 2</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="creditoMonedaCobrar">Moneda</label>
+                  <select class="form-control" id="creditoMonedaCobrar" required>
+                    <option>Colones</option>
+                    <option>Dólares</option>
+                    <option>Euros</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="facturaDescripcionCobrar">Descripción</label>
+                  <textarea class="form-control" id="facturaDescripcionCobrar" required></textarea>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <!-- Tabla de Facturas Por Cobrar-->
+                <h5 class="mt-4">Lista de Facturas por Cobrar</h5>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Factura por Cobrar 1
+                    <div>
+                      <button class="btn btn-sm btn-info mr-2">Editar</button>
+                      <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </div>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Factura por Cobrar 2
+                    <div>
+                      <button class="btn btn-sm btn-info mr-2">Editar</button>
+                      <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">Registrar Factura</button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Registro de Pagos -->
+  <div class="modal fade" id="modalRegistroPagos" tabindex="-1" aria-labelledby="modalRegistroPagosLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroPagosLabel">
+            Registro de Pagos
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Registro de Pagos -->
+          <form>
+            <div class="form-group">
+              <label for="registroPagoMonto">Monto Pagado</label>
+              <input type="number" class="form-control" id="registroPagoMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="registroPagoFecha">Fecha de Pago</label>
+              <input type="date" class="form-control" id="registroPagoFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="registroPagoMetodo">Método de Pago</label>
+              <select class="form-control" id="registroPagoMetodo" required>
+                <option>Transferencia Bancaria</option>
+                <option>Cheque</option>
+                <option>Tarjeta de Crédito</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="registroPagoFactura">Factura por Pagar</label>
+              <select class="form-control" id="registroPagoFactura" required>
+                <option>Factura por Pagar 1</option>
+                <option>Factura por Pagar 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="registroPagoProveedor">Proveedor</label>
+              <select class="form-control" id="registroPagoProveedor" required>
+                <option>Proveedor 1</option>
+                <option>Proveedor 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="creditoMoneda">Moneda</label>
+              <select class="form-control" id="creditoMoneda" required>
+                <option>Colones</option>
+                <option>Dólares</option>
+                <option>Euros</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Pago
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Registro de Cobros -->
+  <div class="modal fade" id="modalRegistroCobros" tabindex="-1" aria-labelledby="modalRegistroCobrosLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroCobrosLabel">
+            Registro de Cobros
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Registro de Cobros -->
+          <form>
+            <div class="form-group">
+              <label for="registroCobroMonto">Monto Cobrado</label>
+              <input type="number" class="form-control" id="registroCobroMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="registroCobroFecha">Fecha de Cobro</label>
+              <input type="date" class="form-control" id="registroCobroFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="registroCobroMetodo">Método de Cobro</label>
+              <select class="form-control" id="registroCobroMetodo" required>
+                <option>Transferencia Bancaria</option>
+                <option>Cheque</option>
+                <option>Tarjeta de Crédito</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="registroCobroFactura">Factura por Cobrar</label>
+              <select class="form-control" id="registroCobroFactura" required>
+                <option>Factura por Cobrar 1</option>
+                <option>Factura por Cobrar 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="registroCobroCliente">Cliente</label>
+              <select class="form-control" id="registroCobroCliente" required>
+                <option>Cliente 1</option>
+                <option>Cliente 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="registroCobroMoneda">Moneda</label>
+              <select class="form-control" id="registroCobroMoneda" required>
+                <option>Colones</option>
+                <option>Dólares</option>
+                <option>Euros</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Cobro
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Modal Reportes -->
+  <div class="modal fade" id="modalReportes" tabindex="-1" aria-labelledby="modalReportesLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalReportesLabel">Reportes</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Reportes -->
+          <form>
+            <div class="form-group">
+              <label for="reporteNombre">Nombre</label>
+              <input type="text" class="form-control" id="reporteNombre" required />
+            </div>
+            <div class="form-group">
+              <label for="reporteDescripcion">Descripción</label>
+              <textarea class="form-control" id="reporteDescripcion" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="reporteFechaGeneracion">Fecha de Generación</label>
+              <input type="date" class="form-control" id="reporteFechaGeneracion" required />
+            </div>
+            <div class="form-group">
+              <label for="reporteTipo">Tipo de Reporte</label>
+              <select class="form-control" id="reporteTipo" required>
+                <option>Balance General</option>
+                <option>Estado de Resultados</option>
+                <option>Flujo de Efectivo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="reporteIdCliente">ID Cliente</label>
+              <input type="text" class="form-control" id="reporteIdCliente" required />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Generar Reporte
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Registro de Notas de Crédito -->
+  <div class="modal fade" id="modalRegistroNotasCredito" tabindex="-1" aria-labelledby="modalRegistroNotasCreditoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroNotasCreditoLabel">
+            Registro de Notas de Crédito
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Registro de Notas de Crédito -->
+          <form>
+            <div class="form-group">
+              <label for="notaCreditoNumero">Número de Nota</label>
+              <input type="text" class="form-control" id="notaCreditoNumero" required />
+            </div>
+            <div class="form-group">
+              <label for="notaCreditoFecha">Fecha de Emisión</label>
+              <input type="date" class="form-control" id="notaCreditoFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="notaCreditoMonto">Monto</label>
+              <input type="number" class="form-control" id="notaCreditoMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="notaCreditoProveedor">Proveedor</label>
+              <select class="form-control" id="notaCreditoProveedor" required>
+                <option>Proveedor 1</option>
+                <option>Proveedor 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="facturaDescripcion">Descripción</label>
+              <textarea class="form-control" id="facturaDescripcion" required></textarea>
+            </div>
+          </form>
+          <!-- Tabla de Notas de Débito -->
+          <h5 class="mt-4">Lista de Notas de Credito</h5>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Nota de Credito 1
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Nota de Credito 2
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <!-- Agrega más notas de débito según sea necesario -->
+          </ul>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Nota de Crédito
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Registro de Notas de Débito -->
+  <div class="modal fade" id="modalRegistroNotasDebito" tabindex="-1" aria-labelledby="modalRegistroNotasDebitoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroNotasDebitoLabel">
+            Registro de Notas de Débito
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Registro de Notas de Débito -->
+          <form>
+            <div class="form-group">
+              <label for="notaDebitoNumero">Número de Nota</label>
+              <input type="text" class="form-control" id="notaDebitoNumero" required />
+            </div>
+            <div class="form-group">
+              <label for="notaDebitoFecha">Fecha de Emisión</label>
+              <input type="date" class="form-control" id="notaDebitoFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="notaDebitoMonto">Monto</label>
+              <input type="number" class="form-control" id="notaDebitoMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="notaDebitoProveedor">Proveedor</label>
+              <select class="form-control" id="notaDebitoProveedor" required>
+                <option>Proveedor 1</option>
+                <option>Proveedor 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="facturaDescripcion">Descripción</label>
+              <textarea class="form-control" id="facturaDescripcion" required></textarea>
+            </div>
+          </form>
+          <!-- Tabla de Notas de Débito -->
+          <h5 class="mt-4">Lista de Notas de Débito</h5>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Nota de Débito 1
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Nota de Débito 2
+              <div>
+                <button class="btn btn-sm btn-info mr-2">Editar</button>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+              </div>
+            </li>
+            <!-- Agrega más notas de débito según sea necesario -->
+          </ul>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Nota de Débito
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Aplicación de Pagos -->
+  <div class="modal fade" id="modalAplicacionPagos" tabindex="-1" aria-labelledby="modalAplicacionPagosLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAplicacionPagosLabel">
+            Aplicación de Pagos
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Aplicación de Pagos -->
+          <form>
+            <div class="form-group">
+              <label for="aplicacionPagoMonto">Monto Aplicado</label>
+              <input type="number" class="form-control" id="aplicacionPagoMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="aplicacionPagoFecha">Fecha de Aplicación</label>
+              <input type="date" class="form-control" id="aplicacionPagoFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="aplicacionPagoProveedor">Pago a Proveedor</label>
+              <select class="form-control" id="aplicacionPagoProveedor" required>
+                <option>Pago a Proveedor 1</option>
+                <option>Pago a Proveedor 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="aplicacionPagoNotaCredito">Nota de Crédito</label>
+              <select class="form-control" id="aplicacionPagoNotaCredito" required>
+                <option>Nota de Crédito 1</option>
+                <option>Nota de Crédito 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="aplicacionPagoCliente">Cliente</label>
+              <select class="form-control" id="aplicacionPagoCliente" required>
+                <option>Cliente 1</option>
+                <option>Cliente 2</option>
+                <!-- Agrega más opciones según sea necesario -->
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Aplicación de Pago
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Creación de Asientos -->
+  <div class="modal fade" id="modalCreacionAsientos" tabindex="-1" aria-labelledby="modalCreacionAsientosLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCreacionAsientosLabel">
+            Creación de Asientos
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario Creación de Asientos -->
+          <form>
+            <div class="form-group">
+              <label for="asientoDescripcion">Descripción</label>
+              <input type="text" class="form-control" id="asientoDescripcion" required />
+            </div>
+            <div class="form-group">
+              <label for="asientoFecha">Fecha de Asiento</label>
+              <input type="date" class="form-control" id="asientoFecha" required />
+            </div>
+            <div class="form-group">
+              <label for="asientoMonto">Monto</label>
+              <input type="number" class="form-control" id="asientoMonto" required />
+            </div>
+            <div class="form-group">
+              <label for="asientoCuentaDebe">Cuenta Debe</label>
+              <input type="text" class="form-control" id="asientoCuentaDebe" required />
+            </div>
+            <div class="form-group">
+              <label for="asientoCuentaHaber">Cuenta Haber</label>
+              <input type="text" class="form-control" id="asientoCuentaHaber" required />
+            </div>
+            <div class="form-group">
+              <label for="asientoIdCliente">ID Cliente</label>
+              <input type="text" class="form-control" id="asientoIdCliente" required />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-register">
+            Registrar Asiento
+          </button>
+          <button type="button" class="btn btn-close-red" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
