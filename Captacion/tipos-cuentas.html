@@ -129,9 +129,14 @@
 
 <body>
 
-    <header class="text-center">
-        <h1>Tipos de cuentas</h1>
+    <header class="d-flex justify-content-between align-items-center px-3 py-2">
+        <div>
+            <a href="#" class="btn btn-light">Volver</a>
+        </div>
+        <h1 class="text-center flex-grow-1">Tipos de cuentas</h1>
+        <h5 class="navbar navbar-light">logo</h5>
     </header>
+    
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-3">
@@ -152,7 +157,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <a href="#" class="custom-button">
+                <a href="#" class="custom-button" id="plazos-button">
                     <img src="Images/plazos.png" alt="Plazos">
                     <strong>Plazos</strong>
                 </a>
@@ -170,7 +175,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <a href="#" class="custom-button">
+                <a href="#" class="custom-button" id="tradicional-button">
                     <img src="Images/Tradicional.png" alt="Tradicional">
                     <strong>Tradicional</strong>
                 </a>
@@ -186,7 +191,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <a href="#" class="custom-button">
+                <a href="#" class="custom-button" id="marchamo-button">
                     <img src="Images/carro.png" alt="Marchamo">
                     <strong>Marchamo</strong>
                 </a>
@@ -202,7 +207,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <a href="#" class="custom-button">
+                <a href="#" class="custom-button" id="infantil-button"  >
                     <img src="Images/infantil.png" alt="Infantil">
                     <strong>Infantil</strong>
                 </a>
@@ -225,7 +230,7 @@
     <!-- Modal -->
     <div id="navideno-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="close-navideno">&times;</span>
             <header class="text-center">
                 <h1>Ahorro Navideño</h1>
             </header>
@@ -257,6 +262,7 @@
                 <div class="col">
                     <div class="image">
                         <img src="Images/navidad.png" alt="Ahorro Navideño" style="width: 100px">
+                        <p>Intereses 13%</p>
                     </div>
                 </div>
                 <div class="col">
@@ -272,11 +278,12 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <a href="#" class="custom-button">
-                        <img src="Images/navidad.png" alt="Infantil">
+                    <a href="#" class="custom-button" onclick="confirmSolicitar()">
+                        <img src="Images/navidad.png" alt="Infantil"  >
                         <strong>Solicitar</strong>
                     </a>
                 </div>
+                
                 <hr>
             </div>
             <footer>
@@ -285,35 +292,10 @@
         </div>
     </div>
 
-    <script>
-        // JavaScript para manejar el modal
-        var modal = document.getElementById("navideno-modal");
-        var btn = document.getElementById("navideno-button");
-        var span = document.getElementsByClassName("close")[0];
-
-        btn.onmouseover = function () {
-            modal.style.display = "block";
-        }
-
-        btn.onmouseout = function () {
-            modal.style.display = "block";
-        }
-
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
-
     <!-- Modal -->
     <div id="plazos-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="close-plazos">&times;</span>
             <header class="text-center">
                 <h1>Ahorro a Plazos</h1>
             </header>
@@ -340,6 +322,7 @@
                 <div class="col">
                     <div class="image">
                         <img src="Images/plazos.png" alt="Ahorro a Plazos" style="width: 100px">
+                        <p>Intereses 13%</p>
                     </div>
                 </div>
                 <div class="col">
@@ -352,11 +335,12 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <a href="#" class="custom-button">
-                        <img src="Images/plazos.png" alt="Plazos">
+                    <a href="#" class="custom-button" onclick="confirmSolicitar()">
+                        <img src="Images/plazos.png" alt="Plazos"  >
                         <strong>Solicitar</strong>
                     </a>
                 </div>
+               
                 <hr>
             </div>
             <footer>
@@ -365,36 +349,10 @@
         </div>
     </div>
 
-    <script>
-        // JavaScript para manejar el modal
-        var modalPlazos = document.getElementById("plazos-modal");
-        var btnPlazos = document.getElementById("plazos-button");
-        var spanPlazos = document.getElementsByClassName("close")[0];
-
-        btnPlazos.onmouseover = function () {
-            modalPlazos.style.display = "block";
-        }
-
-        btnPlazos.onmouseout = function () {
-            modalPlazos.style.display = "block";
-        }
-
-        spanPlazos.onclick = function () {
-            modalPlazos.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modalPlazos) {
-                modalPlazos.style.display = "none";
-            }
-        }
-    </script>
-
-
     <!-- Modal -->
     <div id="tradicional-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="close-tradicional">&times;</span>
             <header class="text-center">
                 <h1>Ahorro Tradicional</h1>
             </header>
@@ -422,6 +380,7 @@
                 <div class="col">
                     <div class="image">
                         <img src="Images/tradicional.png" alt="Ahorro Tradicional" style="width: 100px">
+                        <p>Intereses 13%</p>
                     </div>
                 </div>
                 <div class="col">
@@ -433,11 +392,12 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <a href="#" class="custom-button">
-                        <img src="Images/tradicional.png" alt="Tradicional">
+                    <a href="#" class="custom-button" onclick="confirmSolicitar()">
+                        <img src="Images/tradicional.png" alt="Tradicional"  >
                         <strong>Solicitar</strong>
                     </a>
                 </div>
+                
                 <hr>
             </div>
             <footer>
@@ -446,35 +406,10 @@
         </div>
     </div>
 
-    <script>
-        // JavaScript para manejar el modal
-        var modalTradicional = document.getElementById("tradicional-modal");
-        var btnTradicional = document.getElementById("tradicional-button");
-        var spanTradicional = document.getElementsByClassName("close")[0];
-
-        btnTradicional.onmouseover = function () {
-            modalTradicional.style.display = "block";
-        }
-
-        btnTradicional.onmouseout = function () {
-            modalTradicional.style.display = "block";
-        }
-
-        spanTradicional.onclick = function () {
-            modalTradicional.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modalTradicional) {
-                modalTradicional.style.display = "none";
-            }
-        }
-    </script>
-
     <!-- Modal -->
     <div id="marchamo-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="close-marchamo">&times;</span>
             <header class="text-center">
                 <h1>Ahorro Marchamo</h1>
             </header>
@@ -501,6 +436,7 @@
                 <div class="col">
                     <div class="image">
                         <img src="Images/marchamo.png" alt="Ahorro Marchamo" style="width: 100px">
+                        <p>Intereses 13%</p>
                     </div>
                 </div>
                 <div class="col">
@@ -513,11 +449,12 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <a href="#" class="custom-button">
-                        <img src="Images/marchamo.png" alt="Marchamo">
+                    <a href="#" class="custom-button" onclick="confirmSolicitar()">
+                        <img src="Images/marchamo.png" alt="Marchamo" >
                         <strong>Solicitar</strong>
                     </a>
                 </div>
+               
                 <hr>
             </div>
             <footer>
@@ -526,35 +463,10 @@
         </div>
     </div>
 
-    <script>
-        // JavaScript para manejar el modal
-        var modalMarchamo = document.getElementById("marchamo-modal");
-        var btnMarchamo = document.getElementById("marchamo-button");
-        var spanMarchamo = document.getElementsByClassName("close")[0];
-
-        btnMarchamo.onmouseover = function () {
-            modalMarchamo.style.display = "block";
-        }
-
-        btnMarchamo.onmouseout = function () {
-            modalMarchamo.style.display = "block";
-        }
-
-        spanMarchamo.onclick = function () {
-            modalMarchamo.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modalMarchamo) {
-                modalMarchamo.style.display = "none";
-            }
-        }
-    </script>
-
     <!-- Modal -->
     <div id="infantil-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="close-infantil">&times;</span>
             <header class="text-center">
                 <h1>Ahorro Infantil</h1>
             </header>
@@ -594,11 +506,12 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <a href="#" class="custom-button">
-                        <img src="Images/infantil.png" alt="Infantil">
+                    <a href="#" class="custom-button" onclick="confirmSolicitar()">
+                        <img src="Images/infantil.png" alt="Infantil" >
                         <strong>Solicitar</strong>
                     </a>
                 </div>
+              
                 <hr>
             </div>
             <footer>
@@ -607,30 +520,56 @@
         </div>
     </div>
 
+
+
+
     <script>
-        // JavaScript para manejar el modal
-        var modalInfantil = document.getElementById("infantil-modal");
-        var btnInfantil = document.getElementById("infantil-button");
-        var spanInfantil = document.getElementsByClassName("close")[0];
+        // Función para abrir y cerrar modales
+        function handleModal(modalId, buttonId, closeId) {
+            var modal = document.getElementById(modalId);
+            var btn = document.getElementById(buttonId);
+            var span = document.getElementById(closeId);
 
-        btnInfantil.onmouseover = function () {
-            modalInfantil.style.display = "block";
+            btn.onmouseover = function () {
+                modal.style.display = "block";
+            }
+
+            btn.onmouseout = function () {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
         }
 
-        btnInfantil.onmouseout = function () {
-            modalInfantil.style.display = "block";
-        }
+        // Llamar a la función para cada modal
+        handleModal("navideno-modal", "navideno-button", "close-navideno");
+        handleModal("plazos-modal", "plazos-button", "close-plazos");
+        handleModal("tradicional-modal", "tradicional-button", "close-tradicional");
+        handleModal("marchamo-modal", "marchamo-button", "close-marchamo");
+        handleModal("infantil-modal", "infantil-button", "close-infantil");
 
-        spanInfantil.onclick = function () {
-            modalInfantil.style.display = "none";
-        }
 
-        window.onclick = function (event) {
-            if (event.target == modalInfantil) {
-                modalInfantil.style.display = "none";
+        // Función para confirmar la solicitud
+        function confirmSolicitar() {
+            if (confirm("¿Está seguro de solicitar esta cuenta?")) {
+                // Aquí puede agregar la lógica para realizar la solicitud
+                alert("Solicitud realizada con éxito.");
+            } else {
+                alert("Solicitud cancelada.");
             }
         }
     </script>
+
+
+
 
 </body>
 
