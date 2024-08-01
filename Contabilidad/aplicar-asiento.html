@@ -103,9 +103,9 @@
                     <div class="form-group">
                         <label for="aplicarEstado">Estado</label>
                         <select class="form-control" id="aplicarEstado">
-                            <option>Registrar</option>
-                            <option>Aplicadar</option>
-                            <option>Aprobar</option>
+                            <option>Registrado</option>
+                            <option>Aplicado</option>
+                            <option>Aprobado</option>
                         </select>
                     </div>
                     
@@ -114,6 +114,7 @@
                         <table class="asiento-table">
                             <thead>
                                 <tr>
+                                    <th>ID Cuenta</th>
                                     <th>Cuenta</th>
                                     <th>Denominación</th>
                                     <th>Debe</th>
@@ -123,6 +124,7 @@
                             </thead>
                             <tbody id="detalleAsientoTableBody">
                                 <tr>
+                                    <td><input type="number" class="form-control" placeholder="ID Cuenta"></td>
                                     <td><input type="text" class="form-control" placeholder="Cuenta"></td>
                                     <td><input type="text" class="form-control" placeholder="Denominación"></td>
                                     <td><input type="number" class="form-control" placeholder="Debe"></td>
@@ -152,6 +154,7 @@
             const newRow = document.createElement('tr');
 
             newRow.innerHTML = `
+                <td><input type="number" class="form-control" placeholder="ID Cuenta"></td>
                 <td><input type="text" class="form-control" placeholder="Cuenta"></td>
                 <td><input type="text" class="form-control" placeholder="Denominación"></td>
                 <td><input type="number" class="form-control" placeholder="Debe"></td>
