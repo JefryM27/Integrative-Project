@@ -5,20 +5,21 @@ class Producto {
     private $nombre;
     private $tipo_producto_id;
     private $tasa_interes;
-    private $saldo_minimo;
+    private $saldo_inicial;
     private $requisitos;
     private $beneficios;
 
-    public function __construct($producto_id, $nombre, $tipo_producto_id, $tasa_interes, $saldo_minimo, $requisitos, $beneficios) {
+    public function __construct($producto_id, $nombre, $tipo_producto_id, $tasa_interes, $saldo_inicial, $requisitos, $beneficios) {
         $this->producto_id = $producto_id;
         $this->nombre = $nombre;
         $this->tipo_producto_id = $tipo_producto_id;
         $this->tasa_interes = $tasa_interes;
-        $this->saldo_minimo = $saldo_minimo;
+        $this->saldo_inicial = $saldo_inicial;
         $this->requisitos = $requisitos;
         $this->beneficios = $beneficios;
     }
 
+    // Getters
     public function getProductoId() {
         return $this->producto_id;
     }
@@ -35,8 +36,8 @@ class Producto {
         return $this->tasa_interes;
     }
 
-    public function getSaldoMinimo() {
-        return $this->saldo_minimo;
+    public function getSaldoInicial() {
+        return $this->saldo_inicial;
     }
 
     public function getRequisitos() {
@@ -47,6 +48,7 @@ class Producto {
         return $this->beneficios;
     }
 
+    // Setters
     public function setProductoId($producto_id) {
         $this->producto_id = $producto_id;
     }
@@ -63,8 +65,8 @@ class Producto {
         $this->tasa_interes = $tasa_interes;
     }
 
-    public function setSaldoMinimo($saldo_minimo) {
-        $this->saldo_minimo = $saldo_minimo;
+    public function setSaldoInicial($saldo_inicial) {
+        $this->saldo_inicial = $saldo_inicial;
     }
 
     public function setRequisitos($requisitos) {
@@ -74,7 +76,11 @@ class Producto {
     public function setBeneficios($beneficios) {
         $this->beneficios = $beneficios;
     }
+
+    public function metodoValidar() {}
+    public function metodoMostrarProducto() {}
+    public function metodoCrear() {}
+    public function metodoEliminar() {}
+    public function metodoEditar() {}
 }
-
-
 ?>

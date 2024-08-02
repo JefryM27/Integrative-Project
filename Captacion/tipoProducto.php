@@ -11,6 +11,7 @@ class TipoProducto {
         $this->descripcion = $descripcion;
     }
 
+    // Getters
     public function getTipoProductoId() {
         return $this->tipo_producto_id;
     }
@@ -23,6 +24,7 @@ class TipoProducto {
         return $this->descripcion;
     }
 
+    // Setters
     public function setTipoProductoId($tipo_producto_id) {
         $this->tipo_producto_id = $tipo_producto_id;
     }
@@ -34,8 +36,9 @@ class TipoProducto {
     public function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
     }
+
+    public function metodoCrear() {}
+    public function metodoEditar() {}
+    public function metodoEliminar() {}
 }
-
-
-
 ?>
