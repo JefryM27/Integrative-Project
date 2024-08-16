@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooperativa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/cajaChica.css">
+</head>
+
+<body>
+    <div class="menu">
+        <h2>Menú</h2>
+        <a href="index.html">Inicio</a>
+        <a href="cajaChica.html">Gestión de Caja Chica</a>
+        <a href="gastos.html">Ver Gastos</a>
+        <a href="agregarDinero.html">Agregar Dinero</a>
+        <a href="registroFactura.html">Registrar Factura</a>
+        <a href="reporte.html">Reportes</a>
+        <a href="liquidacionVale.html">Liquidar Vale</a>
+        <a href="liquidacionCajaChica.html">Liquidacion de Caja Chica</a>
+        <a href="asientosContables.html">Asientos Contables</a>
+
+    </div>
+    <header>
+        <h1>Liquidación de Vale</h1>
+    </header>
+    <main>
+        <section class="liquidacion-vale">
+            <h2>Liquidar Vale</h2>
+            <form id="liquidacion-form">
+                <label for="numero-vale">Número de Vale:</label>
+                <input type="text" id="numero-vale" name="numero-vale" required>
+
+                <label for="monto-gastado">Monto Gastado:</label>
+                <input type="number" id="monto-gastado" name="monto-gastado" required>
+
+                <label for="detalle-gastos">Detalle de Gastos:</label>
+                <textarea id="detalle-gastos" name="detalle-gastos" required></textarea>
+
+                <label for="fecha-liquidacion">Fecha de Liquidación:</label>
+                <input type="date" id="fecha-liquidacion" name="fecha-liquidacion" required>
+
+                <button type="submit">Liquidar Vale</button>
+            </form>
+        </section>
+        <section>
+            <button onclick="location.href='cajaChica.html'">Volver</button>
+        </section>
+    </main>
+    <script src="../js/liquidacionVale.js"></script>
+</body>
+
+</html>

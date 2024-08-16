@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooperativa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/cajaChica.css">
+</head>
+
+<body>
+    <div class="menu">
+        <h2>Menú</h2>
+        <a href="index.html">Inicio</a>
+        <a href="cajaChica.html">Gestión de Caja Chica</a>
+        <a href="gastos.html">Ver Gastos</a>
+        <a href="agregarDinero.html">Agregar Dinero</a>
+        <a href="registroFactura.html">Registrar Factura</a>
+        <a href="reporte.html">Reportes</a>
+        <a href="liquidacionVale.html">Liquidar Vale</a>
+        <a href="liquidacionCajaChica.html">Liquidacion de Caja Chica</a>
+        <a href="asientosContables.html">Asientos Contables</a>
+
+    </div>
+    <header>
+        <h1>Reportes de Gastos</h1>
+    </header>
+    <main>
+        <section class="reportes">
+            <h2>Reportes de Gastos</h2>
+            <table id="reportes-table">
+                <thead>
+                    <tr>
+                        <th>Numero de Factura</th>
+                        <th>Encargado</th>
+                        <th>Departamento</th>
+                        <th>Monto</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Generar Reporte</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los reportes se cargarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <button onclick="location.href='cajaChica.html'">Volver</button>
+        </section>
+    </main>
+    <script src="../js/reportes.js"></script>
+</body>
+
+</html>

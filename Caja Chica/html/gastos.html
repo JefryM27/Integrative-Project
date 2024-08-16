@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooperativa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/cajaChica.css">
+</head>
+
+<body>
+    <div class="menu">
+        <h2>Menú</h2>
+        <a href="index.html">Inicio</a>
+        <a href="cajaChica.html">Gestión de Caja Chica</a>
+        <a href="gastos.html">Ver Gastos</a>
+        <a href="agregarDinero.html">Agregar Dinero</a>
+        <a href="registroFactura.html">Registrar Factura</a>
+        <a href="reporte.html">Reportes</a>
+        <a href="liquidacionVale.html">Liquidar Vale</a>
+        <a href="liquidacionCajaChica.html">Liquidacion de Caja Chica</a>
+        <a href="asientosContables.html">Asientos Contables</a>
+
+    </div>
+    <header>
+        <h1>Lista de Gastos</h1>
+    </header>
+    <main>
+        <h4>Buscar por:</h4>
+        <form id="gasto-form">
+            <label for="fecha-ingreso">Fecha:</label>
+            <input type="date" id="fecha-ingreso" name="fecha-ingreso" value=" 25-05-2024" min="01-01-2030"
+                max="01-01-2030">
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" name="descripcion" required>
+            <button>Buscar</button>
+
+        </form>
+        <section class="gastos-lista">
+            <h2>Gastos Registrados</h2>
+            <table id="tabla-gastos">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script src="../js/gastos.js"></script>
+
+</body>
+
+</html>

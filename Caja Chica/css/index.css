@@ -1,0 +1,66 @@
+body {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.menu {
+    width: 200px;
+    background-color: #3b5998;
+    color: white;
+    padding: 1em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100vh;
+    position: fixed;
+}
+
+.menu h2 {
+    margin-top: 0;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 1em 0;
+    padding: 0.5em;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.menu a:hover {
+    background-color: #2d4373;
+}
+
+.content {
+    flex: 1;
+    margin-left: 20px;
+    padding: 2em;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #3b5998;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    margin-bottom: 2em;
+}
+
+section.welcome {
+    background-color: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section.welcome h2 {
+    border-bottom: 2px solid #3b5998;
+    padding-bottom: 0.5em;
+}
+
+section.welcome p {
+    font-size: 1.2em;
+}
