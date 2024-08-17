@@ -1,21 +1,21 @@
 <?php
-include '../utils/db.php';
+include '../utils/database.php';
 
 $conn = get_mysql_connection();
 
 // Cargar cuentas
-$cuentasQuery = "SELECT id, numero_cuenta FROM cuentasbancofk";
+$cuentasQuery = "SELECT id, numero_cuenta FROM cuentasbanco";
 $cuentasResult = $conn->query($cuentasQuery);
 
 // Cargar organizaciones
-$organizacionesQuery = "SELECT organizacion_id, nombre_organización FROM organizacionesfk";
+$organizacionesQuery = "SELECT organizacion_id, nombre FROM organizaciones";
 $organizacionesResult = $conn->query($organizacionesQuery);
 
 // Cargar transferencias recientes
-$transferenciasQuery = "SELECT t.id, c.numero_cuenta AS cuenta_origen, t.cuenta_destino, t.moneda, t.monto, t.fecha_hora, t.descripcion, t.estado, o.nombre_organización AS organizacion 
+$transferenciasQuery = "SELECT t.id, c.numero_cuenta AS cuenta_origen, t.cuenta_destino, t.moneda, t.monto, t.fecha_hora, t.descripcion, t.estado, o.nombre AS organizacion 
                         FROM transferenciasinternas t 
-                        JOIN cuentasbancofk c ON t.id_cuenta = c.id
-                        JOIN organizacionesfk o ON t.id_organizacion = o.organizacion_id";
+                        JOIN cuentasbanco c ON t.id_cuenta = c.id
+                        JOIN organizaciones o ON t.id_organizacion = o.organizacion_id";
 $transferenciasResult = $conn->query($transferenciasQuery);
 
 ?>
@@ -29,7 +29,7 @@ $transferenciasResult = $conn->query($transferenciasQuery);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transferencias Internas</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../public/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -138,7 +138,7 @@ $transferenciasResult = $conn->query($transferenciasQuery);
                         <select class="form-select" id="organizacion" name="organizacion">
                             <?php while ($org = $organizacionesResult->fetch_assoc()): ?>
                                 <option value="<?php echo $org['organizacion_id']; ?>">
-                                    <?php echo $org['nombre_organización']; ?>
+                                    <?php echo $org['nombre']; ?>
                                 </option>
                             <?php endwhile; ?>
                         </select>

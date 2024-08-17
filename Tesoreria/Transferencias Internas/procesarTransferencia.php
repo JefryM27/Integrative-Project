@@ -1,5 +1,5 @@
 <?php
-include '../utils/db.php';
+include '../utils/database.php';
 
 $conn = get_mysql_connection();
 
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     try {
         // Restar el monto de la cuenta de origen
-        $restarSaldo = $conn->prepare("UPDATE cuentasbancofk SET saldo = saldo - ? WHERE id = ?");
+        $restarSaldo = $conn->prepare("UPDATE cuentasbanco SET saldo = saldo - ? WHERE id = ?");
         $restarSaldo->bind_param("di", $monto, $cuentaOrigenId);
         $restarSaldo->execute();
 

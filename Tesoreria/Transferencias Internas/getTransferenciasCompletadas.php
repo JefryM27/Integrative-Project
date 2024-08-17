@@ -1,5 +1,5 @@
 <?php
-include '../utils/db.php';
+include '../utils/database.php';
 
 $conn = get_mysql_connection();
 
