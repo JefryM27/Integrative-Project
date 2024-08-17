@@ -1,101 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tipos de depositos</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: "Poppins", sans-serif;
-            background-color: #e9ecef;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header,
-        footer {
-            background-color: #3b5998;
-            color: white;
-            padding: 10px;
-        }
-
-        footer {
-            margin-top: auto;
-            text-align: center;
-        }
-
-        .container {
-            flex-grow: 1;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .custom-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            text-decoration: none;
-            color: #000;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            width: 200px;
-            margin: 20px auto 0;
-        }
-
-        .custom-button img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-        }
-
-        .custom-button:hover {
-            background-color: #d0d0d0;
-        }
-
-        .savings-description {
-            background-color: #3b5998;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .savings-card {
-            background-color: #3b5998;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .savings-card img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 10px;
-        }
-
-        .savings-card h5 {
-            margin-bottom: 10px;
-        }
-
-        .savings-card p {
-            font-size: 14px;
-        }
-    </style>
+    <link href="css/depositos.css" rel="stylesheet">
 </head>
+
 <body>
+
+    <div class="menu">
+        <h2>Menú</h2>
+        <a href="index.html">Inicio</a>
+        <a href="creacionProducto.html">Creacion Producto</a>
+        <a href="creacionTipoProducto.html">Creacion Tipo Producto</a>
+        <a href="tipos-cuentas.html">Tipos cuentas</a>
+        <a href="tipos-depositos.html">Tipos depositos</a>
+        <a href="vistaMovimientos.html">Vistas de Movimientos</a>
+    </div>
     <header class="d-flex justify-content-between align-items-center px-3 py-2">
         <div>
             <a href="#" class="btn btn-light">Volver</a>
@@ -103,14 +27,16 @@
         <h1 class="text-center flex-grow-1">Tipos de depositos</h1>
         <h5 class="navbar navbar-light">logo</h5>
     </header>
-    
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <div class="savings-card">
                     <img src="Images/plazos.png" alt="Plazos">
                     <h5>Plazos</h5>
-                    <p><strong>Depósitos a Plazo: </strong>Una forma segura de invertir su dinero a cambio de una tasa de interés fija durante un período determinado. Este tipo de inversión garantiza el retorno del capital invertido más los intereses al final del plazo acordado.</p>
+                    <p><strong>Depósitos a Plazo: </strong>Una forma segura de invertir su dinero a cambio de una tasa
+                        de interés fija durante un período determinado. Este tipo de inversión garantiza el retorno del
+                        capital invertido más los intereses al final del plazo acordado.</p>
                     <a href="#" class="custom-button">Plazos</a>
                 </div>
             </div>
@@ -118,7 +44,10 @@
                 <div class="savings-card">
                     <img src="Images/fondosMutuos.png" alt="Fondos-Mutuo">
                     <h5>Fondos Mutuos</h5>
-                    <p><Strong>Fondos Mutuos: </Strong>Una inversión diversificada que le permite invertir en una canasta de activos, como acciones, bonos o instrumentos del mercado monetario. Los fondos mutuos son gestionados por profesionales y ofrecen la posibilidad de acceder a una amplia gama de inversiones con menor riesgo que invertir en un solo activo.</p>
+                    <p><Strong>Fondos Mutuos: </Strong>Una inversión diversificada que le permite invertir en una
+                        canasta de activos, como acciones, bonos o instrumentos del mercado monetario. Los fondos mutuos
+                        son gestionados por profesionales y ofrecen la posibilidad de acceder a una amplia gama de
+                        inversiones con menor riesgo que invertir en un solo activo.</p>
                     <a href="#" class="custom-button">Fondos Mutuos</a>
                 </div>
             </div>
@@ -126,15 +55,20 @@
                 <div class="savings-card">
                     <img src="Images/certificado.png" alt="Certificados">
                     <h5>Certificados</h5>
-                    <p><Strong>Certificados de Inversión (Cetes): </Strong>Un instrumento de renta fija emitido por el gobierno que le permite obtener una tasa de interés fija durante un período determinado. Los Cetes son considerados una inversión segura, ya que están respaldados por el gobierno, y son una opción popular para quienes buscan preservar el capital mientras obtienen rendimientos predecibles.</p>
+                    <p><Strong>Certificados de Inversión (Cetes): </Strong>Un instrumento de renta fija emitido por el
+                        gobierno que le permite obtener una tasa de interés fija durante un período determinado. Los
+                        Cetes son considerados una inversión segura, ya que están respaldados por el gobierno, y son una
+                        opción popular para quienes buscan preservar el capital mientras obtienen rendimientos
+                        predecibles.</p>
                     <a href="#" class="custom-button">Certificados</a>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <footer>
         <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
     </footer>
 </body>
+
 </html>

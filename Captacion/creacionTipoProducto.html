@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creacion de un producto</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/producto.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="menu">
+        <h2>Menú</h2>
+        <a href="index.html">Inicio</a>
+        <a href="creacionProducto.html">Creacion Producto</a>
+        <a href="creacionTipoProducto.html">Creacion Tipo Producto</a>
+        <a href="tipos-cuentas.html">Tipos cuentas</a>
+        <a href="tipos-depositos.html">Tipos depositos</a>
+        <a href="vistaMovimientos.html">Vistas de Movimientos</a>
+    </div>
+
+    <header class="d-flex justify-content-between align-items-center px-3 py-2">
+        <div>
+            <a href="#" class="btn btn-light">Volver</a>
+        </div>
+        <h1 class="text-center flex-grow-1">Creación de producto</h1>
+        <h5 class="navbar navbar-light">logo</h5>
+    </header>
+
+    <div class="container mt-5">
+        <form>
+            <div class="form-group">
+                <label for="productName">Nombre del tipo producto</label>
+                <input type="text" class="form-control" id="productName" placeholder="Nombre del producto">
+            </div>
+            <div class="form-group">
+                <label for="productAdditionalDescription">Descripción</label>
+                <textarea class="form-control" id="productAdditionalDescription" rows="3"
+                    placeholder="Descripción adicional del producto"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+
+
+    <footer>
+        <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+    </footer>
+</body>
+
+</html>
