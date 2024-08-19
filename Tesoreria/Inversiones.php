@@ -1,3 +1,52 @@
+<?php
+include('utils/database.php');
+
+function obtenerInversiones()
+{
+    $conexion = get_mysql_connection();
+    $query = "SELECT * FROM inversiones";
+    $resultado = $conexion->query($query);
+    $inversiones = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $inversiones[] = $fila;
+    }
+
+    $conexion->close();
+    return $inversiones;
+}
+
+function registrarInversion($moneda, $cuenta_debitar, $monto, $fecha_inicio, $fecha_fin, $cliente_tesoreria, $organizacion)
+{
+    $conexion = get_mysql_connection();
+    $query = "INSERT INTO inversiones (moneda, cuenta_debitar, monto, fecha_inicio, fecha_fin, cliente_tesoreria, organizacion) 
+              VALUES ('$moneda', '$cuenta_debitar', '$monto', '$fecha_inicio', '$fecha_fin', '$cliente_tesoreria', '$organizacion')";
+    $conexion->query($query);
+    $conexion->close();
+}
+
+// Manejo de solicitudes POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['accion']) && $_POST['accion'] == 'registrarInversion') {
+        registrarInversion(
+            $_POST['moneda'],
+            $_POST['cuenta_debitar'],
+            $_POST['monto'],
+            $_POST['fecha_inicio'],
+            $_POST['fecha_fin'],
+            $_POST['cliente_tesoreria'],
+            $_POST['organizacion']
+        );
+        header('Location: inversiones.php');
+        exit();
+    }
+}
+
+// Obtener datos para mostrar en la interfaz
+$inversiones = obtenerInversiones();
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -31,10 +80,11 @@
 
             <div class="row mb-5 justify-content-center">
                 <div class="col-md-6">
-                    <form id="formRegistrarInversion">
+                    <form id="formRegistrarInversion" method="POST" action="inversiones.php">
+                        <input type="hidden" name="accion" value="registrarInversion">
                         <div class="mb-3">
                             <label for="monedaInversion" class="form-label">Moneda</label>
-                            <select class="form-select" id="monedaInversion">
+                            <select class="form-select" id="monedaInversion" name="moneda" required>
                                 <option value="CRC">CRC - Colón Costarricense</option>
                                 <option value="USD">USD - Dólar Estadounidense</option>
                                 <option value="EUR">EUR - Euro</option>
@@ -42,7 +92,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="cuentaDebitar" class="form-label">Cuenta A Debitar</label>
-                            <select class="form-select" id="cuentaDebitar">
+                            <select class="form-select" id="cuentaDebitar" name="cuenta_debitar" required>
                                 <option value="12345678">CR150236244</option>
                                 <option value="87654321">12466314564</option>
                                 <option value="11223344">5453434545</option>
@@ -50,19 +100,20 @@
                         </div>
                         <div class="mb-3">
                             <label for="montoInversion" class="form-label">Monto</label>
-                            <input type="number" class="form-control" id="montoInversion" placeholder="Ingrese el monto">
+                            <input type="number" class="form-control" id="montoInversion" name="monto"
+                                placeholder="Ingrese el monto" required>
                         </div>
                         <div class="mb-3">
                             <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
-                            <input type="date" class="form-control" id="fechaInicio">
+                            <input type="date" class="form-control" id="fechaInicio" name="fecha_inicio" required>
                         </div>
                         <div class="mb-3">
                             <label for="fechaFin" class="form-label">Fecha de Fin</label>
-                            <input type="date" class="form-control" id="fechaFin">
+                            <input type="date" class="form-control" id="fechaFin" name="fecha_fin" required>
                         </div>
                         <div class="mb-3">
                             <label for="clienteTesoreria" class="form-label">Cliente Tesorería</label>
-                            <select class="form-select" id="clienteTesoreria">
+                            <select class="form-select" id="clienteTesoreria" name="cliente_tesoreria" required>
                                 <option value="Banco New York">Banco New York</option>
                                 <option value="Bolsa de Valores">Bolsa de Valores</option>
                                 <option value="Banco Costa Rica">Banco Costa Rica</option>
@@ -70,14 +121,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="organizacion" class="form-label">Organización</label>
-                            <select class="form-select" id="organizacion">
+                            <select class="form-select" id="organizacion" name="organizacion" required>
                                 <option value="Org A">Org A</option>
                                 <option value="Org B">Org B</option>
                                 <option value="Org C">Org C</option>
                                 <option value="Org D">Org D</option>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-primary btn-lg" id="registrarInversionBtn">Registrar Inversión</button>
+                        <button type="submit" class="btn btn-primary btn-lg" id="registrarInversionBtn">Registrar
+                            Inversión</button>
                     </form>
                 </div>
                 <div class="col-md-6">
@@ -95,42 +147,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>CRC</td>
-                                    <td>₡1,000,000</td>
-                                    <td>2024-01-01</td>
-                                    <td>2025-01-01</td>
-                                    <td>Banco New York</td>
-                                    <td>Org A</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>USD</td>
-                                    <td>$2,000</td>
-                                    <td>2024-02-01</td>
-                                    <td>2025-02-01</td>
-                                    <td>Bolsa de Valores</td>
-                                    <td>Org B</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>EUR</td>
-                                    <td>€3,000</td>
-                                    <td>2024-03-01</td>
-                                    <td>2025-03-01</td>
-                                    <td>Banco Costa Rica</td>
-                                    <td>Org C</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>USD</td>
-                                    <td>$4,000</td>
-                                    <td>2024-04-01</td>
-                                    <td>2025-04-01</td>
-                                    <td>Banco New York</td>
-                                    <td>Org D</td>
-                                </tr>
+                                <?php foreach ($inversiones as $inversion): ?>
+                                    <tr>
+                                        <td>
+                                            <?= $inversion['id'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $inversion['moneda'] ?>
+                                        </td>
+                                        <td>₡
+                                            <?= number_format($inversion['monto'], 2) ?>
+                                        </td>
+                                        <td>
+                                            <?= $inversion['fecha_inicio'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $inversion['fecha_fin'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $inversion['cliente_tesoreria'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $inversion['organizacion'] ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -142,22 +183,6 @@
     <footer class="footer mt-5">
         <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="grafMonitoreo.js"></script>
-    <script>
-        document.getElementById('registrarInversionBtn').addEventListener('click', function () {
-            const isConfirmed = confirm('¿Estás seguro de registrar esta inversión?');
-            if (isConfirmed) {
-                const inversionExitosa = Math.random() > 0.5; // Simula el éxito o fracaso del registro de la inversión
-                if (inversionExitosa) {
-                    alert('Inversión registrada exitosamente');
-                } else {
-                    alert('Error al registrar la inversión');
-                }
-            }
-        });
-    </script>
 </body>
 
 </html>
