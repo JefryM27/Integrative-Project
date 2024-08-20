@@ -1,105 +1,163 @@
 <?php
 include('utils/database.php');
 
-// Función para procesar el pago de una factura
-function pagarFactura($facturaId, $cuentaDebitar, $montoPagado, $divisa, $fechaPago, $cedula)
+function validarFondos($cuenta, $monto)
+{
+    $conexion = get_mysql_connection();
+    $query = "SELECT saldo FROM cuentas WHERE numero_cuenta = '$cuenta'";
+    $resultado = $conexion->query($query);
+    $saldo = $resultado->fetch_assoc()['saldo'];
+
+    $conexion->close();
+    return $saldo >= $monto;
+}
+
+function procesarPagoDesembolso($idDesembolso, $cuentaDebitar, $monto)
 {
     $conexion = get_mysql_connection();
 
-    // Validar si hay fondos suficientes (simplificado)
-    $queryFondos = "SELECT saldo FROM cuentas WHERE numero_cuenta = '$cuentaDebitar'";
-    $resultado = $conexion->query($queryFondos);
-    $fondos = $resultado->fetch_assoc()['saldo'];
-
-    if ($fondos >= $montoPagado) {
-        // Realizar el pago: insertar en tabla de pagos y actualizar la factura
-        $queryPago = "INSERT INTO pagos_facturas (factura_id, cuenta_debitar, monto_pagado, divisa, fecha_pago, cedula_cliente) 
-                      VALUES ('$facturaId', '$cuentaDebitar', '$montoPagado', '$divisa', '$fechaPago', '$cedula')";
-        $conexion->query($queryPago);
-
-        // Actualizar el estado de la factura
-        $queryActualizarFactura = "UPDATE facturas SET estado = 'Pagado' WHERE id = '$facturaId'";
-        $conexion->query($queryActualizarFactura);
-
-        // Actualizar el saldo de la cuenta
-        $nuevoSaldo = $fondos - $montoPagado;
-        $queryActualizarCuenta = "UPDATE cuentas SET saldo = '$nuevoSaldo' WHERE numero_cuenta = '$cuentaDebitar'";
-        $conexion->query($queryActualizarCuenta);
-
-        $conexion->close();
-        return true;
-    } else {
-        $conexion->close();
-        return false; // Fondos insuficientes
+    // Validar fondos
+    if (!validarFondos($cuentaDebitar, $monto)) {
+        return false;
     }
+
+    // Restar monto de la cuenta
+    $query = "UPDATE cuentas SET saldo = saldo - $monto WHERE numero_cuenta = '$cuentaDebitar'";
+    if (!$conexion->query($query)) {
+        die("Error al restar el monto de la cuenta: " . $conexion->error);
+    }
+
+    // Actualizar estado del desembolso
+    $query = "UPDATE desembolsos SET estado = 'Pagado' WHERE id = '$idDesembolso'";
+    if (!$conexion->query($query)) {
+        die("Error al actualizar el estado del desembolso: " . $conexion->error);
+    }
+
+    // Obtener el tipo de desembolso para actualizar el estado
+    $query = "SELECT tipo_desembolso, id_tipo_desembolso FROM desembolsos WHERE id = '$idDesembolso'";
+    $resultado = $conexion->query($query);
+    $desembolso = $resultado->fetch_assoc();
+
+    switch ($desembolso['tipo_desembolso']) {
+        case 'factura':
+            $query = "UPDATE facturas SET estado = 'Pagado' WHERE id = " . $desembolso['id_tipo_desembolso'];
+            break;
+        case 'prestamo':
+            $query = "UPDATE prestamos SET estado = 'Pagado' WHERE id = " . $desembolso['id_tipo_desembolso'];
+            break;
+        case 'contrato':
+            $query = "UPDATE contratos SET estado = 'Pagado' WHERE id = " . $desembolso['id_tipo_desembolso'];
+            break;
+    }
+
+    if (!$conexion->query($query)) {
+        die("Error al actualizar el estado del tipo de desembolso: " . $conexion->error);
+    }
+
+    $conexion->close();
+
+    return true;
 }
 
-// Función para procesar el pago de un préstamo
-function pagarPrestamo($prestamoId, $cuentaDebitar, $montoPagado, $divisa, $fechaPago, $cedula, $organizacion)
-{
-    $conexion = get_mysql_connection();
-
-    // Validar si hay fondos suficientes
-    $queryFondos = "SELECT saldo FROM cuentas WHERE numero_cuenta = '$cuentaDebitar'";
-    $resultado = $conexion->query($queryFondos);
-    $fondos = $resultado->fetch_assoc()['saldo'];
-
-    if ($fondos >= $montoPagado) {
-        // Realizar el pago: insertar en tabla de pagos y actualizar el préstamo
-        $queryPago = "INSERT INTO pagos_prestamos (prestamo_id, cuenta_debitar, monto_pagado, divisa, fecha_pago, cedula_cliente, organizacion) 
-                      VALUES ('$prestamoId', '$cuentaDebitar', '$montoPagado', '$divisa', '$fechaPago', '$cedula', '$organizacion')";
-        $conexion->query($queryPago);
-
-        // Actualizar el estado del préstamo
-        $queryActualizarPrestamo = "UPDATE prestamos SET estado = 'Pagado' WHERE id = '$prestamoId'";
-        $conexion->query($queryActualizarPrestamo);
-
-        // Actualizar el saldo de la cuenta
-        $nuevoSaldo = $fondos - $montoPagado;
-        $queryActualizarCuenta = "UPDATE cuentas SET saldo = '$nuevoSaldo' WHERE numero_cuenta = '$cuentaDebitar'";
-        $conexion->query($queryActualizarCuenta);
-
-        $conexion->close();
-        return true;
-    } else {
-        $conexion->close();
-        return false; // Fondos insuficientes
-    }
-}
-
-// Procesar la solicitud de pago si se envía el formulario
+// Manejo de solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['pagarFactura'])) {
-        $facturaId = $_POST['facturaId'];
+    if (isset($_POST['accion']) && $_POST['accion'] === 'pagarDesembolso') {
+        $idDesembolso = $_POST['idDesembolso'];
         $cuentaDebitar = $_POST['cuentaDebitar'];
-        $montoPagado = $_POST['montoPagado'];
-        $divisa = $_POST['divisa'];
-        $fechaPago = $_POST['fechaPago'];
-        $cedula = $_POST['cedula'];
+        $monto = $_POST['monto'];
 
-        if (pagarFactura($facturaId, $cuentaDebitar, $montoPagado, $divisa, $fechaPago, $cedula)) {
-            echo "<script>alert('Pago de factura realizado exitosamente.');</script>";
+        if (procesarPagoDesembolso($idDesembolso, $cuentaDebitar, $monto)) {
+            header('Location: desembolsos.php?success=1');
+            exit();
         } else {
-            echo "<script>alert('Fondos insuficientes para realizar el pago de la factura.');</script>";
-        }
-    }
-
-    if (isset($_POST['pagarPrestamo'])) {
-        $prestamoId = $_POST['prestamoId'];
-        $cuentaDebitar = $_POST['cuentaDebitarPrestamo'];
-        $montoPagado = $_POST['montoPagadoPrestamo'];
-        $divisa = $_POST['divisaPrestamo'];
-        $fechaPago = $_POST['fechaPagoPrestamo'];
-        $cedula = $_POST['cedulaPrestamo'];
-        $organizacion = $_POST['organizacionPrestamo'];
-
-        if (pagarPrestamo($prestamoId, $cuentaDebitar, $montoPagado, $divisa, $fechaPago, $cedula, $organizacion)) {
-            echo "<script>alert('Pago de préstamo realizado exitosamente.');</script>";
-        } else {
-            echo "<script>alert('Fondos insuficientes para realizar el pago del préstamo.');</script>";
+            header('Location: desembolsos.php?error=1');
+            exit();
         }
     }
 }
+
+function obtenerDesembolsosPendientes()
+{
+    $conexion = get_mysql_connection();
+    $query = "
+        SELECT 
+            d.id, 
+            d.tipo_desembolso, 
+            d.moneda, 
+            d.monto, 
+            d.fecha_pago, 
+            o.nombre AS organizacion, 
+            COALESCE(f.descripcion, p.descripcion, c.descripcion) AS descripcion, 
+            d.estado
+        FROM desembolsos d
+        LEFT JOIN organizaciones o ON d.id_organizacion = o.organizacion_id
+        LEFT JOIN facturas f ON d.id_tipo_desembolso = f.id AND d.tipo_desembolso = 'factura'
+        LEFT JOIN prestamos p ON d.id_tipo_desembolso = p.id AND d.tipo_desembolso = 'prestamo'
+        LEFT JOIN contratos c ON d.id_tipo_desembolso = c.id AND d.tipo_desembolso = 'contrato'
+        WHERE d.estado = 'Pendiente'";
+
+    $resultado = $conexion->query($query);
+    $desembolsos = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $desembolsos[] = $fila;
+    }
+
+    $conexion->close();
+    return $desembolsos;
+}
+
+
+
+
+
+function obtenerDesembolsosRealizados()
+{
+    $conexion = get_mysql_connection();
+    $query = "
+        SELECT 
+            d.id, 
+            d.tipo_desembolso, 
+            d.moneda, 
+            d.monto, 
+            d.fecha_pago, 
+            o.nombre AS organizacion
+        FROM desembolsos d
+        LEFT JOIN organizaciones o ON d.id_organizacion = o.organizacion_id
+        WHERE d.estado = 'Pagado'";
+
+    $resultado = $conexion->query($query);
+    if (!$resultado) {
+        die("Error al obtener desembolsos realizados: " . $conexion->error);
+    }
+    $desembolsos = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $desembolsos[] = $fila;
+    }
+
+    $conexion->close();
+    return $desembolsos;
+}
+
+function obtenerCuentasDebitar()
+{
+    $conexion = get_mysql_connection();
+    $query = "SELECT numero_cuenta FROM cuentas";
+    $resultado = $conexion->query($query);
+    $cuentas = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $cuentas[] = $fila['numero_cuenta'];
+    }
+
+    $conexion->close();
+    return $cuentas;
+}
+
+$desembolsosPendientes = obtenerDesembolsosPendientes();
+$desembolsosRealizados = obtenerDesembolsosRealizados();
+$cuentasDebitar = obtenerCuentasDebitar();
 ?>
 
 <!DOCTYPE html>
@@ -112,6 +170,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container-fluid {
+            flex: 1;
+        }
+
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -119,156 +202,99 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div>
             <a href="index.html" class="btn btn-light mx-3 my-2">Volver</a>
         </div>
-        <h3 class="text-center flex-grow-1">Gestión de Desembolsos</h3>
+        <h3 class="text-center flex-grow-1">Desembolsos</h3>
         <h5 class="navbar navbar-light">logo</h5>
     </div>
     <div class="container-fluid">
-        <div class="content">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <h5>Facturas Pendientes</h5>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Proveedor</th>
-                                    <th>Moneda</th>
-                                    <th>Monto</th>
-                                    <th>Fecha de Factura</th>
-                                    <th>Descripción</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Ejemplo: agregar botón con función setFacturaId -->
-                                <tr>
-                                    <td>1</td>
-                                    <td>Proveedor A</td>
-                                    <td>CRC</td>
-                                    <td>₡500,000</td>
-                                    <td>2024-06-01</td>
-                                    <td>Compra de suministros</td>
-                                    <td>Pendiente</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-lg" data-bs-toggle="modal"
-                                            data-bs-target="#modalPagarFactura" onclick="setFacturaId(1)">Pagar</button>
-                                    </td>
-                                </tr>
-                                <!-- Más filas según sea necesario -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- Tabla de facturas pagadas, préstamos pendientes y pagados aquí -->
-            </div>
+        <h3 class="text-center">Desembolsos Pendientes</h3>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Moneda</th>
+                        <th>Monto</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($desembolsosPendientes as $desembolso): ?>
+                        <tr>
+                            <td><?= $desembolso['id'] ?></td>
+                            <td><?= $desembolso['tipo_desembolso'] ?></td>
+                            <td><?= $desembolso['moneda'] ?></td>
+                            <td>₡<?= number_format($desembolso['monto'], 2) ?></td>
+                            <td><?= $desembolso['descripcion'] ?></td>
+                            <td><?= $desembolso['estado'] ?></td>
+                            <td>
+                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#modalPagarDesembolso"
+                                    onclick="cargarDatosDesembolso(<?= $desembolso['id'] ?>, '<?= $desembolso['tipo_desembolso'] ?>', '<?= $desembolso['moneda'] ?>', <?= $desembolso['monto'] ?>)">Pagar</button>
+
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="text-center">Desembolsos Realizados</h3>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Moneda</th>
+                        <th>Monto</th>
+                        <th>Fecha de Pago</th>
+                        <th>Organización</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($desembolsosRealizados as $desembolso): ?>
+                        <tr>
+                            <td><?= $desembolso['id'] ?></td>
+                            <td><?= $desembolso['tipo_desembolso'] ?></td>
+                            <td><?= $desembolso['moneda'] ?></td>
+                            <td>₡<?= number_format($desembolso['monto'], 2) ?></td>
+                            <td><?= $desembolso['fecha_pago'] ?></td>
+                            <td><?= $desembolso['organizacion'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Modal de Pago de Factura -->
-    <div class="modal fade" id="modalPagarFactura" tabindex="-1" aria-labelledby="modalPagarFacturaLabel"
-        aria-hidden="true">
+    <!-- Modal para Pago de Desembolso -->
+    <div class="modal fade" id="modalPagarDesembolso" tabindex="-1" aria-labelledby="modalPagarDesembolsoLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalPagarFacturaLabel">Confirmar Pago de Factura</h5>
+                    <h5 class="modal-title" id="modalPagarDesembolsoLabel">Confirmar Pago de Desembolso</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formPago" method="POST" action="">
-                        <input type="hidden" name="facturaId" id="facturaId">
+                    <form id="formPagarDesembolso" method="POST" action="desembolsos.php">
+                        <input type="hidden" name="accion" value="pagarDesembolso">
+                        <input type="hidden" name="idDesembolso" id="idDesembolso">
                         <div class="mb-3">
                             <label for="cuentaDebitar" class="form-label">Cuenta a Debitar</label>
-                            <select class="form-select" name="cuentaDebitar" id="cuentaDebitar">
-                                <option value="12345678">Cuenta 12345678</option>
-                                <option value="87654321">Cuenta 87654321</option>
-                                <option value="11223344">Cuenta 11223344</option>
-                                <option value="44332211">Cuenta 44332211</option>
+                            <select class="form-select" id="cuentaDebitar" name="cuentaDebitar">
+                                <?php foreach ($cuentasDebitar as $cuenta): ?>
+                                    <option value="<?= $cuenta ?>"><?= $cuenta ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="montoPagado" class="form-label">Monto a Pagar</label>
-                            <input type="number" class="form-control" name="montoPagado" id="montoPagado"
-                                placeholder="Ingrese el monto a pagar">
+                            <label for="montoDesembolso" class="form-label">Monto a Pagar</label>
+                            <input type="number" class="form-control" id="montoDesembolso" name="monto" readonly>
                         </div>
-                        <div class="mb-3">
-                            <label for="divisa" class="form-label">Divisa</label>
-                            <select class="form-select" name="divisa" id="divisa">
-                                <option value="CRC">CRC - Colón Costarricense</option>
-                                <option value="USD">USD - Dólar Estadounidense</option>
-                                <option value="EUR">EUR - Euro</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="fechaPago" class="form-label">Fecha de Pago</label>
-                            <input type="datetime-local" class="form-control" name="fechaPago" id="fechaPago">
-                        </div>
-                        <div class="mb-3">
-                            <label for="cedula" class="form-label">Cédula</label>
-                            <input type="text" class="form-control" name="cedula" id="cedula"
-                                placeholder="Ingrese la cédula del cliente">
-                        </div>
-                        <button type="submit" class="btn btn-primary" name="pagarFactura">Confirmar Pago</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Pago de Préstamo -->
-    <div class="modal fade" id="modalPagarPrestamo" tabindex="-1" aria-labelledby="modalPagarPrestamoLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalPagarPrestamoLabel">Confirmar Pago de Préstamo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formPagoPrestamo" method="POST" action="">
-                        <input type="hidden" name="prestamoId" id="prestamoId">
-                        <div class="mb-3">
-                            <label for="cuentaDebitarPrestamo" class="form-label">Cuenta a Debitar</label>
-                            <select class="form-select" name="cuentaDebitarPrestamo" id="cuentaDebitarPrestamo">
-                                <option value="12345678">Cuenta 12345678</option>
-                                <option value="87654321">Cuenta 87654321</option>
-                                <option value="11223344">Cuenta 11223344</option>
-                                <option value="44332211">Cuenta 44332211</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="montoPagadoPrestamo" class="form-label">Monto a Pagar</label>
-                            <input type="number" class="form-control" name="montoPagadoPrestamo"
-                                id="montoPagadoPrestamo" placeholder="Ingrese el monto a pagar">
-                        </div>
-                        <div class="mb-3">
-                            <label for="divisaPrestamo" class="form-label">Divisa</label>
-                            <select class="form-select" name="divisaPrestamo" id="divisaPrestamo">
-                                <option value="CRC">CRC - Colón Costarricense</option>
-                                <option value="USD">USD - Dólar Estadounidense</option>
-                                <option value="EUR">EUR - Euro</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="fechaPagoPrestamo" class="form-label">Fecha de Pago</label>
-                            <input type="date" class="form-control" name="fechaPagoPrestamo" id="fechaPagoPrestamo">
-                        </div>
-                        <div class="mb-3">
-                            <label for="cedulaPrestamo" class="form-label">Cédula</label>
-                            <input type="text" class="form-control" name="cedulaPrestamo" id="cedulaPrestamo"
-                                placeholder="Ingrese la cédula del cliente">
-                        </div>
-                        <div class="mb-3">
-                            <label for="organizacionPrestamo" class="form-label">Organización</label>
-                            <select class="form-select" name="organizacionPrestamo" id="organizacionPrestamo">
-                                <option value="Org A">Org A</option>
-                                <option value="Org B">Org B</option>
-                                <option value="Org C">Org C</option>
-                                <option value="Org D">Org D</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" name="pagarPrestamo">Confirmar Pago</button>
+                        <button type="submit" class="btn btn-primary">Confirmar Pago</button>
                     </form>
                 </div>
             </div>
@@ -278,15 +304,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <footer class="footer mt-5">
         <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function setFacturaId(id) {
-            document.getElementById('facturaId').value = id;
-        }
-
-        function setPrestamoId(id) {
-            document.getElementById('prestamoId').value = id;
+        function cargarDatosDesembolso(id, tipo, moneda, monto) {
+            document.getElementById('idDesembolso').value = id;
+            document.getElementById('montoDesembolso').value = monto;
         }
     </script>
 </body>

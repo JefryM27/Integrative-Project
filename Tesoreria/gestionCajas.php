@@ -1,6 +1,7 @@
 <?php
 include('utils/database.php');
 
+// Función para obtener las cajas
 function obtenerCajas()
 {
     $conexion = get_mysql_connection();
@@ -16,94 +17,93 @@ function obtenerCajas()
     return $cajas;
 }
 
-
-function obtenerArqueos()
+// Función para obtener transferencias completadas a cajas
+function obtenerTransferenciasCompletadas($caja_id = null)
 {
     $conexion = get_mysql_connection();
-    $query = "SELECT a.*, c.nombre AS caja FROM arqueos a 
-              INNER JOIN cajas c ON a.caja_id = c.id";
+    $query = "
+        SELECT 
+            t.id, 
+            t.monto, 
+            t.moneda, 
+            t.fecha_transferencia, 
+            t.descripcion, 
+            c.nombre AS caja_destino 
+        FROM transferencias_cajas t
+        JOIN cajas c ON t.caja_destino_id = c.id";
+
+    if ($caja_id) {
+        $query .= " WHERE t.caja_destino_id = " . intval($caja_id);
+    }
+
     $resultado = $conexion->query($query);
-    $arqueos = [];
+    $transferencias = [];
 
     while ($fila = $resultado->fetch_assoc()) {
-        $arqueos[] = $fila;
+        $transferencias[] = $fila;
     }
 
     $conexion->close();
-    return $arqueos;
+    return $transferencias;
 }
 
-function agregarArqueo($fecha, $caja_id, $responsable, $saldo_inicial, $entradas, $salidas, $saldo_final)
+// Función para obtener solicitudes de dinero a caja
+function obtenerSolicitudesDineroCaja()
 {
     $conexion = get_mysql_connection();
-    $query = "INSERT INTO arqueos (fecha, caja_id, responsable, saldo_inicial, entradas, salidas, saldo_final) 
-              VALUES ('$fecha', '$caja_id', '$responsable', '$saldo_inicial', '$entradas', '$salidas', '$saldo_final')";
-    $conexion->query($query);
+    $query = "SELECT s.id, c.nombre AS caja_solicitante, s.moneda, s.fecha_solicitud, s.estado 
+              FROM solicitudes_dinero s 
+              INNER JOIN cajas c ON s.caja_solicitante_id = c.id 
+              WHERE s.estado != 'Pagado'"; // Filtrar solo solicitudes pendientes
+
+    $resultado = $conexion->query($query);
+    $solicitudes = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $solicitudes[] = $fila;
+    }
+
     $conexion->close();
+    return $solicitudes;
 }
 
-function editarArqueo($id, $fecha, $caja_id, $responsable, $saldo_inicial, $entradas, $salidas, $saldo_final)
+// Función para transferir dinero a una caja
+function transferirDinero($solicitud_id, $caja_destino_nombre, $moneda, $monto, $descripcion)
 {
     $conexion = get_mysql_connection();
-    $query = "UPDATE arqueos SET fecha='$fecha', caja_id='$caja_id', responsable='$responsable', 
-              saldo_inicial='$saldo_inicial', entradas='$entradas', salidas='$salidas', saldo_final='$saldo_final' 
-              WHERE id='$id'";
-    $conexion->query($query);
-    $conexion->close();
-}
 
-function eliminarArqueo($id)
-{
-    $conexion = get_mysql_connection();
-    $query = "DELETE FROM arqueos WHERE id='$id'";
-    $conexion->query($query);
-    $conexion->close();
-}
+    // Buscar el ID de la caja basado en el nombre
+    $queryObtenerId = "SELECT id FROM cajas WHERE nombre = '$caja_destino_nombre'";
+    $resultado = $conexion->query($queryObtenerId);
 
-function transferirDinero($solicitud_id, $caja_destino_id, $moneda, $monto, $descripcion)
-{
-    $conexion = get_mysql_connection();
-    $query = "INSERT INTO transferencias (solicitud_id, caja_destino_id, moneda, monto, descripcion) 
-              VALUES ('$solicitud_id', '$caja_destino_id', '$moneda', '$monto', '$descripcion')";
+    if ($resultado->num_rows > 0) {
+        $caja_destino_id = $resultado->fetch_assoc()['id'];
+    } else {
+        die("Error: No se encontró la caja destino con el nombre: " . $caja_destino_nombre);
+    }
+
+    // Registrar la transferencia
+    $query = "INSERT INTO transferencias_cajas (solicitud_id, caja_destino_id, moneda, monto, descripcion, fecha_transferencia) 
+              VALUES ('$solicitud_id', '$caja_destino_id', '$moneda', '$monto', '$descripcion', NOW())";
     $conexion->query($query);
 
     // Actualizar el saldo de la caja de destino
     $queryActualizarSaldo = "UPDATE cajas SET saldo = saldo + $monto WHERE id = '$caja_destino_id'";
     $conexion->query($queryActualizarSaldo);
 
+    // Actualizar el estado de la solicitud a 'Pagado'
+    $queryActualizarEstadoSolicitud = "UPDATE solicitudes_dinero SET estado = 'Pagado' WHERE id = '$solicitud_id'";
+    $conexion->query($queryActualizarEstadoSolicitud);
+
     $conexion->close();
 }
+
+
 
 // Manejo de solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['accion'])) {
         switch ($_POST['accion']) {
-            case 'agregarArqueo':
-                agregarArqueo(
-                    $_POST['fecha'],
-                    $_POST['caja_id'],
-                    $_POST['responsable'],
-                    $_POST['saldo_inicial'],
-                    $_POST['entradas'],
-                    $_POST['salidas'],
-                    $_POST['saldo_final']
-                );
-                break;
-            case 'editarArqueo':
-                editarArqueo(
-                    $_POST['id'],
-                    $_POST['fecha'],
-                    $_POST['caja_id'],
-                    $_POST['responsable'],
-                    $_POST['saldo_inicial'],
-                    $_POST['entradas'],
-                    $_POST['salidas'],
-                    $_POST['saldo_final']
-                );
-                break;
-            case 'eliminarArqueo':
-                eliminarArqueo($_POST['id']);
-                break;
             case 'transferirDinero':
                 transferirDinero(
                     $_POST['solicitud_id'],
@@ -118,10 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 
-
 // Obtener datos para mostrar en la interfaz
 $cajas = obtenerCajas();
-$arqueos = obtenerArqueos();
+// Llamar a la función con el filtro, si está seleccionado
+$transferenciasCompletadas = obtenerTransferenciasCompletadas(isset($_POST['filterTipo']) ? $_POST['filterTipo'] : null);
+$solicitudesDineroCaja = obtenerSolicitudesDineroCaja();
 
 ?>
 
@@ -131,7 +132,7 @@ $arqueos = obtenerArqueos();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Cajas</title>
+    <title>Gestión de Cajas</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -142,242 +143,146 @@ $arqueos = obtenerArqueos();
         <div>
             <a href="index.html" class="btn btn-light mx-3 my-2">Volver</a>
         </div>
-        <h3 class="text-center flex-grow-1">Gestion de Cajas</h3>
+        <h3 class="text-center flex-grow-1">Gestión de Cajas</h3>
         <h5 class="navbar navbar-light">logo</h5>
     </div>
     <div class="container-fluid">
         <div class="content">
-            <div class="row justify-content-center">
-                <div class="col-md-3 mx-5">
-                    <h3>Arqueo de Cajas</h3>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h3>Transferencias a Cajas Completadas</h3>
                 </div>
-                <div class="col-md-3">
-                    <label for="filterCedula" class="form-label">Filtrar por #</label>
-                    <input type="text" class="form-control" id="filterCedula" placeholder="Ingrese número de Registro">
-                </div>
-                <div class="col-md-3">
-                    <label for="filterTipo" class="form-label">Filtrar por Caja</label>
-                    <select class="form-select" id="filterTipo">
-                        <option value="">Todas</option>
-                        <option value="Caja 1">Caja 1</option>
-                        <option value="Caja 2">Caja 2</option>
-                        <option value="Caja 3">Caja 3</option>
-                        <option value="Caja Chica">Caja Chica</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Fecha</th>
-                                <th>Caja</th>
-                                <th>Responsable</th>
-                                <th>Saldo Inicial</th>
-                                <th>Entradas</th>
-                                <th>Salidas</th>
-                                <th>Saldo Final</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($arqueos as $arqueo): ?>
-                                <tr data-id="<?= $arqueo['id'] ?>">
-                                    <td><?= $arqueo['id'] ?></td>
-                                    <td class="registro-fecha"><?= $arqueo['fecha'] ?></td>
-                                    <td class="registro-caja" data-caja-id="<?= $arqueo['caja_id'] ?>"><?= $arqueo['caja'] ?></td>
-                                    <td class="registro-responsable"><?= $arqueo['responsable'] ?></td>
-                                    <td class="registro-saldo-inicial">₡<?= number_format($arqueo['saldo_inicial'], 2) ?></td>
-                                    <td class="registro-entradas">₡<?= number_format($arqueo['entradas'], 2) ?></td>
-                                    <td class="registro-salidas">₡<?= number_format($arqueo['salidas'], 2) ?></td>
-                                    <td class="registro-saldo-final">₡<?= number_format($arqueo['saldo_final'], 2) ?></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-lg btn-sm mx-1" data-bs-toggle="modal"
-                                            data-bs-target="#modalRegistro"
-                                            onclick="editarRegistro(<?= $arqueo['id'] ?>)">Editar</button>
-                                        <button class="btn btn-danger btn-lg btn-sm mx-1" data-bs-toggle="modal"
-                                            data-bs-target="#modalEliminarRegistro"
-                                            onclick="eliminarRegistro(<?= $arqueo['id'] ?>)">Eliminar</button>
-                                    </td>
-                                </tr>
+                <!-- Formulario de Filtro -->
+                <form method="POST" action="gestionCajas.php">
+                    <div class="col-md-3">
+                        <label for="filterTipo" class="form-label">Filtrar por Caja</label>
+                        <select class="form-select" id="filterTipo" name="filterTipo" onchange="this.form.submit()">
+                            <option value="">Todas</option>
+                            <?php foreach ($cajas as $caja): ?>
+                                <option value="<?= $caja['id'] ?>" <?= isset($_POST['filterTipo']) && $_POST['filterTipo'] == $caja['id'] ? 'selected' : '' ?>>
+                                    <?= $caja['nombre'] ?>
+                                </option>
                             <?php endforeach; ?>
-                        </tbody>
+                        </select>
+                    </div>
+                </form>
 
-                    </table>
-                </div>
-                <button class="btn btn-primary btn-lg btn-sm mx-1 mb-5" data-bs-toggle="modal"
-                    data-bs-target="#modalRegistro">Añadir Registro</button>
             </div>
+
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Caja Destino</th>
+                            <th>Monto</th>
+                            <th>Moneda</th>
+                            <th>Fecha de Transferencia</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transferenciasCajasTable">
+                        <?php foreach ($transferenciasCompletadas as $transferencia): ?>
+                            <tr>
+                                <td><?= $transferencia['id'] ?></td>
+                                <td><?= $transferencia['caja_destino'] ?></td>
+                                <td>₡<?= number_format($transferencia['monto'], 2) ?></td>
+                                <td><?= $transferencia['moneda'] ?></td>
+                                <td><?= $transferencia['fecha_transferencia'] ?></td>
+                                <td><?= $transferencia['descripcion'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="mt-5">Solicitudes de Dinero a Caja</h3>
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Caja Solicitante</th>
+                            <th>Moneda</th>
+                            <th>Fecha de Solicitud</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($solicitudesDineroCaja as $solicitud): ?>
+                            <tr>
+                                <td><?= $solicitud['id'] ?></td>
+                                <td><?= $solicitud['caja_solicitante'] ?></td>
+                                <td><?= $solicitud['moneda'] ?></td>
+                                <td><?= $solicitud['fecha_solicitud'] ?></td>
+                                <td><?= $solicitud['estado'] ?></td>
+                                <td>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPagarSolicitud"
+                                        onclick="cargarSolicitud(<?= $solicitud['id'] ?>, '<?= $solicitud['caja_solicitante'] ?>', '<?= $solicitud['moneda'] ?>')">
+                                        Pagar
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="mt-5">Gráfico de Transferencias a Cajas Completadas</h4>
+            <canvas id="scheduledTransfersChart"></canvas>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-8 mx-5">
-            <h3>Transferir Dinero a Cajas</h3>
-        </div>
-    </div>
-    <form id="formTransferencia" method="POST" action="gestionCajas.php">
-        <div class="row justify-content-center">
-            <div class="col-md-5 mt-3 mb-5">
-                <input type="hidden" name="accion" value="transferirDinero">
-                <label for="solicitud" class="form-label">Solicitud de dinero</label>
-                <select class="form-select" id="solicitud" name="solicitud_id" required>
-                    <option value="1">Caja 1 - Euro</option>
-                    <option value="2">Caja 2 - Dólar</option>
-                    <option value="3">Caja 3 - Colones</option>
-                </select>
-                <label for="cajaDestino" class="form-label">Caja de Destino</label>
-                <select class="form-select" id="cajaDestino" name="caja_destino_id" required>
-                    <?php foreach ($cajas as $caja): ?>
-                        <option value="<?= $caja['id'] ?>">
-                            <?= $caja['nombre'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <label for="moneda" class="form-label">Moneda</label>
-                <select class="form-select" id="moneda" name="moneda" required>
-                    <option value="CRC">Colones</option>
-                    <option value="USD">Dólares</option>
-                    <option value="EUR">Euros</option>
-                </select>
-                <label for="montoTransferencia" class="form-label">Monto a Transferir</label>
-                <input type="number" class="form-control" id="montoTransferencia" name="monto"
-                    placeholder="Ingrese el monto a transferir" required>
-                <label for="descripcionTransferencia" class="form-label">Descripción</label>
-                <input type="text" class="form-control" id="descripcionTransferencia" name="descripcion"
-                    placeholder="Ingrese una descripción">
-                <button type="submit" class="btn btn-primary btn-lg mt-3">Transferir</button>
-            </div>
 
-            <div class="col-md-5">
-                <h4>Gráfico de Transferencias a Cajas Completadas</h4>
-                <canvas id="scheduledTransfersChart"></canvas>
-            </div>
-        </div>
-    </form>
-
-    <!-- Modal para Añadir/Editar Registro -->
-    <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+    <!-- Modal para Pagar Solicitud de Dinero -->
+    <div class="modal fade" id="modalPagarSolicitud" tabindex="-1" aria-labelledby="modalPagarSolicitudLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalRegistroLabel">Añadir/Editar Registro</h5>
+                    <h5 class="modal-title" id="modalPagarSolicitudLabel">Pagar Solicitud de Dinero</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formRegistro" method="POST" action="gestionCajas.php">
-                        <input type="hidden" name="accion" id="registroAccion" value="agregarArqueo">
-                        <input type="hidden" name="id" id="registroId">
+                    <form id="formPagarSolicitud" method="POST" action="gestionCajas.php">
+                        <input type="hidden" name="accion" value="transferirDinero">
+                        <input type="hidden" name="solicitud_id" id="solicitudId">
+
                         <div class="mb-3">
-                            <label for="registroFecha" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="registroFecha" name="fecha" required>
+                            <label for="cajaDestinoModal" class="form-label">Caja Destino</label>
+                            <input type="text" class="form-control" id="cajaDestinoModal" name="caja_destino_nombre" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="registroCaja" class="form-label">Caja</label>
-                            <select class="form-select" id="registroCaja" name="caja_id" required>
-                                <?php foreach ($cajas as $caja): ?>
-                                    <option value="<?= $caja['id'] ?>">
-                                        <?= $caja['nombre'] ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <label for="monedaModal" class="form-label">Moneda</label>
+                            <input type="text" class="form-control" id="monedaModal" name="moneda" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="registroResponsable" class="form-label">Responsable</label>
-                            <input type="text" class="form-control" id="registroResponsable" name="responsable"
-                                placeholder="Ingrese el nombre del responsable" required>
+                            <label for="montoTransferenciaModal" class="form-label">Monto a Transferir</label>
+                            <input type="number" class="form-control" id="montoTransferenciaModal" name="monto" required>
                         </div>
                         <div class="mb-3">
-                            <label for="registroSaldoInicial" class="form-label">Saldo Inicial</label>
-                            <input type="number" class="form-control" id="registroSaldoInicial" name="saldo_inicial"
-                                placeholder="Ingrese el saldo inicial" required>
+                            <label for="descripcionTransferenciaModal" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcionTransferenciaModal" name="descripcion">
                         </div>
-                        <div class="mb-3">
-                            <label for="registroEntradas" class="form-label">Entradas</label>
-                            <input type="number" class="form-control" id="registroEntradas" name="entradas"
-                                placeholder="Ingrese las entradas" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="registroSalidas" class="form-label">Salidas</label>
-                            <input type="number" class="form-control" id="registroSalidas" name="salidas"
-                                placeholder="Ingrese las salidas" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="registroSaldoFinal" class="form-label">Saldo Final</label>
-                            <input type="number" class="form-control" id="registroSaldoFinal" name="saldo_final"
-                                placeholder="Ingrese el saldo final" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                        <button type="submit" class="btn btn-primary">Confirmar Transferencia</button>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para Confirmar Eliminación -->
-    <div class="modal fade" id="modalEliminarRegistro" tabindex="-1" aria-labelledby="modalEliminarRegistroLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalEliminarRegistroLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>¿Estás seguro de eliminar este registro?</p>
-                    <form method="POST" action="gestionCajas.php">
-                        <input type="hidden" name="accion" value="eliminarArqueo">
-                        <input type="hidden" name="id" id="eliminarRegistroId">
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <footer class="footer">
         <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="grafTransferencias.js"></script>
     <script>
-        function editarRegistro(id) {
-            // Buscar los datos del registro en el DOM
-            const registro = document.querySelector(`tr[data-id="${id}"]`);
-
-            // Obtener los valores de las celdas correspondientes
-            const fecha = registro.querySelector('.registro-fecha').textContent.trim();
-            const cajaId = registro.querySelector('.registro-caja').getAttribute('data-caja-id');
-            const responsable = registro.querySelector('.registro-responsable').textContent.trim();
-            const saldoInicial = parseFloat(registro.querySelector('.registro-saldo-inicial').textContent.replace('₡', '').replace(',', ''));
-            const entradas = parseFloat(registro.querySelector('.registro-entradas').textContent.replace('₡', '').replace(',', ''));
-            const salidas = parseFloat(registro.querySelector('.registro-salidas').textContent.replace('₡', '').replace(',', ''));
-            const saldoFinal = parseFloat(registro.querySelector('.registro-saldo-final').textContent.replace('₡', '').replace(',', ''));
-
-            // Rellenar los campos del modal con los datos del registro
-            document.getElementById('registroId').value = id;
-            document.getElementById('registroAccion').value = 'editarArqueo';
-            document.getElementById('registroFecha').value = fecha;
-            document.getElementById('registroCaja').value = cajaId;
-            document.getElementById('registroResponsable').value = responsable;
-            document.getElementById('registroSaldoInicial').value = saldoInicial;
-            document.getElementById('registroEntradas').value = entradas;
-            document.getElementById('registroSalidas').value = salidas;
-            document.getElementById('registroSaldoFinal').value = saldoFinal;
-
-            // Mostrar el modal
-            const modalRegistro = new bootstrap.Modal(document.getElementById('modalRegistro'));
-            modalRegistro.show();
-        }
-
-
-        function eliminarRegistro(id) {
-            document.getElementById('eliminarRegistroId').value = id;
+        function cargarSolicitud(id, caja, moneda) {
+            document.getElementById('solicitudId').value = id;
+            document.getElementById('cajaDestinoModal').value = caja;
+            document.getElementById('monedaModal').value = moneda;
         }
     </script>
 </body>

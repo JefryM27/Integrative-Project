@@ -1,6 +1,7 @@
 <?php
 
-function get_mysql_connection(){
+function get_mysql_connection()
+{
     $server = "localhost";
     $user = "root";
     $pass = "Jairo8553";
@@ -14,6 +15,9 @@ function get_mysql_connection(){
         die("Error en la conexión a la base de datos: " . $mysqli->connect_error);
     }
 
+    // Establecer el conjunto de caracteres a UTF-8
+    $mysqli->set_charset("utf8mb4");
+
     // Retornar la conexión establecida
     return $mysqli;
 }
@@ -22,4 +26,3 @@ function get_mysql_connection(){
 $conexion = get_mysql_connection();
 // Eliminar o comentar esta línea para evitar que se muestre el mensaje
 // echo "Conexión exitosa a la base de datos.";
-?>
