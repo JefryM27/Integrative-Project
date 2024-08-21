@@ -1,10 +1,25 @@
 <?php
 include('utils/database.php');
 
+// Función para obtener todas las inversiones registradas
 function obtenerInversiones()
 {
     $conexion = get_mysql_connection();
-    $query = "SELECT * FROM inversiones";
+    $query = "
+        SELECT 
+        i.id, 
+        i.tipo, 
+        i.moneda, 
+        i.monto, 
+        i.fecha_inicio, 
+        i.fecha_fin, 
+        i.finalizada, 
+        c.numero_cuenta AS cuenta_banco,
+        o.nombre AS organizacion
+    FROM inversiones i
+    JOIN cuentas c ON i.id_cuenta = c.id
+    JOIN organizaciones o ON i.id_organizacion = o.organizacion_id";
+
     $resultado = $conexion->query($query);
     $inversiones = [];
 
@@ -16,25 +31,124 @@ function obtenerInversiones()
     return $inversiones;
 }
 
-function registrarInversion($moneda, $cuenta_debitar, $monto, $fecha_inicio, $fecha_fin, $cliente_tesoreria, $organizacion)
+// Función para registrar una nueva inversión
+function registrarInversion($tipo, $moneda, $monto, $fecha_inicio, $fecha_fin, $cuenta_debitar, $organizacion)
 {
     $conexion = get_mysql_connection();
-    $query = "INSERT INTO inversiones (moneda, cuenta_debitar, monto, fecha_inicio, fecha_fin, cliente_tesoreria, organizacion) 
-              VALUES ('$moneda', '$cuenta_debitar', '$monto', '$fecha_inicio', '$fecha_fin', '$cliente_tesoreria', '$organizacion')";
-    $conexion->query($query);
+
+    if ($tipo === 'certificado') {
+        $tipo_certificado = $_POST['tipo_certificado'] ?? '';
+        $valor_nominal = $_POST['valor_nominal'] ?? '';
+        $tasa_interes = $_POST['tasa_interes'] ?? '';
+        $fecha_vencimiento = $_POST['fecha_vencimiento'] ?? '';
+        $vendible = isset($_POST['vendible']) ? 1 : 0;
+
+        // Imprimir los valores para depuración
+        echo "Tipo Certificado: $tipo_certificado<br>";
+        echo "Valor Nominal: $valor_nominal<br>";
+        echo "Tasa de Interés: $tasa_interes<br>";
+        echo "Fecha de Vencimiento: $fecha_vencimiento<br>";
+        echo "Vendible: $vendible<br>";
+
+        if (empty($tipo_certificado) || empty($valor_nominal) || empty($tasa_interes) || empty($fecha_vencimiento)) {
+            echo "Error: Uno o más campos obligatorios para el certificado están vacíos.";
+            return;
+        }
+
+        // Inserta la inversión
+        $queryInversion = "INSERT INTO inversiones (tipo, moneda, monto, fecha_inicio, fecha_fin, id_cuenta, id_organizacion)
+                            VALUES ('$tipo', '$moneda', '$monto', '$fecha_inicio', '$fecha_fin', '$cuenta_debitar', '$organizacion')";
+        if (!$conexion->query($queryInversion)) {
+            echo "Error al registrar la inversión: " . $conexion->error;
+            return;
+        }
+        $id_inversion = $conexion->insert_id;
+
+        // Inserta los detalles del certificado 
+        $queryCertificado = "INSERT INTO certificados (tipo, valor_nominal, tasa_interes, fecha_vencimiento, vendible, id_inversion, id_organizacion)
+                             VALUES ('$tipo_certificado', '$valor_nominal', '$tasa_interes', '$fecha_vencimiento', '$vendible', '$id_inversion', '$organizacion')";
+
+        if ($conexion->query($queryCertificado) === TRUE) {
+            echo "Nuevo certificado registrado correctamente";
+        } else {
+            echo "Error: " . $queryCertificado . "<br>" . $conexion->error;
+        }
+    } elseif ($tipo === 'proveedor') {
+        $nombre_proveedor = $_POST['nombre_proveedor'] ?? '';
+        $cuenta_iban = $_POST['cuenta_iban'] ?? '';
+        $tasa_interes = $_POST['tasa_interes'] ?? '';
+        $fecha_vencimiento = $_POST['fecha_vencimiento'] ?? '';
+
+        if (empty($nombre_proveedor) || empty($cuenta_iban) || empty($tasa_interes) || empty($fecha_vencimiento)) {
+            echo "Error: Uno o más campos obligatorios para el proveedor están vacíos.";
+            return;
+        }
+
+        // Inserta la inversión
+        $queryInversion = "INSERT INTO inversiones (tipo, moneda, monto, fecha_inicio, fecha_fin, id_cuenta, id_organizacion)
+                            VALUES ('$tipo', '$moneda', '$monto', '$fecha_inicio', '$fecha_fin', '$cuenta_debitar', '$organizacion')";
+        if (!$conexion->query($queryInversion)) {
+            echo "Error al registrar la inversión: " . $conexion->error;
+            return;
+        }
+        $id_inversion = $conexion->insert_id;
+
+        // Inserta los detalles del proveedor
+        $queryProveedor = "INSERT INTO proveedorestesoreria (nombre, cuenta_iban, tasa_interes, fecha_vencimiento, id_inversion, id_organizacion)
+                           VALUES ('$nombre_proveedor', '$cuenta_iban', '$tasa_interes', '$fecha_vencimiento', '$id_inversion', '$organizacion')";
+        if (!$conexion->query($queryProveedor)) {
+            echo "Error al registrar el proveedor: " . $conexion->error;
+            return;
+        }
+
+        echo "Proveedor registrado con éxito.";
+    }
+
     $conexion->close();
+}
+
+// Función para obtener las cuentas bancarias
+function obtenerCuentasBancarias()
+{
+    $conexion = get_mysql_connection();
+    $query = "SELECT id, numero_cuenta FROM cuentas";
+    $resultado = $conexion->query($query);
+    $cuentas = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $cuentas[] = $fila;
+    }
+
+    $conexion->close();
+    return $cuentas;
+}
+
+// Función para obtener las organizaciones
+function obtenerOrganizaciones()
+{
+    $conexion = get_mysql_connection();
+    $query = "SELECT organizacion_id, nombre FROM organizaciones";
+    $resultado = $conexion->query($query);
+    $organizaciones = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $organizaciones[] = $fila;
+    }
+
+    $conexion->close();
+    return $organizaciones;
 }
 
 // Manejo de solicitudes POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['accion']) && $_POST['accion'] == 'registrarInversion') {
         registrarInversion(
+            $_POST['tipo_inversion'],
             $_POST['moneda'],
-            $_POST['cuenta_debitar'],
             $_POST['monto'],
             $_POST['fecha_inicio'],
             $_POST['fecha_fin'],
-            $_POST['cliente_tesoreria'],
+            $_POST['cuenta_debitar'],
             $_POST['organizacion']
         );
         header('Location: inversiones.php');
@@ -44,8 +158,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Obtener datos para mostrar en la interfaz
 $inversiones = obtenerInversiones();
+$cuentasBancarias = obtenerCuentasBancarias();
+$organizaciones = obtenerOrganizaciones();
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -82,6 +199,57 @@ $inversiones = obtenerInversiones();
                 <div class="col-md-6">
                     <form id="formRegistrarInversion" method="POST" action="inversiones.php">
                         <input type="hidden" name="accion" value="registrarInversion">
+
+                        <div class="mb-3">
+                            <label for="tipoInversion" class="form-label">Tipo de Inversión</label>
+                            <select class="form-select" id="tipoInversion" name="tipo_inversion" required>
+                                <option value="certificado">Certificado</option>
+                                <option value="proveedor">Proveedor</option>
+                            </select>
+                        </div>
+
+                        <div id="camposCertificado" style="display:none;">
+                            <div class="mb-3">
+                                <label for="tipoCertificado" class="form-label">Tipo de Certificado</label>
+                                <input type="text" class="form-control" id="tipoCertificado" name="tipo_certificado">
+                            </div>
+                            <div class="mb-3">
+                                <label for="valorNominal" class="form-label">Valor Nominal</label>
+                                <input type="number" class="form-control" id="valorNominal" name="valor_nominal">
+                            </div>
+                            <div class="mb-3">
+                                <label for="tasaInteresCertificado" class="form-label">Tasa de Interés</label>
+                                <input type="number" step="0.01" class="form-control" id="tasaInteresCertificado" name="tasa_interes">
+                            </div>
+                            <div class="mb-3">
+                                <label for="fechaVencimientoCertificado" class="form-label">Fecha de Vencimiento</label>
+                                <input type="date" class="form-control" id="fechaVencimientoCertificado" name="fecha_vencimiento">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="vendibleCertificado" name="vendible">
+                                <label for="vendibleCertificado" class="form-check-label">Es Vendible</label>
+                            </div>
+                        </div>
+
+                        <div id="camposProveedor" style="display:none;">
+                            <div class="mb-3">
+                                <label for="nombreProveedor" class="form-label">Nombre del Proveedor</label>
+                                <input type="text" class="form-control" id="nombreProveedor" name="nombre_proveedor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="cuentaIBANProveedor" class="form-label">Cuenta IBAN</label>
+                                <input type="text" class="form-control" id="cuentaIBANProveedor" name="cuenta_iban">
+                            </div>
+                            <div class="mb-3">
+                                <label for="tasaInteresProveedor" class="form-label">Tasa de Interés</label>
+                                <input type="number" step="0.01" class="form-control" id="tasaInteresProveedor" name="tasa_interes">
+                            </div>
+                            <div class="mb-3">
+                                <label for="fechaVencimientoProveedor" class="form-label">Fecha de Vencimiento</label>
+                                <input type="date" class="form-control" id="fechaVencimientoProveedor" name="fecha_vencimiento">
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="monedaInversion" class="form-label">Moneda</label>
                             <select class="form-select" id="monedaInversion" name="moneda" required>
@@ -90,12 +258,13 @@ $inversiones = obtenerInversiones();
                                 <option value="EUR">EUR - Euro</option>
                             </select>
                         </div>
+                        <!-- Mostrar las cuentas desde la base de datos -->
                         <div class="mb-3">
                             <label for="cuentaDebitar" class="form-label">Cuenta A Debitar</label>
                             <select class="form-select" id="cuentaDebitar" name="cuenta_debitar" required>
-                                <option value="12345678">CR150236244</option>
-                                <option value="87654321">12466314564</option>
-                                <option value="11223344">5453434545</option>
+                                <?php foreach ($cuentasBancarias as $cuenta): ?>
+                                    <option value="<?= $cuenta['id'] ?>"><?= $cuenta['numero_cuenta'] ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -111,21 +280,13 @@ $inversiones = obtenerInversiones();
                             <label for="fechaFin" class="form-label">Fecha de Fin</label>
                             <input type="date" class="form-control" id="fechaFin" name="fecha_fin" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="clienteTesoreria" class="form-label">Cliente Tesorería</label>
-                            <select class="form-select" id="clienteTesoreria" name="cliente_tesoreria" required>
-                                <option value="Banco New York">Banco New York</option>
-                                <option value="Bolsa de Valores">Bolsa de Valores</option>
-                                <option value="Banco Costa Rica">Banco Costa Rica</option>
-                            </select>
-                        </div>
+                        <!-- Mostrar las organizaciones desde la base de datos -->
                         <div class="mb-3">
                             <label for="organizacion" class="form-label">Organización</label>
                             <select class="form-select" id="organizacion" name="organizacion" required>
-                                <option value="Org A">Org A</option>
-                                <option value="Org B">Org B</option>
-                                <option value="Org C">Org C</option>
-                                <option value="Org D">Org D</option>
+                                <?php foreach ($organizaciones as $organizacion): ?>
+                                    <option value="<?= $organizacion['organizacion_id'] ?>"><?= $organizacion['nombre'] ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg" id="registrarInversionBtn">Registrar
@@ -138,38 +299,26 @@ $inversiones = obtenerInversiones();
                             <thead>
                                 <tr>
                                     <th># Inversión</th>
+                                    <th>Tipo</th>
                                     <th>Moneda</th>
                                     <th>Monto</th>
                                     <th>Fecha de Inicio</th>
                                     <th>Fecha de Fin</th>
-                                    <th>Cliente</th>
+                                    <th>Cuenta</th>
                                     <th>Organización</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($inversiones as $inversion): ?>
                                     <tr>
-                                        <td>
-                                            <?= $inversion['id'] ?>
-                                        </td>
-                                        <td>
-                                            <?= $inversion['moneda'] ?>
-                                        </td>
-                                        <td>₡
-                                            <?= number_format($inversion['monto'], 2) ?>
-                                        </td>
-                                        <td>
-                                            <?= $inversion['fecha_inicio'] ?>
-                                        </td>
-                                        <td>
-                                            <?= $inversion['fecha_fin'] ?>
-                                        </td>
-                                        <td>
-                                            <?= $inversion['cliente_tesoreria'] ?>
-                                        </td>
-                                        <td>
-                                            <?= $inversion['organizacion'] ?>
-                                        </td>
+                                        <td><?= $inversion['id'] ?></td>
+                                        <td><?= $inversion['tipo'] ?></td>
+                                        <td><?= $inversion['moneda'] ?></td>
+                                        <td>₡<?= number_format($inversion['monto'], 2) ?></td>
+                                        <td><?= $inversion['fecha_inicio'] ?></td>
+                                        <td><?= $inversion['fecha_fin'] ?></td>
+                                        <td><?= $inversion['cuenta_banco'] ?></td>
+                                        <td><?= $inversion['organizacion'] ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -183,6 +332,23 @@ $inversiones = obtenerInversiones();
     <footer class="footer mt-5">
         <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar/Ocultar campos específicos según el tipo de inversión seleccionado
+        document.addEventListener('DOMContentLoaded', function() {
+            var tipoInversion = document.getElementById('tipoInversion').value;
+            toggleCamposInversion(tipoInversion);
+
+            document.getElementById('tipoInversion').addEventListener('change', function() {
+                toggleCamposInversion(this.value);
+            });
+        });
+
+        function toggleCamposInversion(tipoInversion) {
+            document.getElementById('camposCertificado').style.display = (tipoInversion === 'certificado') ? 'block' : 'none';
+            document.getElementById('camposProveedor').style.display = (tipoInversion === 'proveedor') ? 'block' : 'none';
+        }
+    </script>
 </body>
 
 </html>
