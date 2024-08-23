@@ -90,62 +90,6 @@
         </div>
     </header>
     <div class="d-flex">
-        <aside id="sidebar" class="bg-primary text-white p-3">
-            <ul class="list-unstyled">
-                <li>
-                    <a href="#modalCreditosInternos" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/prestamos.png" alt="Préstamos" class="mr-2" />
-                        Registro de préstamos</a>
-                </li>
-                <li>
-                    <a href="#modalRegistroProveedores" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/proveedores.png" alt="Proveedores" class="mr-2" />
-                        Registro de Proveedores</a>
-                </li>
-                <li>
-                    <a href="#modalPagosProveedores" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/pagos.png" alt="Pagos" class="mr-2" /> Pagos a
-                        Proveedores</a>
-                </li>
-                <li>
-                    <a href="#modalGestionIntereses" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/intereses.png" alt="Intereses" class="mr-2" />
-                        Gestión de Intereses</a>
-                </li>
-                <li>
-                    <a href="#modalRegistroFacturasPorPagar" class="text-white d-flex align-items-center" data-toggle="modal">
-                        <img src="/icons/facturas_por_pagar.png" alt="Facturas Por Pagar" class="mr-2" />
-                        Registro de Facturas Por Pagar
-                    </a>
-                </li>
-                <li>
-                    <a href="#modalRegistroFacturasPorCobrar" class="text-white d-flex align-items-center" data-toggle="modal">
-                        <img src="/icons/facturas_por_cobrar.png" alt="Facturas Por Cobrar" class="mr-2" />
-                        Registro de Facturas Por Cobrar
-                    </a>
-                </li>
-                <li>
-                    <a href="#modalRegistroPagos" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/pagos.png" alt="Pagos" class="mr-2" /> Registro
-                        de Pagos</a>
-                </li>
-                <li>
-                    <a href="#modalRegistroCobros" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/pagos.png" alt="Cobros" class="mr-2" /> Registro
-                        de Cobros</a>
-                </li>
-                <li>
-                    <a href="#modalReportes" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/reportes.png" alt="Reportes" class="mr-2" />
-                        Reportes</a>
-                </li>
-                <li>
-                    <a href="#modalRegistroNotasCredito" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/credit.png" alt="Notas de Crédito" class="mr-2" />
-                        Registro de Notas de Crédito</a>
-                </li>
-                <li>
-                    <a href="#modalRegistroNotasDebito" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/debit.png" alt="Notas de Débito" class="mr-2" />
-                        Registro de Notas de Débito</a>
-                </li>
-                <li>
-                    <a href="#modalCreacionAsientos" class="text-white d-flex align-items-center" data-toggle="modal"><img src="/icons/book.png" alt="Asientos" class="mr-2" />
-                        Creación de Asientos</a>
-                </li>
-            </ul>
-        </aside>
         <main class="flex-fill p-3">
             <section id="inicio">
                 <h2>Sección de Cuentas por Cobrar | Pagar</h2>
