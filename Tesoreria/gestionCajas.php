@@ -136,101 +136,163 @@ $solicitudesDineroCaja = obtenerSolicitudesDineroCaja();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+
+        .header {
+            background-color: #3b5998;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .header h3 {
+            margin: 0;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .table-container table {
+            margin-bottom: 20px;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-container h3 {
+            margin: 0;
+        }
+
+        .filter-container .form-select {
+            max-width: 300px;
+        }
+
+        .footer {
+            background-color: #3b5998;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .modal-header {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        .modal-footer .btn-primary {
+            background-color: #3b5998;
+            border-color: #3b5998;
+        }
+
+        .chart-container {
+            margin-top: 40px;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="header d-flex justify-content-between align-items-center px-3 py-2">
-        <div>
-            <a href="index.html" class="btn btn-light mx-3 my-2">Volver</a>
-        </div>
+    <div class="header d-flex justify-content-between align-items-center px-3">
+        <a href="index.html" class="btn btn-light">Volver</a>
         <h3 class="text-center flex-grow-1">Gestión de Cajas</h3>
-        <h5 class="navbar navbar-light">logo</h5>
+        <div class="navbar navbar-light">logo</div>
     </div>
-    <div class="container-fluid">
-        <div class="content">
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <h3>Transferencias a Cajas Completadas</h3>
-                </div>
 
-                <!-- Formulario de Filtro -->
-                <form method="POST" action="gestionCajas.php">
-                    <div class="col-md-3">
-                        <label for="filterTipo" class="form-label">Filtrar por Caja</label>
-                        <select class="form-select" id="filterTipo" name="filterTipo" onchange="this.form.submit()">
-                            <option value="">Todas</option>
-                            <?php foreach ($cajas as $caja): ?>
-                                <option value="<?= $caja['id'] ?>" <?= isset($_POST['filterTipo']) && $_POST['filterTipo'] == $caja['id'] ? 'selected' : '' ?>>
-                                    <?= $caja['nombre'] ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </form>
+    <div class="container-fluid content">
+        <div class="filter-container">
+            <h3>Transferencias a Cajas Completadas</h3>
+            <!-- Formulario de Filtro -->
+            <form method="POST" action="gestionCajas.php" class="d-flex">
+                <label for="filterTipo" class="form-label me-2">Filtrar por Caja:</label>
+                <select class="form-select" id="filterTipo" name="filterTipo" onchange="this.form.submit()">
+                    <option value="">Todas</option>
+                    <?php foreach ($cajas as $caja): ?>
+                        <option value="<?= $caja['id'] ?>" <?= isset($_POST['filterTipo']) && $_POST['filterTipo'] == $caja['id'] ? 'selected' : '' ?>>
+                            <?= $caja['nombre'] ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+        </div>
 
-            </div>
-
-            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                <table class="table table-bordered">
-                    <thead>
+        <div class="table-container">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Caja Destino</th>
+                        <th>Monto</th>
+                        <th>Moneda</th>
+                        <th>Fecha de Transferencia</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody id="transferenciasCajasTable">
+                    <?php foreach ($transferenciasCompletadas as $transferencia): ?>
                         <tr>
-                            <th>ID</th>
-                            <th>Caja Destino</th>
-                            <th>Monto</th>
-                            <th>Moneda</th>
-                            <th>Fecha de Transferencia</th>
-                            <th>Descripción</th>
+                            <td><?= $transferencia['id'] ?></td>
+                            <td><?= $transferencia['caja_destino'] ?></td>
+                            <td>₡<?= number_format($transferencia['monto'], 2) ?></td>
+                            <td><?= $transferencia['moneda'] ?></td>
+                            <td><?= $transferencia['fecha_transferencia'] ?></td>
+                            <td><?= $transferencia['descripcion'] ?></td>
                         </tr>
-                    </thead>
-                    <tbody id="transferenciasCajasTable">
-                        <?php foreach ($transferenciasCompletadas as $transferencia): ?>
-                            <tr>
-                                <td><?= $transferencia['id'] ?></td>
-                                <td><?= $transferencia['caja_destino'] ?></td>
-                                <td>₡<?= number_format($transferencia['monto'], 2) ?></td>
-                                <td><?= $transferencia['moneda'] ?></td>
-                                <td><?= $transferencia['fecha_transferencia'] ?></td>
-                                <td><?= $transferencia['descripcion'] ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-            <h3 class="mt-5">Solicitudes de Dinero a Caja</h3>
-            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                <table class="table table-bordered">
-                    <thead>
+        <h3 class="mt-5">Solicitudes de Dinero a Caja</h3>
+        <div class="table-container">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Caja Solicitante</th>
+                        <th>Moneda</th>
+                        <th>Fecha de Solicitud</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($solicitudesDineroCaja as $solicitud): ?>
                         <tr>
-                            <th>ID</th>
-                            <th>Caja Solicitante</th>
-                            <th>Moneda</th>
-                            <th>Fecha de Solicitud</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <td><?= $solicitud['id'] ?></td>
+                            <td><?= $solicitud['caja_solicitante'] ?></td>
+                            <td><?= $solicitud['moneda'] ?></td>
+                            <td><?= $solicitud['fecha_solicitud'] ?></td>
+                            <td><?= $solicitud['estado'] ?></td>
+                            <td>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPagarSolicitud"
+                                    onclick="cargarSolicitud(<?= $solicitud['id'] ?>, '<?= $solicitud['caja_solicitante'] ?>', '<?= $solicitud['moneda'] ?>')">
+                                    Pagar
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($solicitudesDineroCaja as $solicitud): ?>
-                            <tr>
-                                <td><?= $solicitud['id'] ?></td>
-                                <td><?= $solicitud['caja_solicitante'] ?></td>
-                                <td><?= $solicitud['moneda'] ?></td>
-                                <td><?= $solicitud['fecha_solicitud'] ?></td>
-                                <td><?= $solicitud['estado'] ?></td>
-                                <td>
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPagarSolicitud"
-                                        onclick="cargarSolicitud(<?= $solicitud['id'] ?>, '<?= $solicitud['caja_solicitante'] ?>', '<?= $solicitud['moneda'] ?>')">
-                                        Pagar
-                                    </button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-            <h4 class="mt-5">Gráfico de Transferencias a Cajas Completadas</h4>
+        <div class="chart-container">
             <canvas id="scheduledTransfersChart"></canvas>
         </div>
     </div>
@@ -271,7 +333,6 @@ $solicitudesDineroCaja = obtenerSolicitudesDineroCaja();
             </div>
         </div>
     </div>
-
 
     <footer class="footer">
         <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>

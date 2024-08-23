@@ -1,10 +1,12 @@
 <?php
 include('utils/database.php');
 
+// Función para obtener todos los clientes
 function obtenerClientes()
 {
     $conexion = get_mysql_connection();
-    $query = "SELECT * FROM clientes_tesoreria";
+    $query = "SELECT c.*, o.nombre as nombre_organizacion FROM clientes_tesoreria c 
+              JOIN organizaciones o ON c.organizacion_id = o.organizacion_id";
     $resultado = $conexion->query($query);
     $clientes = [];
 
@@ -16,24 +18,43 @@ function obtenerClientes()
     return $clientes;
 }
 
-function agregarCliente($nombre, $cuenta_iban, $organizacion)
+// Función para obtener todas las organizaciones
+function obtenerOrganizaciones()
 {
     $conexion = get_mysql_connection();
-    $query = "INSERT INTO clientes_tesoreria (nombre, cuenta_iban, organizacion) 
-              VALUES ('$nombre', '$cuenta_iban', '$organizacion')";
+    $query = "SELECT organizacion_id, nombre FROM organizaciones";
+    $resultado = $conexion->query($query);
+    $organizaciones = [];
+
+    while ($fila = $resultado->fetch_assoc()) {
+        $organizaciones[] = $fila;
+    }
+
+    $conexion->close();
+    return $organizaciones;
+}
+
+// Función para agregar un nuevo cliente
+function agregarCliente($nombre, $cuenta_iban, $organizacion_id)
+{
+    $conexion = get_mysql_connection();
+    $query = "INSERT INTO clientes_tesoreria (nombre, cuenta_iban, organizacion_id) 
+              VALUES ('$nombre', '$cuenta_iban', '$organizacion_id')";
     $conexion->query($query);
     $conexion->close();
 }
 
-function editarCliente($id, $nombre, $cuenta_iban, $organizacion)
+// Función para editar un cliente existente
+function editarCliente($id, $nombre, $cuenta_iban, $organizacion_id)
 {
     $conexion = get_mysql_connection();
-    $query = "UPDATE clientes_tesoreria SET nombre='$nombre', cuenta_iban='$cuenta_iban', organizacion='$organizacion' 
+    $query = "UPDATE clientes_tesoreria SET nombre='$nombre', cuenta_iban='$cuenta_iban', organizacion_id='$organizacion_id' 
               WHERE id='$id'";
     $conexion->query($query);
     $conexion->close();
 }
 
+// Función para eliminar un cliente
 function eliminarCliente($id)
 {
     $conexion = get_mysql_connection();
@@ -64,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Obtener datos para mostrar en la interfaz
 $clientes = obtenerClientes();
+$organizaciones = obtenerOrganizaciones();
 
 ?>
 
@@ -105,22 +127,14 @@ $clientes = obtenerClientes();
                             <tbody>
                                 <?php foreach ($clientes as $cliente): ?>
                                     <tr>
-                                        <td>
-                                            <?= $cliente['id'] ?>
-                                        </td>
-                                        <td>
-                                            <?= $cliente['nombre'] ?>
-                                        </td>
-                                        <td>
-                                            <?= $cliente['cuenta_iban'] ?>
-                                        </td>
-                                        <td>
-                                            <?= $cliente['organizacion'] ?>
-                                        </td>
+                                        <td><?= $cliente['id'] ?></td>
+                                        <td><?= $cliente['nombre'] ?></td>
+                                        <td><?= $cliente['cuenta_iban'] ?></td>
+                                        <td><?= $cliente['nombre_organizacion'] ?></td>
                                         <td>
                                             <button class="btn btn-primary btn-lg btn-sm mx-1" data-bs-toggle="modal"
                                                 data-bs-target="#modalEditarCliente"
-                                                onclick="cargarClienteParaEditar(<?= $cliente['id'] ?>, '<?= $cliente['nombre'] ?>', '<?= $cliente['cuenta_iban'] ?>', '<?= $cliente['organizacion'] ?>')">Editar</button>
+                                                onclick="cargarClienteParaEditar(<?= $cliente['id'] ?>, '<?= $cliente['nombre'] ?>', '<?= $cliente['cuenta_iban'] ?>', '<?= $cliente['organizacion_id'] ?>')">Editar</button>
                                             <button class="btn btn-danger btn-lg btn-sm mx-1" data-bs-toggle="modal"
                                                 data-bs-target="#modalEliminarCliente"
                                                 onclick="prepararEliminarCliente(<?= $cliente['id'] ?>)">Eliminar</button>
@@ -157,10 +171,9 @@ $clientes = obtenerClientes();
                             placeholder="Ingrese la cuenta IBAN" required>
                         <label for="organizacion" class="form-label">Organización</label>
                         <select class="form-select" id="organizacion" name="organizacion" required>
-                            <option value="Org A">Org A</option>
-                            <option value="Org B">Org B</option>
-                            <option value="Org C">Org C</option>
-                            <option value="Org D">Org D</option>
+                            <?php foreach ($organizaciones as $org): ?>
+                                <option value="<?= $org['organizacion_id'] ?>"><?= $org['nombre'] ?></option>
+                            <?php endforeach; ?>
                         </select>
                         <button type="submit" class="btn btn-primary btn-lg mt-3">Agregar</button>
                     </form>
@@ -190,10 +203,9 @@ $clientes = obtenerClientes();
                             placeholder="Ingrese la cuenta IBAN" required>
                         <label for="organizacionEdit" class="form-label">Organización</label>
                         <select class="form-select" id="organizacionEdit" name="organizacion" required>
-                            <option value="Org A">Org A</option>
-                            <option value="Org B">Org B</option>
-                            <option value="Org C">Org C</option>
-                            <option value="Org D">Org D</option>
+                            <?php foreach ($organizaciones as $org): ?>
+                                <option value="<?= $org['organizacion_id'] ?>"><?= $org['nombre'] ?></option>
+                            <?php endforeach; ?>
                         </select>
                         <button type="submit" class="btn btn-primary btn-lg mt-3">Guardar Cambios</button>
                     </form>

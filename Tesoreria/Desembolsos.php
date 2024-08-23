@@ -185,11 +185,11 @@ $cuentasDebitar = obtenerCuentasDebitar();
         }
 
         .footer {
-            background-color: #2c3e50;
+            background-color: #3b5998;
             color: white;
             padding: 10px 0;
             text-align: center;
-            position: relative;
+            position: fixed;
             bottom: 0;
             width: 100%;
         }

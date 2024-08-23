@@ -6,22 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tesoreria / Transferencias</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="public/css/styles.css">
     <style>
         .module {
-            margin: 5px 0;
+            margin: 15px 0;
             text-align: center;
         }
 
-        .module img {
-            width: 85px;
-            height: 85px;
+        .module i {
+            font-size: 3rem;
+            color: black;
         }
 
         .module-title {
             background-color: white;
             color: black;
-            border: 3px solid #3b5998;
+            border: 3px solid black;
             padding: 5px;
             display: block;
             margin: 10px auto;
@@ -31,6 +32,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+        }
+
+        .module-title:hover {
+            background-color: #f8f9fa;
+            color: black;
         }
     </style>
 </head>
@@ -45,42 +52,39 @@
     </div>
     <div class="container-fluid">
         <div class="main-content container">
-            <h3 class="text-center mt-4">Pagina Principal</h3>
+            <h3 class="text-center mt-4">Página Principal</h3>
             <div class="row mb-4">
                 <div class="col-md-4 module">
-                    <img src="public/img/Transferencias.png">
-                    <a href="Transferencias Internas/transferencias.php" class="module-title">Transferencias Internas</a>
+                    <i class="bi bi-arrow-left-right"></i>
+                    <a href="Transferencias Internas/transferencias.php" class="module-title">Transferencias
+                        Internas</a>
                 </div>
                 <div class="col-md-4 module">
-                    <img src="public/img/Boveda.png">
+                    <i class="bi bi-safe2"></i>
                     <a href="Boveda/gestionBovedas.php" class="module-title">Bóveda</a>
                 </div>
                 <div class="col-md-4 module">
-                    <img src="public/img/Desembolsos.png">
+                    <i class="bi bi-cash-stack"></i>
                     <a href="desembolsos.php" class="module-title">Desembolsos</a>
                 </div>
                 <div class="col-md-4 module">
-                    <img src="public/img/ArqueoCajas.png">
-                    <a href="gestionCajas.php" class="module-title">Gestion de Cajas</a>
+                    <i class="bi bi-box-seam"></i>
+                    <a href="gestionCajas.php" class="module-title">Gestión de Cajas</a>
                 </div>
                 <div class="col-md-4 module">
-                    <img src="public/img/Inversiones.png">
+                    <i class="bi bi-piggy-bank"></i>
                     <a href="inversiones.php" class="module-title">Gestión de Inversiones</a>
                 </div>
                 <div class="col-md-4 module">
-                    <img src="public/img/Asientos.png">
-                    <a href="asientos.html" class="module-title">Asientos</a>
+                    <i class="bi bi-journal-check"></i>
+                    <a href="asientos.php" class="module-title">Asientos</a>
                 </div>
                 <div class="col-md-4 module">
-                    <img src="public/img/ClienteTesoreria.png">
-                    <a href="clientesTesoreria.php" class="module-title">Clientes de Tesoreria</a>
+                    <i class="bi bi-person-lines-fill"></i>
+                    <a href="clientesTesoreria.php" class="module-title">Clientes de Tesorería</a>
                 </div>
                 <div class="col-md-4 module">
-                    <img src="public/img/Reportes.png">
-                    <a href="reportes.php" class="module-title">Reportes</a>
-                </div>
-                <div class="col-md-4 module">
-                    <img src="public/img/Normativas.png">
+                    <i class="bi bi-file-earmark-text"></i>
                     <a href="normativas.html" class="module-title">Normativas</a>
                 </div>
             </div>

@@ -163,7 +163,6 @@ $organizaciones = obtenerOrganizaciones();
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -174,6 +173,19 @@ $organizaciones = obtenerOrganizaciones();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        .form-container {
+            max-height: 500px;
+            overflow-y: scroll;
+        }
+
+        .table-container {
+            max-height: 500px;
+            overflow-y: scroll;
+            margin-top: 30px;
+            /* Ajusta este valor para alinear la tabla con el formulario */
+        }
+    </style>
 </head>
 
 <body>
@@ -187,16 +199,8 @@ $organizaciones = obtenerOrganizaciones();
     <div class="container-fluid">
         <div class="content">
             <div class="row justify-content-center">
-                <div class="col-md-6">
+                <div class="col-md-6 form-container">
                     <h3>Registrar Nueva Inversión</h3>
-                </div>
-                <div class="col-md-6">
-                    <h3>Inversiones Registradas</h3>
-                </div>
-            </div>
-
-            <div class="row mb-5 justify-content-center">
-                <div class="col-md-6">
                     <form id="formRegistrarInversion" method="POST" action="inversiones.php">
                         <input type="hidden" name="accion" value="registrarInversion">
 
@@ -293,7 +297,7 @@ $organizaciones = obtenerOrganizaciones();
                             Inversión</button>
                     </form>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 table-container">
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
@@ -323,8 +327,8 @@ $organizaciones = obtenerOrganizaciones();
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-                    </div>
-                </div>
+                    </div> <!-- Fin del div .table-responsive -->
+                </div> <!-- Fin del contenedor de la tabla -->
             </div>
         </div>
     </div>
