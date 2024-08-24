@@ -21,12 +21,15 @@ function obtenerAsientos()
 function crearAsiento($fecha, $cuenta, $denominacion, $debe, $haber, $glosa)
 {
     $conexion = get_mysql_connection();
-    $query = "INSERT INTO asientos (fecha, cuenta, denominacion, debe, haber, glosa) VALUES ('$fecha', '$cuenta', '$denominacion', '$debe', '$haber', '$glosa')";
-    if ($conexion->query($query) === TRUE) {
-        echo "Nuevo asiento creado correctamente";
+    $query = "INSERT INTO asientos (fecha, cuenta, denominacion, debe, haber, glosa) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("sssdds", $fecha, $cuenta, $denominacion, $debe, $haber, $glosa);
+    if ($stmt->execute()) {
+        echo "<script>alert('Nuevo asiento creado correctamente');</script>";
     } else {
-        echo "Error: " . $query . "<br>" . $conexion->error;
+        echo "<script>alert('Error: " . addslashes($stmt->error) . "');</script>";
     }
+    $stmt->close();
     $conexion->close();
 }
 
@@ -34,12 +37,15 @@ function crearAsiento($fecha, $cuenta, $denominacion, $debe, $haber, $glosa)
 function modificarAsiento($id, $fecha, $cuenta, $denominacion, $debe, $haber, $glosa)
 {
     $conexion = get_mysql_connection();
-    $query = "UPDATE asientos SET fecha='$fecha', cuenta='$cuenta', denominacion='$denominacion', debe='$debe', haber='$haber', glosa='$glosa' WHERE id='$id'";
-    if ($conexion->query($query) === TRUE) {
-        echo "Asiento modificado correctamente";
+    $query = "UPDATE asientos SET fecha=?, cuenta=?, denominacion=?, debe=?, haber=?, glosa=? WHERE id=?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("sssddsi", $fecha, $cuenta, $denominacion, $debe, $haber, $glosa, $id);
+    if ($stmt->execute()) {
+        echo "<script>alert('Asiento modificado correctamente');</script>";
     } else {
-        echo "Error: " . $query . "<br>" . $conexion->error;
+        echo "<script>alert('Error: " . addslashes($stmt->error) . "');</script>";
     }
+    $stmt->close();
     $conexion->close();
 }
 
@@ -47,47 +53,48 @@ function modificarAsiento($id, $fecha, $cuenta, $denominacion, $debe, $haber, $g
 function borrarAsiento($id)
 {
     $conexion = get_mysql_connection();
-    $query = "DELETE FROM asientos WHERE id='$id'";
-    if ($conexion->query($query) === TRUE) {
-        echo "Asiento borrado correctamente";
+    $query = "DELETE FROM asientos WHERE id=?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
+        echo "<script>alert('Asiento borrado correctamente');</script>";
     } else {
-        echo "Error: " . $query . "<br>" . $conexion->error;
+        echo "<script>alert('Error: " . addslashes($stmt->error) . "');</script>";
     }
+    $stmt->close();
     $conexion->close();
 }
 
-// Función para consultar un asiento
 function consultarAsiento($id)
 {
     $conexion = get_mysql_connection();
-    $query = "SELECT * FROM asientos WHERE id='$id'";
-    $resultado = $conexion->query($query);
+    $query = "SELECT * FROM asientos WHERE id = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
     $asiento = null;
+
     if ($resultado->num_rows > 0) {
         $asiento = $resultado->fetch_assoc();
     }
+
+    $stmt->close();
     $conexion->close();
     return $asiento;
 }
 
 // Manejo de solicitudes POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
 
-        if ($accion == 'crear') {
+        if ($accion === 'crear') {
             crearAsiento($_POST['fecha'], $_POST['cuenta'], $_POST['denominacion'], $_POST['debe'], $_POST['haber'], $_POST['glosa']);
-        } elseif ($accion == 'modificar') {
+        } elseif ($accion === 'modificar') {
             modificarAsiento($_POST['id'], $_POST['fecha'], $_POST['cuenta'], $_POST['denominacion'], $_POST['debe'], $_POST['haber'], $_POST['glosa']);
-        } elseif ($accion == 'borrar') {
+        } elseif ($accion === 'borrar') {
             borrarAsiento($_POST['id']);
-        } elseif ($accion == 'consultar') {
-            $asiento = consultarAsiento($_POST['id']);
-            if ($asiento) {
-                // Aquí puedes hacer algo con el asiento consultado, como mostrarlo en el modal
-            } else {
-                echo "Asiento no encontrado";
-            }
         }
     }
 }
@@ -205,147 +212,103 @@ $asientos = obtenerAsientos();
             <div class="col-md-8">
                 <!-- Contenedor para los asientos con desplazamiento fijo -->
                 <div class="asiento-container">
-                    <div class="asiento" data-id="1">
-                        <table class="asiento-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Cuenta</th>
-                                    <th>Denominación</th>
-                                    <th>Debe</th>
-                                    <th>Haber</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td rowspan="2">15/12/20XX</td>
-                                    <td>42121</td>
-                                    <td>Facturas por pagar</td>
-                                    <td>1,000.00</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>1011</td>
-                                    <td>Efectivo y equivalente de efectivo</td>
-                                    <td></td>
-                                    <td>1,000.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="glosa">
-                            <p><strong>Glosa:</strong> Pago de facturas pendientes</p>
+                    <?php foreach ($asientos as $asiento): ?>
+                        <div class="asiento" data-id="<?php echo $asiento['id']; ?>">
+                            <table class="asiento-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Cuenta</th>
+                                        <th>Denominación</th>
+                                        <th>Debe</th>
+                                        <th>Haber</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="2"><?php echo $asiento['fecha']; ?></td>
+                                        <td><?php echo $asiento['cuenta']; ?></td>
+                                        <td><?php echo $asiento['denominacion']; ?></td>
+                                        <td><?php echo number_format($asiento['debe'], 2); ?></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><?php echo $asiento['cuenta']; ?></td>
+                                        <td><?php echo $asiento['denominacion']; ?></td>
+                                        <td></td>
+                                        <td><?php echo number_format($asiento['haber'], 2); ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="glosa">
+                                <p><strong>Glosa:</strong> <?php echo $asiento['glosa']; ?></p>
+                            </div>
+                            <!-- Botones Modificar y Borrar -->
+                            <div class="button-group">
+                                <button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#modificarModal"
+                                    onclick="rellenarModificarModal(<?php echo htmlspecialchars(json_encode($asiento)); ?>)">
+                                    Modificar
+                                </button>
+                                <button class="btn btn-danger btn-lg"
+                                    onclick="confirmarBorrado(<?php echo $asiento['id']; ?>)">
+                                    Borrar
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="asiento" data-id="2">
-                        <table class="asiento-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Cuenta</th>
-                                    <th>Denominación</th>
-                                    <th>Debe</th>
-                                    <th>Haber</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td rowspan="2">05/01/2024</td>
-                                    <td>50210</td>
-                                    <td>Inventarios</td>
-                                    <td>2,500.00</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>20110</td>
-                                    <td>Cuentas por pagar</td>
-                                    <td></td>
-                                    <td>2,500.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="glosa">
-                            <p><strong>Glosa:</strong> Compra de mercaderías a crédito</p>
-                        </div>
-                    </div>
-                    <div class="asiento" data-id="3">
-                        <table class="asiento-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Cuenta</th>
-                                    <th>Denominación</th>
-                                    <th>Debe</th>
-                                    <th>Haber</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td rowspan="2">10/01/2024</td>
-                                    <td>10110</td>
-                                    <td>Caja/Bancos</td>
-                                    <td>1,200.00</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>40010</td>
-                                    <td>Ventas</td>
-                                    <td></td>
-                                    <td>1,200.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="glosa">
-                            <p><strong>Glosa:</strong> Venta de mercaderías al contado</p>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div> <!-- Fin del contenedor de asientos -->
                 <div class="button-group">
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#crearModal">Crear</button>
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modificarModal">Modificar</button>
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#borrarModal">Borrar</button>
-                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#consultarModal">Consultar</button>
+                    <button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#crearModal">Crear</button>
+                    <button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#consultarModal">Consultar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
-    </footer>
 
     <!-- Modals -->
     <!-- Crear Modal -->
-    <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="crearModalLabel">Crear Asiento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Formulario para crear asiento -->
-                    <form>
+                    <form action="" method="POST">
+                        <input type="hidden" name="accion" value="crear">
                         <div class="form-group">
                             <label for="crearFecha">Fecha</label>
-                            <input type="date" class="form-control" id="crearFecha">
+                            <input type="date" class="form-control" id="crearFecha" name="fecha" required>
                         </div>
                         <div class="form-group">
                             <label for="crearCuenta">Cuenta</label>
-                            <input type="text" class="form-control" id="crearCuenta" placeholder="Ingrese la cuenta">
+                            <input type="text" class="form-control" id="crearCuenta" name="cuenta"
+                                placeholder="Ingrese la cuenta" required>
                         </div>
                         <div class="form-group">
                             <label for="crearDenominacion">Denominación</label>
-                            <input type="text" class="form-control" id="crearDenominacion" placeholder="Ingrese la denominación">
+                            <input type="text" class="form-control" id="crearDenominacion" name="denominacion"
+                                placeholder="Ingrese la denominación" required>
                         </div>
                         <div class="form-group">
                             <label for="crearDebe">Debe</label>
-                            <input type="number" class="form-control" id="crearDebe" placeholder="Ingrese el debe">
+                            <input type="number" class="form-control" id="crearDebe" name="debe"
+                                placeholder="Ingrese el debe" required>
                         </div>
                         <div class="form-group">
                             <label for="crearHaber">Haber</label>
-                            <input type="number" class="form-control" id="crearHaber" placeholder="Ingrese el haber">
+                            <input type="number" class="form-control" id="crearHaber" name="haber"
+                                placeholder="Ingrese el haber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="crearGlosa">Glosa</label>
+                            <textarea class="form-control" id="crearGlosa" name="glosa" placeholder="Ingrese la glosa"
+                                required></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary btn-lg">Crear</button>
@@ -357,41 +320,49 @@ $asientos = obtenerAsientos();
     </div>
 
     <!-- Modificar Modal -->
-    <div class="modal fade" id="modificarModal" tabindex="-1" role="dialog" aria-labelledby="modificarModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="modificarModal" tabindex="-1" aria-labelledby="modificarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modificarModalLabel">Modificar Asiento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Formulario para modificar asiento -->
-                    <form>
+                    <form action="" method="POST">
+                        <input type="hidden" name="accion" value="modificar">
                         <div class="form-group">
                             <label for="modificarIDAsiento">ID del asiento</label>
-                            <input type="text" class="form-control" id="modificarIDAsiento" placeholder="Ingrese el ID del asiento">
+                            <input type="text" class="form-control" id="modificarIDAsiento" name="id"
+                                placeholder="Ingrese el ID del asiento" required>
                         </div>
                         <div class="form-group">
                             <label for="modificarFecha">Fecha</label>
-                            <input type="date" class="form-control" id="modificarFecha">
+                            <input type="date" class="form-control" id="modificarFecha" name="fecha" required>
                         </div>
                         <div class="form-group">
                             <label for="modificarCuenta">Cuenta</label>
-                            <input type="text" class="form-control" id="modificarCuenta" placeholder="Ingrese la cuenta">
+                            <input type="text" class="form-control" id="modificarCuenta" name="cuenta"
+                                placeholder="Ingrese la cuenta" required>
                         </div>
                         <div class="form-group">
                             <label for="modificarDenominacion">Denominación</label>
-                            <input type="text" class="form-control" id="modificarDenominacion" placeholder="Ingrese la denominación">
+                            <input type="text" class="form-control" id="modificarDenominacion" name="denominacion"
+                                placeholder="Ingrese la denominación" required>
                         </div>
                         <div class="form-group">
                             <label for="modificarDebe">Debe</label>
-                            <input type="number" class="form-control" id="modificarDebe" placeholder="Ingrese el debe">
+                            <input type="number" class="form-control" id="modificarDebe" name="debe"
+                                placeholder="Ingrese el debe" required>
                         </div>
                         <div class="form-group">
                             <label for="modificarHaber">Haber</label>
-                            <input type="number" class="form-control" id="modificarHaber" placeholder="Ingrese el haber">
+                            <input type="number" class="form-control" id="modificarHaber" name="haber"
+                                placeholder="Ingrese el haber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modificarGlosa">Glosa</label>
+                            <textarea class="form-control" id="modificarGlosa" name="glosa"
+                                placeholder="Ingrese la glosa" required></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary btn-lg">Modificar</button>
@@ -403,21 +374,20 @@ $asientos = obtenerAsientos();
     </div>
 
     <!-- Borrar Modal -->
-    <div class="modal fade" id="borrarModal" tabindex="-1" role="dialog" aria-labelledby="borrarModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="borrarModal" tabindex="-1" aria-labelledby="borrarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="borrarModalLabel">Borrar Asiento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Formulario para borrar asiento -->
-                    <form>
+                    <form action="" method="POST">
+                        <input type="hidden" name="accion" value="borrar">
                         <div class="form-group">
                             <label for="borrarIDAsiento">ID del asiento</label>
-                            <input type="text" class="form-control" id="borrarIDAsiento" placeholder="Ingrese el ID del asiento">
+                            <input type="text" class="form-control" id="borrarIDAsiento" name="id"
+                                placeholder="Ingrese el ID del asiento" required>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-danger">Borrar</button>
@@ -429,21 +399,20 @@ $asientos = obtenerAsientos();
     </div>
 
     <!-- Consultar Modal -->
-    <div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="consultarModal" tabindex="-1" aria-labelledby="consultarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="consultarModalLabel">Consultar Asiento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- Formulario para consultar asiento -->
-                    <form>
+                    <form id="consultarModalForm">
                         <div class="form-group">
                             <label for="consultarIDAsiento">ID del asiento</label>
-                            <input type="text" class="form-control" id="consultarIDAsiento" placeholder="Ingrese el ID del asiento">
+                            <input type="text" class="form-control" id="consultarIDAsiento"
+                                placeholder="Ingrese el ID del asiento">
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary btn-lg">Consultar</button>
@@ -454,6 +423,76 @@ $asientos = obtenerAsientos();
         </div>
     </div>
 
+
+    <footer>
+        <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para rellenar el modal de modificar con los datos del asiento seleccionado
+        function rellenarModificarModal(asiento) {
+            document.getElementById('modificarIDAsiento').value = asiento.id;
+            document.getElementById('modificarFecha').value = asiento.fecha;
+            document.getElementById('modificarCuenta').value = asiento.cuenta;
+            document.getElementById('modificarDenominacion').value = asiento.denominacion;
+            document.getElementById('modificarDebe').value = asiento.debe;
+            document.getElementById('modificarHaber').value = asiento.haber;
+            document.getElementById('modificarGlosa').value = asiento.glosa;
+        }
+
+        // Función para confirmar el borrado de un asiento
+        function confirmarBorrado(id) {
+            if (confirm("¿Estás seguro de que deseas borrar este asiento?")) {
+                // Crear un formulario oculto para enviar el ID del asiento a borrar
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = ''; // Debería ser la URL a donde se envía el formulario
+
+                const inputAccion = document.createElement('input');
+                inputAccion.type = 'hidden';
+                inputAccion.name = 'accion';
+                inputAccion.value = 'borrar';
+
+                const inputID = document.createElement('input');
+                inputID.type = 'hidden';
+                inputID.name = 'id';
+                inputID.value = id;
+
+                form.appendChild(inputAccion);
+                form.appendChild(inputID);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        document.getElementById('consultarModalForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const idConsultado = document.getElementById('consultarIDAsiento').value;
+            const asientos = document.querySelectorAll('.asiento');
+            let asientoEncontrado = false;
+
+            asientos.forEach(asiento => {
+                if (asiento.getAttribute('data-id') === idConsultado) {
+                    asiento.style.display = 'block'; // Mostrar el asiento con el ID consultado
+                    asientoEncontrado = true;
+                } else {
+                    asiento.style.display = 'none'; // Ocultar los demás asientos
+                }
+            });
+
+            if (asientoEncontrado) {
+                var modal = bootstrap.Modal.getInstance(document.getElementById('consultarModal'));
+                modal.hide(); // Ocultar el modal si el asiento fue encontrado
+            } else {
+                alert('Asiento no encontrado');
+                asientos.forEach(asiento => {
+                    asiento.style.display = 'block'; // Volver a mostrar todos los asientos si no se encontró ninguno
+                });
+            }
+        });
+
+
+    </script>
 </body>
 
 </html>
