@@ -17,7 +17,7 @@ function obtenerInversiones()
         c.numero_cuenta AS cuenta_banco,
         o.nombre AS organizacion
     FROM inversiones i
-    JOIN cuentas c ON i.id_cuenta = c.id
+    JOIN cuentasbanco c ON i.id_cuenta = c.id
     JOIN organizaciones o ON i.id_organizacion = o.organizacion_id";
 
     $resultado = $conexion->query($query);
@@ -111,7 +111,7 @@ function registrarInversion($tipo, $moneda, $monto, $fecha_inicio, $fecha_fin, $
 function obtenerCuentasBancarias()
 {
     $conexion = get_mysql_connection();
-    $query = "SELECT id, numero_cuenta FROM cuentas";
+    $query = "SELECT id, numero_cuenta, moneda FROM cuentasbanco";
     $resultado = $conexion->query($query);
     $cuentas = [];
 
@@ -173,19 +173,6 @@ $organizaciones = obtenerOrganizaciones();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        .form-container {
-            max-height: 500px;
-            overflow-y: scroll;
-        }
-
-        .table-container {
-            max-height: 500px;
-            overflow-y: scroll;
-            margin-top: 30px;
-            /* Ajusta este valor para alinear la tabla con el formulario */
-        }
-    </style>
 </head>
 
 <body>
@@ -223,14 +210,17 @@ $organizaciones = obtenerOrganizaciones();
                             </div>
                             <div class="mb-3">
                                 <label for="tasaInteresCertificado" class="form-label">Tasa de Interés</label>
-                                <input type="number" step="0.01" class="form-control" id="tasaInteresCertificado" name="tasa_interes">
+                                <input type="number" step="0.01" class="form-control" id="tasaInteresCertificado"
+                                    name="tasa_interes">
                             </div>
                             <div class="mb-3">
                                 <label for="fechaVencimientoCertificado" class="form-label">Fecha de Vencimiento</label>
-                                <input type="date" class="form-control" id="fechaVencimientoCertificado" name="fecha_vencimiento">
+                                <input type="date" class="form-control" id="fechaVencimientoCertificado"
+                                    name="fecha_vencimiento">
                             </div>
                             <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="vendibleCertificado" name="vendible">
+                                <input type="checkbox" class="form-check-input" id="vendibleCertificado"
+                                    name="vendible">
                                 <label for="vendibleCertificado" class="form-check-label">Es Vendible</label>
                             </div>
                         </div>
@@ -246,29 +236,30 @@ $organizaciones = obtenerOrganizaciones();
                             </div>
                             <div class="mb-3">
                                 <label for="tasaInteresProveedor" class="form-label">Tasa de Interés</label>
-                                <input type="number" step="0.01" class="form-control" id="tasaInteresProveedor" name="tasa_interes">
+                                <input type="number" step="0.01" class="form-control" id="tasaInteresProveedor"
+                                    name="tasa_interes">
                             </div>
                             <div class="mb-3">
                                 <label for="fechaVencimientoProveedor" class="form-label">Fecha de Vencimiento</label>
-                                <input type="date" class="form-control" id="fechaVencimientoProveedor" name="fecha_vencimiento">
+                                <input type="date" class="form-control" id="fechaVencimientoProveedor"
+                                    name="fecha_vencimiento">
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="monedaInversion" class="form-label">Moneda</label>
-                            <select class="form-select" id="monedaInversion" name="moneda" required>
+                            <select class="form-select" id="monedaInversion" name="moneda"
+                                onchange="filtrarCuentasPorMoneda()">
+                                <option value="">Seleccione una moneda</option>
                                 <option value="CRC">CRC - Colón Costarricense</option>
                                 <option value="USD">USD - Dólar Estadounidense</option>
                                 <option value="EUR">EUR - Euro</option>
                             </select>
                         </div>
                         <!-- Mostrar las cuentas desde la base de datos -->
-                        <div class="mb-3">
+                        <div class="mb-3" id="cuentasContainer" style="display: none;">
                             <label for="cuentaDebitar" class="form-label">Cuenta A Debitar</label>
                             <select class="form-select" id="cuentaDebitar" name="cuenta_debitar" required>
-                                <?php foreach ($cuentasBancarias as $cuenta): ?>
-                                    <option value="<?= $cuenta['id'] ?>"><?= $cuenta['numero_cuenta'] ?></option>
-                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -289,7 +280,8 @@ $organizaciones = obtenerOrganizaciones();
                             <label for="organizacion" class="form-label">Organización</label>
                             <select class="form-select" id="organizacion" name="organizacion" required>
                                 <?php foreach ($organizaciones as $organizacion): ?>
-                                    <option value="<?= $organizacion['organizacion_id'] ?>"><?= $organizacion['nombre'] ?></option>
+                                    <option value="<?= $organizacion['organizacion_id'] ?>"><?= $organizacion['nombre'] ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -298,30 +290,27 @@ $organizaciones = obtenerOrganizaciones();
                     </form>
                 </div>
                 <div class="col-md-6 table-container">
-                    <div class="table-responsive">
+                    <h3>Inversiones registradas</h3>
+                    <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th># Inversión</th>
                                     <th>Tipo</th>
                                     <th>Moneda</th>
                                     <th>Monto</th>
                                     <th>Fecha de Inicio</th>
                                     <th>Fecha de Fin</th>
-                                    <th>Cuenta</th>
                                     <th>Organización</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($inversiones as $inversion): ?>
                                     <tr>
-                                        <td><?= $inversion['id'] ?></td>
                                         <td><?= $inversion['tipo'] ?></td>
                                         <td><?= $inversion['moneda'] ?></td>
                                         <td>₡<?= number_format($inversion['monto'], 2) ?></td>
                                         <td><?= $inversion['fecha_inicio'] ?></td>
                                         <td><?= $inversion['fecha_fin'] ?></td>
-                                        <td><?= $inversion['cuenta_banco'] ?></td>
                                         <td><?= $inversion['organizacion'] ?></td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -339,18 +328,46 @@ $organizaciones = obtenerOrganizaciones();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Mostrar/Ocultar campos específicos según el tipo de inversión seleccionado
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var tipoInversion = document.getElementById('tipoInversion').value;
             toggleCamposInversion(tipoInversion);
 
-            document.getElementById('tipoInversion').addEventListener('change', function() {
+            document.getElementById('tipoInversion').addEventListener('change', function () {
                 toggleCamposInversion(this.value);
             });
+
+            document.getElementById('monedaInversion').addEventListener('change', filtrarCuentasPorMoneda);
         });
 
         function toggleCamposInversion(tipoInversion) {
             document.getElementById('camposCertificado').style.display = (tipoInversion === 'certificado') ? 'block' : 'none';
             document.getElementById('camposProveedor').style.display = (tipoInversion === 'proveedor') ? 'block' : 'none';
+        }
+
+        function filtrarCuentasPorMoneda() {
+            var monedaSeleccionada = document.getElementById('monedaInversion').value;
+            var cuentaDebitarSelect = document.getElementById('cuentaDebitar');
+            var cuentasContainer = document.getElementById('cuentasContainer');
+
+            // Limpiar las opciones del select
+            cuentaDebitarSelect.innerHTML = '';
+
+            // Filtrar y mostrar las cuentas correspondientes a la moneda seleccionada
+            <?php foreach ($cuentasBancarias as $cuenta): ?>
+                if ('<?= $cuenta['moneda'] ?>' === monedaSeleccionada) {
+                    var option = document.createElement('option');
+                    option.value = '<?= $cuenta['id'] ?>';
+                    option.textContent = '<?= $cuenta['numero_cuenta'] ?>';
+                    cuentaDebitarSelect.appendChild(option);
+                }
+            <?php endforeach; ?>
+
+            // Mostrar u ocultar el contenedor de cuentas según si hay cuentas para la moneda seleccionada
+            if (cuentaDebitarSelect.options.length > 0) {
+                cuentasContainer.style.display = 'block';
+            } else {
+                cuentasContainer.style.display = 'none';
+            }
         }
     </script>
 </body>

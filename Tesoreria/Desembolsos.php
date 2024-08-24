@@ -4,7 +4,7 @@ include('utils/database.php');
 function validarFondos($cuenta, $monto)
 {
     $conexion = get_mysql_connection();
-    $query = "SELECT saldo FROM cuentas WHERE numero_cuenta = '$cuenta'";
+    $query = "SELECT saldo FROM cuentasbanco WHERE numero_cuenta = '$cuenta'";
     $resultado = $conexion->query($query);
     $saldo = $resultado->fetch_assoc()['saldo'];
 
@@ -22,7 +22,7 @@ function procesarPagoDesembolso($idDesembolso, $cuentaDebitar, $monto)
     }
 
     // Restar monto de la cuenta
-    $query = "UPDATE cuentas SET saldo = saldo - $monto WHERE numero_cuenta = '$cuentaDebitar'";
+    $query = "UPDATE cuentasbanco SET saldo = saldo - $monto WHERE numero_cuenta = '$cuentaDebitar'";
     if (!$conexion->query($query)) {
         die("Error al restar el monto de la cuenta: " . $conexion->error);
     }
@@ -143,7 +143,7 @@ function obtenerDesembolsosRealizados()
 function obtenerCuentasDebitar()
 {
     $conexion = get_mysql_connection();
-    $query = "SELECT numero_cuenta FROM cuentas";
+    $query = "SELECT numero_cuenta FROM cuentasbanco";
     $resultado = $conexion->query($query);
     $cuentas = [];
 
@@ -170,31 +170,6 @@ $cuentasDebitar = obtenerCuentasDebitar();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <style>
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .container-fluid {
-            flex: 1;
-        }
-
-        .footer {
-            background-color: #3b5998;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -206,72 +181,77 @@ $cuentasDebitar = obtenerCuentasDebitar();
         <h5 class="navbar navbar-light">logo</h5>
     </div>
     <div class="container-fluid">
-        <h3 class="text-center">Desembolsos Pendientes</h3>
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tipo</th>
-                        <th>Moneda</th>
-                        <th>Monto</th>
-                        <th>Descripción</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($desembolsosPendientes as $desembolso): ?>
-                        <tr>
-                            <td><?= $desembolso['id'] ?></td>
-                            <td><?= $desembolso['tipo_desembolso'] ?></td>
-                            <td><?= $desembolso['moneda'] ?></td>
-                            <td>₡<?= number_format($desembolso['monto'], 2) ?></td>
-                            <td><?= $desembolso['descripcion'] ?></td>
-                            <td><?= $desembolso['estado'] ?></td>
-                            <td>
-                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#modalPagarDesembolso"
-                                    onclick="cargarDatosDesembolso(<?= $desembolso['id'] ?>, '<?= $desembolso['tipo_desembolso'] ?>', '<?= $desembolso['moneda'] ?>', <?= $desembolso['monto'] ?>)">Pagar</button>
+        <h3 class="text-center mt-3">Desembolsos Pendientes</h3>
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-10">
+                <div class="table-responsive" style="max-height: 375px; overflow-y: auto;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo</th>
+                                <th>Moneda</th>
+                                <th>Monto</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($desembolsosPendientes as $desembolso): ?>
+                                <tr>
+                                    <td><?= $desembolso['id'] ?></td>
+                                    <td><?= $desembolso['tipo_desembolso'] ?></td>
+                                    <td><?= $desembolso['moneda'] ?></td>
+                                    <td>₡<?= number_format($desembolso['monto'], 2) ?></td>
+                                    <td><?= $desembolso['descripcion'] ?></td>
+                                    <td><?= $desembolso['estado'] ?></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                            data-bs-target="#modalPagarDesembolso"
+                                            onclick="cargarDatosDesembolso(<?= $desembolso['id'] ?>, '<?= $desembolso['tipo_desembolso'] ?>', '<?= $desembolso['moneda'] ?>', <?= $desembolso['monto'] ?>)">Pagar</button>
 
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-        <h3 class="text-center">Desembolsos Realizados</h3>
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tipo</th>
-                        <th>Moneda</th>
-                        <th>Monto</th>
-                        <th>Fecha de Pago</th>
-                        <th>Organización</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($desembolsosRealizados as $desembolso): ?>
-                        <tr>
-                            <td><?= $desembolso['id'] ?></td>
-                            <td><?= $desembolso['tipo_desembolso'] ?></td>
-                            <td><?= $desembolso['moneda'] ?></td>
-                            <td>₡<?= number_format($desembolso['monto'], 2) ?></td>
-                            <td><?= $desembolso['fecha_pago'] ?></td>
-                            <td><?= $desembolso['organizacion'] ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                <h3 class="text-center mt-3">Desembolsos Realizados</h3>
+                <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo</th>
+                                <th>Moneda</th>
+                                <th>Monto</th>
+                                <th>Fecha de Pago</th>
+                                <th>Organización</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($desembolsosRealizados as $desembolso): ?>
+                                <tr>
+                                    <td><?= $desembolso['id'] ?></td>
+                                    <td><?= $desembolso['tipo_desembolso'] ?></td>
+                                    <td><?= $desembolso['moneda'] ?></td>
+                                    <td>₡<?= number_format($desembolso['monto'], 2) ?></td>
+                                    <td><?= $desembolso['fecha_pago'] ?></td>
+                                    <td><?= $desembolso['organizacion'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Modal para Pago de Desembolso -->
-    <div class="modal fade" id="modalPagarDesembolso" tabindex="-1" aria-labelledby="modalPagarDesembolsoLabel" aria-hidden="true">
+    <div class="modal fade" id="modalPagarDesembolso" tabindex="-1" aria-labelledby="modalPagarDesembolsoLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -300,10 +280,6 @@ $cuentasDebitar = obtenerCuentasDebitar();
             </div>
         </div>
     </div>
-
-    <footer class="footer mt-5">
-        <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
-    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function cargarDatosDesembolso(id, tipo, moneda, monto) {
@@ -311,6 +287,9 @@ $cuentasDebitar = obtenerCuentasDebitar();
             document.getElementById('montoDesembolso').value = monto;
         }
     </script>
+    <footer class="footer mt-5">
+        <p>&copy; 2024 Cooperativa de Ahorro. Todos los derechos reservados.</p>
+    </footer>
 </body>
 
 </html>

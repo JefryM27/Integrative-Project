@@ -4,7 +4,7 @@ function get_mysql_connection()
 {
     $server = "localhost";
     $user = "root";
-    $pass = "Jairo8553";
+    $pass = "";
     $db = "Tesoreria";
 
     // Crear una conexión al servidor MySQL
