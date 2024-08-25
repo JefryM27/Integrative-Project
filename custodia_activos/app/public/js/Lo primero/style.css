@@ -1,0 +1,153 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #3b5998;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: absolute; /* Cambiado de fixed a absolute */
+    height: 100%;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1001; /* Asegurarse de que esté por encima del overlay */
+}
+
+.sidebar.open {
+    transform: translateX(0);
+    position: fixed; /* Cambia a fixed cuando está abierta */
+    height: 100%; /* Asegura que el sidebar cubra toda la altura */
+    z-index: 1003; /* Más alto que el header y footer */
+    transition: transform 0.3s ease, z-index 0s linear 0s; /* z-index cambia inmediatamente */
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+#menuButton {
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+#menuButton:hover {
+    color: #1f14e6;
+}
+
+.menu li {
+    margin-bottom: 10px;
+}
+.menu i {
+    margin-right: 10px; /* Ajusta este valor según sea necesario */
+}
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.menu a:hover {
+    background-color: #339966;
+}
+
+.content {
+    margin-left: 100px;
+    padding: 50px;
+    width: calc(100% - 270px);
+}
+
+.content h2 {
+    color: #00aae4;
+    left: 20;
+}
+
+.content p {
+    color: #666;
+    font-size: 18px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Debajo del sidebar pero encima del resto del contenido */
+}
+
+.overlay.visible {
+    display: block;
+}
+
+.header, .footer {
+    background-color: #3b5998;
+    color: white;
+    text-align: center;
+    padding: 2px;
+}
+h1 {
+    color: #ffffff;
+}
+ 
+.header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1002;
+    height: 70px;
+}
+
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 1002;
+}
+
+#salir {
+    position: fixed; /* Posición fija */
+    top: 20px; /* Distancia desde la parte superior */
+    right: 20px; /* Distancia desde la derecha */
+    background-color: #3b5998; /* Color de fondo */
+    color: #ffffff; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espacio interno */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambiar el cursor al pasar el ratón */
+  }
+  
+  #salir:hover {
+    background-color: #3b5998; /* Color de fondo al pasar el ratón */
+  }

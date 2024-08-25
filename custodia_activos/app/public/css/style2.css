@@ -1,0 +1,143 @@
+/* Estilos generales */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el contenido ocupe al menos toda la altura de la pantalla */
+}
+
+.header {
+    background-color: #3b5998;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-buttons button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.logo img {
+    height: 40px; /* Ajusta el tamaño del logo según sea necesario */
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f0f0f0;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: 100%;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.menu a:hover {
+    background-color: #ddd;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.footer {
+    background-color: #3b5998;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    margin-top: auto;
+}
+
+/* Modal */
+.modal {
+    display: none; /* Ocultar modal por defecto */
+    position: fixed;
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    width: 80%; /* Ancho del modal */
+    max-width: 600px; /* Ancho máximo del modal */
+    max-height: 80%; /* Altura máxima del modal */
+    overflow-y: auto; /* Permitir scroll si el contenido es demasiado largo */
+    position: relative;
+    margin: auto; /* Asegura que esté centrado horizontalmente */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close:hover {
+    color: black;
+}
+
+.modal-content h2 {
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    margin-bottom: 15px;
+}
+
+.modal-content button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.modal-content button:hover {
+    background-color: #45a049;
+}

@@ -1,0 +1,64 @@
+.header, .footer {
+    background-color: #3b5998 !important;
+    color: white;
+}
+
+.header-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.h3 {
+    margin: 0;
+    text-align: center;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+}
+
+.content {
+    min-height: 80vh;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    height: 100px;
+    color: black;
+    text-align: center;
+}
+
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon-container i {
+    margin-bottom: 10px;
+}
+
+.icon-container span {
+    display: block;
+    font-size: 1.2rem;
+}
+
+.smaller-text {
+    font-size: 1.5rem; 
+}
+
+.custom-btn {
+    border-color: #b2b3b4; /* Color del borde de los botones */
+}
+
+.custom-btn:active,
+.custom-btn:hover {
+    background-color: #3b5998; /* Color de fondo cuando el botón está presionado o el cursor está sobre él */
+    color: white; /* Color del texto cuando el botón está presionado o el cursor está sobre él */
+    border-color: #3b5998; /* Cambia el color del borde también */
+}
