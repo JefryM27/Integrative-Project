@@ -1,0 +1,75 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background-color: #3b5998; /* Color del fondo del encabezado */
+    color: white;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+}
+
+header .top-buttons {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+header button {
+    background-color: #3b5998; /* Mismo color que el fondo del encabezado */
+    border: 2px solid #3b5998; /* Borde del botón para destacar */
+    color: white;
+    border-radius: 5px;
+    padding: 9px 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header button img {
+    width: 20px; /* Ajusta el tamaño de la imagen del botón */
+    height: auto;
+}
+
+header button:hover {
+    background-color: #2e477a; /* Color del botón al pasar el cursor */
+    border-color: #2e477a; /* Ajustar el borde al pasar el cursor */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    flex: 1;
+}
+
+main {
+    margin: 60px 20px 60px 20px; /* Ajustar el margen superior e inferior para el contenido entre el header y el footer */
+    flex: 1;
+    overflow-y: auto;
+}
+
+.content-section {
+    padding: 20px;
+}
+
+footer {
+    background-color: #3b5998; /* Color del fondo del pie de página */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

@@ -1,0 +1,66 @@
+/* styles_seguridad.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #3b5998;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+}
+
+header .top-buttons {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+header .top-buttons h1 {
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+}
+
+header .btn-back,
+header .btn-logout {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+header .btn-back img,
+header .btn-logout img {
+    width: 24px;
+    height: 24px;
+}
+
+main {
+    flex: 1;
+    padding: 60px 20px 20px; /* Adjust top padding to account for header */
+    overflow-y: auto;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #3b5998;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
