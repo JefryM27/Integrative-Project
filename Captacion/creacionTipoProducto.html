@@ -4,21 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creacion de un producto</title>
+    <title>Creación de un tipo de producto</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/producto.css" rel="stylesheet">
-
 </head>
 
 <body>
-
     <div class="menu">
         <h2>Menú</h2>
         <a href="index.html">Inicio</a>
-        <a href="creacionProducto.html">Creacion Producto</a>
-        <a href="creacionTipoProducto.html">Creacion Tipo Producto</a>
+        <a href="creacionProducto.html">Creación Producto</a>
+        <a href="creacionTipoProducto.html">Creación Tipo Producto</a>
         <a href="tipos-cuentas.html">Tipos cuentas</a>
-        <a href="tipos-depositos.html">Tipos depositos</a>
+        <a href="tipos-depositos.html">Tipos depósitos</a>
         <a href="vistaMovimientos.html">Vistas de Movimientos</a>
     </div>
 
@@ -26,30 +24,151 @@
         <div>
             <a href="#" class="btn btn-light">Volver</a>
         </div>
-        <h1 class="text-center flex-grow-1">Creación de producto</h1>
+        <h1 class="text-center flex-grow-1">Creación de tipo de producto</h1>
         <h5 class="navbar navbar-light">logo</h5>
     </header>
 
     <div class="container mt-5">
-        <form>
+        <form id="tipoProductoForm">
             <div class="form-group">
-                <label for="productName">Nombre del tipo producto</label>
-                <input type="text" class="form-control" id="productName" placeholder="Nombre del producto">
+                <label for="productName">Nombre del tipo de producto</label>
+                <input type="text" class="form-control" id="productName" placeholder="Nombre del tipo de producto">
             </div>
             <div class="form-group">
                 <label for="productAdditionalDescription">Descripción</label>
-                <textarea class="form-control" id="productAdditionalDescription" rows="3"
-                    placeholder="Descripción adicional del producto"></textarea>
+                <textarea class="form-control" id="productAdditionalDescription" rows="3" placeholder="Descripción del tipo de producto"></textarea>
             </div>
-
             <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
+        
+        <!-- Tabla con tipos de productos -->
+        <h2 class="mt-5">Tipos de Productos</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tipoProductoTable">
+                <tr>
+                    <td>Tipo Producto 1</td>
+                    <td>Descripción del tipo de producto 1</td>
+                    <td>
+                        <button class="btn btn-warning btn-edit" data-toggle="modal" data-target="#editModal">Editar</button>
+                        <button class="btn btn-danger btn-delete">Eliminar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo Producto 2</td>
+                    <td>Descripción del tipo de producto 2</td>
+                    <td>
+                        <button class="btn btn-warning btn-edit" data-toggle="modal" data-target="#editModal">Editar</button>
+                        <button class="btn btn-danger btn-delete">Eliminar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo Producto 3</td>
+                    <td>Descripción del tipo de producto 3</td>
+                    <td>
+                        <button class="btn btn-warning btn-edit" data-toggle="modal" data-target="#editModal">Editar</button>
+                        <button class="btn btn-danger btn-delete">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
+    
+    <!-- Modal para editar tipo de producto -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar tipo de producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editTipoProductoForm">
+                        <div class="form-group">
+                            <label for="editProductName">Nombre del tipo de producto</label>
+                            <input type="text" class="form-control" id="editProductName">
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductAdditionalDescription">Descripción</label>
+                            <textarea class="form-control" id="editProductAdditionalDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveEdit">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2024 Nombre de tu empresa. Todos los derechos reservados.</p>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Evento para manejar la creación de un nuevo tipo de producto
+        $('#tipoProductoForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const productName = $('#productName').val();
+            const productDescription = $('#productAdditionalDescription').val();
+
+            // Agregar nueva fila a la tabla
+            const newRow = `
+                <tr>
+                    <td>${productName}</td>
+                    <td>${productDescription}</td>
+                    <td>
+                        <button class="btn btn-warning btn-edit" data-toggle="modal" data-target="#editModal">Editar</button>
+                        <button class="btn btn-danger btn-delete">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+            $('#tipoProductoTable').append(newRow);
+
+            // Limpiar el formulario
+            $('#tipoProductoForm')[0].reset();
+        });
+
+        // Evento para editar tipo de producto
+        $(document).on('click', '.btn-edit', function() {
+            const row = $(this).closest('tr');
+            const productName = row.find('td:eq(0)').text();
+            const productDescription = row.find('td:eq(1)').text();
+
+            $('#editProductName').val(productName);
+            $('#editProductAdditionalDescription').val(productDescription);
+        });
+
+        // Guardar cambios en la edición del tipo de producto
+        $('#saveEdit').on('click', function() {
+            const productName = $('#editProductName').val();
+            const productDescription = $('#editProductAdditionalDescription').val();
+
+            const selectedRow = $('#tipoProductoTable').find('.btn-edit').closest('tr');
+            selectedRow.find('td:eq(0)').text(productName);
+            selectedRow.find('td:eq(1)').text(productDescription);
+
+            $('#editModal').modal('hide');
+        });
+
+        // Evento para eliminar tipo de producto
+        $(document).on('click', '.btn-delete', function() {
+            $(this).closest('tr').remove();
+        });
+    </script>
 </body>
 
 </html>
