@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.header {
+    background-color: #3b5998; /* Color azul claro */
+    padding: 10px;
+    color: rgb(255, 255, 255);
+    text-align: left; /* Colocación a la izquierda */
+}
+.navbar-custom {
+    background-color: #3b5998; /* Azul claro */
+    color: rgb(233, 233, 233);
+}
+a{
+    color: rgb(255, 255, 255);
+}

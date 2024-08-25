@@ -1,0 +1,78 @@
+body {
+    background-color: #f8f9fa;
+    /* Color de fondo del body */
+    color: #030303;
+    /* Color de texto predeterminado */
+}
+
+.loan-section {
+    margin-top: 50px;
+}
+
+.loan-box {
+    background-color: #3b5998;
+    /* Color de fondo de las cajas de préstamos */
+    padding: 30px;
+    border: 1px solid #050505;
+    /* Borde de las cajas de préstamos */
+    border-radius: 10px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+    cursor: pointer;
+    min-height: 250px;
+    margin-bottom: 30px;
+    color: white;
+    /* Color del texto dentro de las cajas de préstamos */
+}
+
+.loan-box:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title a {
+    text-decoration: none;
+    color: #fffefe;
+    /* Color del enlace del título de la tarjeta */
+}
+
+.navbar {
+    background-color: #3b5998 !important;
+    /* Color de fondo del navbar */
+}
+
+.navbar-brand {
+    color: #ffffff;
+    /* Color del texto del brand del navbar */
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff;
+    /* Color del texto de los enlaces del navbar */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #cccccc;
+    /* Color del texto de los enlaces del navbar al pasar el mouse */
+}
+
+.modal-header {
+    background-color: #3b5998;
+    /* Color de fondo del header del modal */
+    color: #ffffff;
+    /* Color del texto del header del modal */
+}
+a{
+    color: rgb(255, 255, 255);
+}
+.modal-footer .btn-secondary {
+    background-color: #3b5998;
+    /* Color del botón cerrar del modal */
+    border-color: #3b5998;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #3b5998;
+    /* Color del botón cerrar del modal al pasar el mouse */
+    border-color: #3b5998;
+}

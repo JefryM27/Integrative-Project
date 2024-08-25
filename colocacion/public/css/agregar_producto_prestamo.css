@@ -1,0 +1,28 @@
+.container {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.btn-primary {
+    background-color: #3b5998;
+    border-color: #3b5998;
+}
+.btn-primary:hover {
+    background-color: #3b5998;
+    border-color: #3b5998;
+}
+.form-control, .form-group label {
+    margin-bottom: 15px;
+}
+.navbar {
+    background-color: #3b5998;
+}
+.navbar-brand {
+    color: #ffffff !important;
+}
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}a{
+    color: rgb(255, 255, 255);
+}

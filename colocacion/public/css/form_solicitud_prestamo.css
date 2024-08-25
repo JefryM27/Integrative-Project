@@ -1,0 +1,33 @@
+body {
+    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+    background-color: #3b5998;
+    color: aliceblue;
+}
+
+.main-content {
+    margin-top: 20px;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loan-info {
+    background-color: #3b5998;
+}
+
+.btn-color1 {
+    background-color: #3b5998;
+    color: white;
+}
+
+.btn-color1:hover {
+    background-color: #2d4373;
+    color: white;
+}
+.h222{
+    color: #3b5998
+}
