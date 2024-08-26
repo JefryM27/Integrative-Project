@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cierre de Caja</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      background-color: #3b5998;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+    .main-content {
+      flex: 1 0 auto;
+    }
+    .container {
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .btn {
+      background-color: white;
+      color: #000000;
+      margin: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      width: 200px;
+      border: 3px solid #3b5998;
+    }
+    .btnmd {
+      background-color: #3b5998;
+      color: white;
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      width: 100px;
+      border-radius: 10px;
+    }
+    .btnmdd {
+      background-color: #3b5998;
+      color: rgb(255, 255, 255);
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      width: 100px;
+      border-radius: 10px;
+    }
+    .btn:hover {
+      background-color: #f1f1f1;
+      color: #2d4373;
+    }
+    .modal-header {
+      background-color: #3b5998;
+      color: white;
+    }
+    .logo-btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+    .footer {
+      background-color: #3b5998;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>COODESCA</h1>
+  </div>
+  
+  <div class="main-content">
+    <div class="container text-center">
+      <h2 class="mb-4">Cierre de Caja</h2>
+      <div class="logo-btn-container">
+        <div class="text-center">
+          <img src="preparacionlogo.png" alt="Preparación Logo" class="logo">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#preparacionModal">
+            <span>1. Preparación para el Cierre</span>
+          </button>
+        </div>
+        <div class="text-center">
+          <img src="calculoregistrologo.png" alt="Cálculo y Registro Logo" class="logo">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#calculoRegistroModal">
+            <span>2. Cálculo del Saldo y Registro del Cierre</span>
+          </button>
+        </div>
+        <div class="text-center">
+          <img src="revisionvalidacionlogo.png" alt="Revisión y Validación Logo" class="logo">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#revisionValidacionModal">
+            <span>3. Revisión y Validación</span>
+          </button>
+        </div>
+        <div class="text-center">
+          <img src="aprobacionlogo.png" alt="Aprobación Logo" class="logo">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#aprobacionModal">
+            <span>4. Aprobación del Cierre</span>
+          </button>
+        </div>
+        <div class="text-center">
+          <img src="entregacajalogo.png" alt="Entrega de Caja Logo" class="logo">
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#entregaCajaModal">
+            <span>5. Entrega de Caja</span>
+          </button>
+        </div>
+        <div class="text-center">
+          <img src="reportefinallogo.png" alt="Reporte Final Logo" class="logo">
+          <button type="button" class="btn" onclick="generarReporte()">
+            <span>Generar Reporte Final</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Preparación para el Cierre -->
+  <div class="modal fade" id="preparacionModal" tabindex="-1" aria-labelledby="preparacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="preparacionModalLabel">Preparación para el Cierre</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="transaccionesFinalizadas">
+            <label class="form-check-label" for="transaccionesFinalizadas">
+              Todas las transacciones del día han sido finalizadas
+            </label>
+          </div>
+          <div class="mb-3">
+            <label for="totalTransacciones" class="form-label">Total de transacciones del día</label>
+            <input type="number" class="form-control" id="totalTransacciones">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnmd" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btnmd" onclick="guardarPreparacion()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Cálculo del Saldo y Registro del Cierre -->
+  <div class="modal fade" id="calculoRegistroModal" tabindex="-1" aria-labelledby="calculoRegistroModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="calculoRegistroModalLabel">Cálculo del Saldo y Registro del Cierre</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Cálculo del Saldo Final</h6>
+              <div class="mb-3">
+                <label for="tipoMoneda" class="form-label">Tipo de Moneda</label>
+                <select id="tipoMoneda" class="form-select" onchange="actualizarDenominaciones()">
+                  <option value="colones">Colones</option>
+                  <option value="dolares">Dólares</option>
+                  <option value="euros">Euros</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="billetes" class="form-label">Billetes</label>
+                <select id="billetes" class="form-select">
+                  <!-- Las opciones se actualizarán dinámicamente -->
+                </select>
+                <input type="number" class="form-control mt-2" id="cantidadBilletes" placeholder="Cantidad">
+              </div>
+              <div class="mb-3">
+                <label for="monedas" class="form-label">Monedas</label>
+                <select id="monedas" class="form-select">
+                  <!-- Las opciones se actualizarán dinámicamente -->
+                </select>
+                <input type="number" class="form-control mt-2" id="cantidadMonedas" placeholder="Cantidad">
+              </div>
+              <div class="mb-3">
+                <label for="totalEfectivo" class="form-label">Total de Efectivo</label>
+                <input type="number" class="form-control" id="totalEfectivo" placeholder="Total de Efectivo">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6>Registro del Cierre</h6>
+              <div class="mb-3">
+                <label for="depositosBancarios" class="form-label">Depósitos Bancarios</label>
+                <input type="number" class="form-control" id="depositosBancarios">
+              </div>
+              <div class="mb-3">
+                <label for="transaccionesElectronicas" class="form-label">Transacciones Electrónicas</label>
+                <input type="number" class="form-control" id="transaccionesElectronicas">
+              </div>
+              <div class="mb-3">
+                <label for="otros" class="form-label">Otros</label>
+                <input type="number" class="form-control" id="otros">
+              </div>
+              <div class="mb-3">
+                <label for="saldoFinalCalculado" class="form-label">Saldo Final Calculado</label>
+                <input type="number" class="form-control" id="saldoFinalCalculado">
+              </div>
+              <div class="mb-3">
+                <label for="saldoReportado" class="form-label">Saldo Reportado</label>
+                <input type="number" class="form-control" id="saldoReportado">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnmd" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btnmd" onclick="guardarCalculo()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Revisión y Validación -->
+  <div class="modal fade" id="revisionValidacionModal" tabindex="-1" aria-labelledby="revisionValidacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="revisionValidacionModalLabel">Revisión y Validación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Revisión</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="revisionDiscrepancias">
+                <label class="form-check-label" for="revisionDiscrepancias">
+                  Revisar discrepancias en el saldo final
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="confirmacionTransacciones">
+                <label class="form-check-label" for="confirmacionTransacciones">
+                  Confirmar todas las transacciones registradas
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6>Validación</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="validacionSaldos">
+                <label class="form-check-label" for="validacionSaldos">
+                  Validar los saldos finales con los registros
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="verificacionDepositos">
+                <label class="form-check-label" for="verificacionDepositos">
+                  Verificar los depósitos bancarios y transacciones electrónicas
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnmd" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btnmd" onclick="guardarRevisionValidacion()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Aprobación del Cierre -->
+  <div class="modal fade" id="aprobacionModal" tabindex="-1" aria-labelledby="aprobacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="aprobacionModalLabel">Aprobación del Cierre</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Aprobación del Cierre</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="aprobacionGerente">
+                <label class="form-check-label" for="aprobacionGerente">
+                  Aprobación del gerente
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="aprobacionContabilidad">
+                <label class="form-check-label" for="aprobacionContabilidad">
+                  Aprobación del departamento de contabilidad
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6>Confirmación Final</h6>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="confirmacionFinal">
+                <label class="form-check-label" for="confirmacionFinal">
+                  Confirmación final del cierre de caja
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="registroAuditoria">
+                <label class="form-check-label" for="registroAuditoria">
+                  Registro de auditoría completado
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnmd" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btnmd" onclick="guardarAprobacion()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Entrega de Caja -->
+  <div class="modal fade" id="entregaCajaModal" tabindex="-1" aria-labelledby="entregaCajaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="entregaCajaModalLabel">Entrega de Caja</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="responsableCaja" class="form-label">Responsable de la Caja</label>
+            <input type="text" class="form-control" id="responsableCaja">
+          </div>
+          <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea class="form-control" id="observaciones" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btnmd" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btnmd" onclick="guardarEntrega()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2023 COODESCA. Todos los derechos reservados.</p>
+    <button type="button" class="btnmdd" onclick="location.href='caja.html'">Volver a caja</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function actualizarDenominaciones() {
+      const tipoMoneda = document.getElementById('tipoMoneda').value;
+      const billetesSelect = document.getElementById('billetes');
+      const monedasSelect = document.getElementById('monedas');
+
+      billetesSelect.innerHTML = '';
+      monedasSelect.innerHTML = '';
+
+      let billetes = [];
+      let monedas = [];
+
+      if (tipoMoneda === 'colones') {
+        billetes = [50000, 20000, 10000, 5000, 2000, 1000];
+        monedas = [500, 100, 50, 25, 10, 5];
+      } else if (tipoMoneda === 'dolares') {
+        billetes = [100, 50, 20, 10, 5, 2, 1];
+        monedas = [1, 0.5, 0.25, 0.1, 0.05, 0.01];
+      } else if (tipoMoneda === 'euros') {
+        billetes = [500, 200, 100, 50, 20, 10, 5];
+        monedas = [2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01];
+      }
+
+      billetes.forEach(denominacion => {
+        const option = document.createElement('option');
+        option.value = denominacion;
+        option.textContent = denominacion;
+        billetesSelect.appendChild(option);
+      });
+
+      monedas.forEach(denominacion => {
+        const option = document.createElement('option');
+        option.value = denominacion;
+        option.textContent = denominacion;
+        monedasSelect.appendChild(option);
+      });
+    }
+
+    function calcularTotal() {
+      const cantidadBilletes = document.getElementById('cantidadBilletes').value || 0;
+      const cantidadMonedas = document.getElementById('cantidadMonedas').value || 0;
+      const denominacionBilletes = document.getElementById('billetes').value || 0;
+      const denominacionMonedas = document.getElementById('monedas').value || 0;
+      
+      const totalBilletes = cantidadBilletes * denominacionBilletes;
+      const totalMonedas = cantidadMonedas * denominacionMonedas;
+      
+      document.getElementById('totalBilletes').value = totalBilletes;
+      document.getElementById('totalMonedas').value = totalMonedas;
+      document.getElementById('totalEfectivo').value = totalBilletes + totalMonedas;
+    }
+
+    function guardarCalculo() {
+      const totalEfectivo = document.getElementById('totalEfectivo').value;
+      const depositosBancarios = document.getElementById('depositosBancarios').value;
+      const transaccionesElectronicas = document.getElementById('transaccionesElectronicas').value;
+      const otros = document.getElementById('otros').value;
+      const saldoFinalCalculado = document.getElementById('saldoFinalCalculado').value;
+      const saldoReportado = document.getElementById('saldoReportado').value;
+
+      // Lógica para guardar el cálculo
+    }
+
+    function guardarRevisionValidacion() {
+      const revisionDiscrepancias = document.getElementById('revisionDiscrepancias').checked;
+      const confirmacionTransacciones = document.getElementById('confirmacionTransacciones').checked;
+      const validacionSaldos = document.getElementById('validacionSaldos').checked;
+      const verificacionDepositos = document.getElementById('verificacionDepositos').checked;
+
+      // Lógica para guardar la revisión y validación
+    }
+
+    function guardarAprobacion() {
+      const aprobacionGerente = document.getElementById('aprobacionGerente').checked;
+      const aprobacionContabilidad = document.getElementById('aprobacionContabilidad').checked;
+      const confirmacionFinal = document.getElementById('confirmacionFinal').checked;
+      const registroAuditoria = document.getElementById('registroAuditoria').checked;
+
+      // Lógica para guardar la aprobación del cierre
+    }
+
+    function guardarEntrega() {
+      const responsableCaja = document.getElementById('responsableCaja').value;
+      const observaciones = document.getElementById('observaciones').value;
+
+      // Lógica para guardar la entrega de caja
+    }
+  </script>
+</body>
+</html>
