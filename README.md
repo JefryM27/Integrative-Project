@@ -1,0 +1,1 @@
+This repository is from a university project where we specifically touch on topics related to accounting and some of its areas, where most of the ITI group interacted, in which we had to create the accounting operation of a savings cooperative.
